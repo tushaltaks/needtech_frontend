@@ -21,7 +21,7 @@ const BidsDetail = () => {
         <>
             <div className='inner_head'>
                 <Container>
-                    <div className='inner_head_in'>
+                    <div className='inner_head_in backbtn_s'>
                         <Link to="/my-bids"><img src={BackIc} /> Back to My Bids</Link>
                     </div>
                 </Container>
@@ -72,9 +72,9 @@ const BidsDetail = () => {
                                         <div className='market_detail_right_con'>
                                             <div className='market_detail_right_in'>
                                                 <div className='market_detail_logo'><img src={Logo_approved} /></div>
-                                                <div className='market_detail_time'>
-                                                    <p>Business Started</p>
-                                                    <h4>(13 years 1 month old)</h4>
+                                                <div className='market_detail_serviceprovider'>
+                                                    <h4>Business Started</h4>
+                                                    <p>(13 years 1 month old)</p>
                                                 </div>
                                             </div>
                                             <div className='heart_ic'><img src={HeartIcon} /></div>

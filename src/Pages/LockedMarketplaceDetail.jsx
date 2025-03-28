@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { use, useEffect, useState } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import BackIc from "../assets/backIc.svg"
 import HeartIcon from "../assets/heartIc.png"
 import BusinessImg1 from "../assets/business_img1.jpg"
@@ -13,11 +13,14 @@ import Agric3 from "../assets/agric3.svg"
 import Lokedic from "../assets/lokedic.svg"
 import Logo_approved from "../assets/logo_approved.png"
 import OfferBid from '../Component/Modals/OfferBid';
+import { GetFunction } from '../utils/ApiFunctions';
+import { baseURL } from '../utils/AxiosInstance';
 
 const LockedMarketplaceDetail = () => {
     const [show, setShow] = useState(false);
-        const handleClose = () => setShow(false);
-        const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
     return (
         <>
             <div className='inner_head'>
@@ -100,7 +103,7 @@ const LockedMarketplaceDetail = () => {
                                         <p className='locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation. Lorem ipsum dolor sit amet. veniam, quis nostrud exercitation. magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation.</p>
                                         <p className='locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation. Lorem ipsum dolor sit amet. veniam, quis nostrud exercitation. magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation.</p>
                                         <div className='locked_sec'>
-                                            <div className='locked_sec_img'><img src={Lokedic}/></div>
+                                            <div className='locked_sec_img'><img src={Lokedic} /></div>
                                             <div className='locked_sec_con'>
                                                 <h2 className='heading_type2'>Unlock Product</h2>
                                                 <p>You can get full access for this product</p>

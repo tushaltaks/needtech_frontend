@@ -23,7 +23,7 @@ const MarketDetailLogin = () => {
         <>
             <div className='inner_head'>
                 <Container>
-                    <div className='inner_head_in'>
+                    <div className='inner_head_in backbtn_s'>
                         <Link to="/my-business"><img src={BackIc} /> Back to Startups</Link>
                     </div>
                 </Container>

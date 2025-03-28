@@ -40,7 +40,7 @@ const AboutUs = () => {
                                             </div>                                        
                                         </div>
                                     </div>
-                                    <div className='team_sec_ic'><Link to="/"><img src={Linkedinic} /></Link></div>
+                                    <div className='team_sec_ic'><Link target='blank' to="https://www.linkedin.com/in/-danielkatz/"><img src={Linkedinic} /></Link></div>
                                 </div>
                             </Col>
                             <Col md="4">
@@ -55,7 +55,7 @@ const AboutUs = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='team_sec_ic'><Link to="/"><img src={Linkedinic} /></Link></div>
+                                    <div className='team_sec_ic'><Link target='blank' to="https://www.linkedin.com/in/zipi-weinreich-katz-a5391b297/"><img src={Linkedinic} /></Link></div>
                                 </div>
                             </Col>
                             <Col md="4">
@@ -70,7 +70,7 @@ const AboutUs = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className='team_sec_ic'><Link to="/"><img src={Linkedinic} /></Link></div>
+                                    <div className='team_sec_ic'><Link  target='blank' to="https://www.linkedin.com/in/shalomdaskal/"><img src={Linkedinic} /></Link></div>
                                 </div>
                             </Col>
                         </Row>

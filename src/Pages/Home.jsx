@@ -24,8 +24,8 @@ function Home() {
                             <h1 className='heading_type1'>Own Patent-Secured Startups: <span className='d_block'>Pre-Vetted Startup-in-a-Box<sup>TM</sup></span></h1>
                             <p>Invest in innovative startups, secured by rigorous due diligence and solving real-world challenges, to minimize risk and maximize scaling potential.</p>
                             <div className='btn_sec btn_sec_itms'>
-                                <Link to="/" className='btn btn_primary'>Startup Now</Link>
-                                <Link to="/" className='btn btn_outline'>Read More</Link>
+                                <Link to="/signup" className='btn btn_primary'>Startup Now</Link>
+                                <Link to="/the-company" className='btn btn_info'>Read More</Link>
                             </div>
                         </div>
                     </Col>
@@ -46,17 +46,31 @@ function Home() {
                 <div className='home_search_itm'>
                     <Form.Select aria-label="Default select example">
                         <option>Pick a Category</option>
-                        <option value="1">Pick a Category</option>
-                        <option value="2">Pick a Category</option>
-                        <option value="3">Pick a Category</option>
+                        <option value="1">Agriculture</option>
+                        <option value="2">Manufacturing</option>
+                        <option value="3">Energy</option>
+                        <option value="4">Water</option>
+                        <option value="5">Wholesale and retail</option>
+                        <option value="6">Tourism</option>
+                        <option value="7">Food</option>
+                        <option value="8">Information Technology and Communication</option>
+                        <option value="9">Finance and Insurance</option>
+                        <option value="10">Real Estate</option>
+                        <option value="11">Professional Services</option>
+                        <option value="12">Education</option>
+                        <option value="13">Health & Pharma</option>
+                        <option value="14">Culture, Arts, Recreation</option>
+                        <option value="15">Sports</option>
+                        <option value="16">Homeland Security and Defense</option>
                     </Form.Select>
                 </div>
                 <div className='home_search_itm'>
                     <Form.Select aria-label="Default select example">
                         <option>InnovaRate<sup>™</sup></option>
-                        <option value="1">InnovaRat</option>
-                        <option value="2">InnovaRate</option>
-                        <option value="3">InnovaRate</option>
+                        <option value="1">60 - 70</option>
+                        <option value="2">71 - 80</option>
+                        <option value="3">81 - 90</option>
+                        <option value="3">91 - 100</option>
                     </Form.Select>
                 </div>
                 <div className='home_search_itm home_search_itm_btn'>
@@ -143,8 +157,7 @@ function Home() {
                                 <li>And all other relevant due diligence documents.</li>
                             </ul>
                             <div className='btn_sec btn_sec_itms'>
-                                <Link to="/" className='btn btn_primary'>Startup Now</Link>
-                                <Link to="/" className='btn btn_outline'>Read More</Link>
+                                <Link to="/signup" className='btn btn_primary'>Startup Now</Link>
                             </div>
                         </div>
                     </Col>

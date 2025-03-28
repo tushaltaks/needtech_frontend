@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const Footer = () => {
     return (
         <>
-        <footer className='footer_sec'>
+        {/* <footer className='footer_sec'>
             <Container>
                 <div className='footer_sec_in'>
                     <Row>
@@ -56,6 +56,38 @@ const Footer = () => {
                         </Col>
                         <Col md={6}>
                             <p className='footer_bottom_con'>© 2025 NeedTech. All rights reserved</p>
+                        </Col>
+                    </Row>
+                </div>
+            </Container>
+        </footer> */}
+        <footer className='footer_sec'>
+            <Container>
+                <div className='footer_sec_in'>
+                    <Row>
+                        <Col md="5">
+                            <div className='footer_itm footer_logo'><img src={Logoimg} /></div>
+                            <p className='footer_bottom_con'>© 2025 NeedTech. All rights reserved</p>
+                        </Col>
+                        <Col md="4">
+                            <div className='footer_itm'>
+                                <ul>
+                                    <li><Link to="/about-us">About us</Link></li>
+                                    <li><Link to="/marketplace">Marketplace</Link></li>
+                                    <li><Link to="/service-provider">Service Provider</Link></li>
+                                    <li><Link to="/articles">Articles</Link></li>
+                                </ul>
+                            </div>
+                        </Col>
+                        <Col md="3">
+                            <div className='footer_itm'>
+                                <ul>
+                                    <li><Link to="/terms-conditions">Terms of Service</Link></li>
+                                    <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+                                    <li><Link to="/help-support">Help & Support</Link></li>
+                                    <li><Link to="/faqs">FAQs</Link></li>
+                                </ul>
+                            </div>
                         </Col>
                     </Row>
                 </div>

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
 import HeartIcon from "../assets/heartIc.png"
+import DOMPurify from 'dompurify';
+
 import HeartIconFilled from "../assets/heartFilledIc.png"
 import BusinessImg1 from "../assets/business_img1.jpg"
 import VerifiedIc from "../assets/verifiedIc.svg"
@@ -11,8 +13,59 @@ import Agric2 from "../assets/agric2.svg"
 import Agric3 from "../assets/agric3.svg"
 import Lokedic from "../assets/lokedic.svg"
 import { Link } from 'react-router-dom';
+import { baseURL } from '../utils/AxiosInstance';
+import { FirstLettCapital, GetFunction, handleimageUrl } from '../utils/ApiFunctions';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const MyBids = () => {
+
+    const [page, setPage] = React.useState(1);
+    const [limit] = React.useState(10);
+
+    const [paginatio, setPagination] = useState({})
+    const queryClient = useQueryClient()
+
+
+    const getBids = async () => {
+        const res = await GetFunction(`${baseURL}/bidListByUser?page=${page}&limit=${10}`);
+        // console.log('res', res)
+        if (res?.status == 200) {
+            setPagination({
+                currentPage: res?.data?.currentPage,
+                totalPages: res?.data?.totalPages,
+                totalRecords: res?.data?.totalRecords,
+            });
+            return res?.data?.data
+        }
+        else {
+            toast.dismiss()
+            toast.error(res?.data?.message)
+        }
+    };
+
+
+    const { data, isLoading, refetch } = useQuery({
+        queryKey: ['bids', page],
+        queryFn: getBids,
+        onError: (error) => {
+            toast.error(error.message);
+        },
+
+
+    })
+
+    const addToWishList = async (id) => {
+        const res = await SubmitResponse(`${baseURL}/AddtowishList`, { businessId: id });
+        if (res?.status == 200) {
+            toast.dismiss()
+            toast.success(res?.data?.message)
+            queryClient.invalidateQueries("bids"); // Ref
+        }
+        else {
+            toast.dismiss()
+            toast.error(res?.data?.message)
+        }
+    }
     return (
         <>
             <div className='inner_head mb-0'>
@@ -25,100 +78,79 @@ const MyBids = () => {
                 <Container>
                     <div className='market_list_in'>
                         <div className='market_list_itms bid_list_itms'>
-                            <div className='market_list_itm'>
-                                <div className='market_list_img'><div className='market_list_img_in'><img src={BusinessImg1} /></div></div>
-                                <div className='market_list_con'>
-                                    <div className='market_list_con_in'>
-                                        <div className='bid_data'>
-                                            <div className='bid_data_price market_list_rate'>
-                                                <p>Bid Price</p>
-                                                <h4>$37,700</h4>
+                            {
+                                data && data?.map((val, i) => (
+                                    <div className='market_list_itm' key={i}>
+                                        <div className='market_list_img'><div className='market_list_img_in'><img src={val?.businessData?.image ? handleimageUrl(val?.businessData?.image) : BusinessImg1} /></div></div>
+                                        <div className='market_list_con'>
+                                            <div className='market_list_con_in'>
+                                                <div className='bid_data'>
+                                                    <div className='bid_data_price market_list_rate'>
+                                                        <p>Bid Price</p>
+                                                        <h4>${val?.bidAmount}</h4>
+                                                    </div>
+                                                    {/* <div className='bid_status status_rejected'>Rejected</div> */}
+                                                    <div className={val?.status == "accepted" ? ' bid_status status_accepted' : val?.status == "rejected" ? 'status_rejected bid_status' : " bid_status"}>{FirstLettCapital(val?.status)}</div>
+                                                </div>
+                                                <div className='market_list_info'>
+                                                    <h3 className='heading_type2'>{val?.businessData?.title}</h3>
+                                                    <p>
+                                                        {DOMPurify.sanitize(val?.businessData?.description)
+                                                            .replace(/<[^>]+>/g, '') // Remove HTML tags
+                                                            .substring(0, 100)}
+                                                        {val?.businessData?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div className='bid_status status_rejected'>Rejected</div>
-                                        </div>
-                                        <div className='market_list_info'>
-                                            <h3 className='heading_type2'>Cleaning Products, Lifestyle, Personal Care</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</p>
-                                        </div>
-                                    </div>
-                                    <div className='market_list_rates'>
-                                        <div className='market_list_rate'>
-                                            <p>InnovaRate:</p>
-                                            <h4>74%</h4>
-                                        </div>
-                                        <div className='market_list_rate'>
-                                            <p>Market Readiness Rate:</p>
-                                            <h4>87%</h4>
-                                        </div>
-                                        <div className='market_list_rate'>
-                                            <p>Market Growth:</p>
-                                            <h4><img src={GrowIc} /> 4.3%</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='market_list_right'>
-                                    <div className='market_list_right_con'>
-                                        <div className='market_list_right_con_in'>
-                                            <p>Asking price:</p>
-                                            <h4>$37,700</h4>
-                                        </div>
-                                        <div className='heart_ic'><img src={HeartIcon} /></div>
-                                    </div>
-                                    <div className='market_list_right_meta'>
-                                        <div className='market_list_right_meta_ic'><img src={Agric1} /></div>
-                                        <div className='market_list_right_meta_ic'><img src={Agric2} /></div>
-                                        <div className='market_list_right_meta_ic'><img src={Agric3} /></div>
-                                    </div>
-                                    <div className='market_list_btn'><Link to="/bids-detail" className='btn btn_primary'>Read More</Link></div>
-                                </div>
-                            </div>
-                            <div className='market_list_itm'>
-                                <div className='market_list_img'><div className='market_list_img_in'><img src={BusinessImg1} /></div></div>
-                                <div className='market_list_con'>
-                                    <div className='market_list_con_in'>
-                                        <div className='bid_data'>
-                                            <div className='bid_data_price market_list_rate'>
-                                                <p>Bid Price</p>
-                                                <h4>$37,700</h4>
+                                            <div className='market_list_rates'>
+                                                <div className='market_list_rate'>
+                                                    <p>InnovaRate:</p>
+                                                    <h4>{val?.businessData?.innovaRate}%</h4>
+                                                </div>
+                                                <div className='market_list_rate'>
+                                                    <p>Market Readiness Rate:</p>
+                                                    <h4>{val?.businessData?.marketReadiness}%</h4>
+                                                </div>
+                                                <div className='market_list_rate'>
+                                                    <p>Market Growth:</p>
+                                                    <h4><img src={GrowIc} /> {val?.businessData?.marketGrowth}%</h4>
+                                                </div>
                                             </div>
-                                            <div className='bid_status status_pending'>Pending</div>
                                         </div>
-                                        <div className='market_list_info'>
-                                            <h3 className='heading_type2'>Cleaning Products, Lifestyle, Personal Care</h3>
-                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</p>
+                                        <div className='market_list_right'>
+                                            <div className='market_list_right_con'>
+                                                <div className='market_list_right_con_in'>
+                                                    <p>Asking price:</p>
+                                                    <h4>${val?.businessData?.price}</h4>
+                                                </div>
+                                                {/* <div className='heart_ic cursor-pointer'
+                                                    onClick={() => {
+                                                        addToWishList(val?.businessData?._id)
+
+                                                    }}
+                                                >
+                                                    {
+                                                        val?.businessData?.wishlist ?
+                                                            <img src={HeartIconFilled} />
+
+
+                                                            :
+                                                            <img src={HeartIcon} />
+                                                    }
+                                                </div> */}
+                                            </div>
+                                            <div className='market_list_right_meta'>
+                                                <div className='market_list_right_meta_ic'><img src={Agric1} /></div>
+                                                <div className='market_list_right_meta_ic'><img src={Agric2} /></div>
+                                                <div className='market_list_right_meta_ic'><img src={Agric3} /></div>
+                                            </div>
+                                            <div className='market_list_btn'><Link to={`/market-detail/${val?.businessData?._id}`} className='btn btn_primary'>Read More</Link></div>
                                         </div>
                                     </div>
-                                    <div className='market_list_rates'>
-                                        <div className='market_list_rate'>
-                                            <p>InnovaRate:</p>
-                                            <h4>74%</h4>
-                                        </div>
-                                        <div className='market_list_rate'>
-                                            <p>Market Readiness Rate:</p>
-                                            <h4>87%</h4>
-                                        </div>
-                                        <div className='market_list_rate'>
-                                            <p>Market Growth:</p>
-                                            <h4><img src={GrowIc} /> 4.3%</h4>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='market_list_right'>
-                                    <div className='market_list_right_con'>
-                                        <div className='market_list_right_con_in'>
-                                            <p>Asking price:</p>
-                                            <h4>$37,700</h4>
-                                        </div>
-                                        <div className='heart_ic'><img src={HeartIcon} /></div>
-                                    </div>
-                                    <div className='market_list_right_meta'>
-                                        <div className='market_list_right_meta_ic'><img src={Agric1} /></div>
-                                        <div className='market_list_right_meta_ic'><img src={Agric2} /></div>
-                                        <div className='market_list_right_meta_ic'><img src={Agric3} /></div>
-                                    </div>
-                                    <div className='market_list_btn'><Link to="/bids-detail" className='btn btn_primary'>Read More</Link></div>
-                                </div>
-                            </div>
+                                ))
+                            }
+
+
                         </div>
                     </div>
                 </Container>

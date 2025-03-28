@@ -41,7 +41,7 @@ const MarketplaceLogin = () => {
                 <Container>
                     <Form>
                         <div className='innner_search_form'>
-                            <div className='innner_search_itm'>
+                            <div className='innner_search_itm innner_search_itm_big'>
                                 <Form.Select aria-label="Default select example">
                                     <option>Pick a Category</option>
                                     <option value="1">Pick a Category</option>
@@ -49,21 +49,13 @@ const MarketplaceLogin = () => {
                                     <option value="3">Pick a Category</option>
                                 </Form.Select>                                
                             </div>
-                            <div className='innner_search_itm'>
-                                <Form.Control type='text' placeholder='Industry & Niche' />
+                            <div className='innner_search_itm innner_search_itm_nm'>
+                                <Form.Control type='text' placeholder='Search' />
                             </div>
-                            <div className='innner_search_itm'>
-                                <Form.Select aria-label="Default select example">
-                                    <option>Business Model</option>
-                                    <option value="1">Business Model</option>
-                                    <option value="2">Business Model</option>
-                                    <option value="3">Business Model</option>
-                                </Form.Select>                                
-                            </div>
-                            <div className='innner_search_itm'>
+                            <div className='innner_search_itm innner_search_itm_small'>
                                 <Form.Control type='text' placeholder='Min Price' />
                             </div>
-                            <div className='innner_search_itm'>
+                            <div className='innner_search_itm innner_search_itm_small'>
                                 <Form.Control type='text' placeholder='Max Price' />
                             </div>
                             <div className='innner_search_itm innner_search_itm_btn'>

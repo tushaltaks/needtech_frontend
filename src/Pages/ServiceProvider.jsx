@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
 import HeartIcon from "../assets/heartIc.png"
 import VerifiedIc from "../assets/verifiedIc.svg"
@@ -7,18 +7,62 @@ import ProfilePhoto from "../assets/profilePhoto.jpg"
 import DewberryLogo from "../assets/dewberry_logo.jpg"
 import SearchIc from "../assets/searchIc.svg"
 import { Link } from 'react-router-dom';
+import toast from "react-hot-toast";
+import HeartIconFilled from "../assets/heartFilledIc.png"
+
+import { GetFunction, handleimageUrl, SubmitResponse } from "../utils/ApiFunctions";
+import { baseURL } from "../utils/AxiosInstance";
 
 const ServiceProvider = () => {
+
+    const token = localStorage.getItem('token')
+    const userId = localStorage.getItem('userId')
+    const [page, setPage] = useState(1)
+    const [categoryId, setcategoryId] = useState('')
+    const [paginatio, setPagination] = useState({})
+    const [list, setList] = useState([]);
+    const [search, setSearch] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [categoryList, setCategoryList] = useState([]);
     const handleToggle = () => {
-            document.body.classList.toggle("active_search");
-          };
-        
-          useEffect(() => {
-            // Cleanup to ensure no unintended behavior on unmount
-            return () => {
-              document.body.classList.remove("active_search");
-            };
-          }, []);
+        document.body.classList.toggle("active_search");
+    };
+    const getBusinessList = async () => {
+        const res = await GetFunction(`${baseURL}/serviceProviderList?userId=${token && userId ? userId : ""}&page=${page}&limit=10&search=${search}&categoryId=${categoryId}&minPrice=${minPrice}&maxPrice=${maxPrice}`);
+        if (res?.status == 200) {
+            setPagination({
+                totalRecords: res?.data?.totalRecords, totalPages:
+                    res?.data?.totalPages
+            })
+            setList(res?.data?.data)
+        }
+        else {
+            toast.error(res?.data?.message)
+        }
+    };
+
+    useEffect(() => {
+        getBusinessList()
+        return () => {
+            document.body.classList.remove("active_search");
+        };
+    }, []);
+
+    const addToWishList = async (id) => {
+        const res = await SubmitResponse(`${baseURL}/AddtowishList`, { proivider: id });
+        if (res?.status == 200) {
+            toast.dismiss()
+            toast.success(res?.data?.message)
+            getBusinessList()
+        }
+        else {
+            toast.dismiss()
+            toast.error(res?.data?.message)
+        }
+    }
+
+
     return (
         <>
             <div className='inner_head'>
@@ -26,7 +70,7 @@ const ServiceProvider = () => {
                     <div className='inner_head_in'><h1 className='heading_type1'>Professional Services</h1></div>
                 </Container>
             </div>
-            <div className='mobile_search'><Container><div className='mobile_search_in btn btn_outline' onClick={handleToggle}>Search <img src={SearchIc}/></div></Container></div>
+            <div className='mobile_search'><Container><div className='mobile_search_in btn btn_outline' onClick={handleToggle}>Search <img src={SearchIc} /></div></Container></div>
             <div className='innner_search servidersearch'>
                 <Container>
                     <Form>
@@ -37,10 +81,10 @@ const ServiceProvider = () => {
                                     <option value="1">Professional Service</option>
                                     <option value="2">Professional Service</option>
                                     <option value="3">Professional Service</option>
-                                </Form.Select>                                
+                                </Form.Select>
                             </div>
                             <div className='innner_search_itm innner_search_itm_btn'>
-                            <Button className="btn btn_primary" type="submit">Search</Button>
+                                <Button className="btn btn_primary" type="submit">Search</Button>
                             </div>
                         </div>
                     </Form>
@@ -51,7 +95,65 @@ const ServiceProvider = () => {
                 <Container>
                     <div className='market_list_in'>
                         <div className='market_list_itms serviceprovider_list'>
-                            <div className='market_list_itm'>
+                            {
+                                list && list?.map((val, i) => (
+                                    <div className='market_list_itm' key={i}>
+                                        <div className='market_list_img'><div className='market_list_img_in'><img src={handleimageUrl(val?.image)} /></div></div>
+                                        <div className='market_list_con'>
+                                            <div className='market_list_con_in'>
+                                                <div className='market_meta'>
+                                                    <div className='market_meta_itm'><div className='market_meta_itm_ic'>
+                                                        <img src={VerifiedIc} />
+                                                    </div><span>Verified</span></div>
+                                                </div>
+                                                <div className='market_list_info'>
+                                                    <div className='user_detail'>
+                                                        <h3 className='heading_type2 locked_data'>John Smith</h3>
+                                                        <h4>Electrical Engineer</h4>
+                                                    </div>
+                                                    <p className='locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. tempor incididunt ut labore et dolore magna aliqua.</p>
+                                                    <div className='locked_btn'>
+                                                        <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Professional</Link>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className='market_list_right'>
+                                            <div className='market_list_right_con'>
+                                                <div className='heart_ic'
+                                                    onClick={() => {
+                                                        addToWishList(val?._id)
+
+                                                    }}
+                                                >
+                                                    {
+                                                        val?.wishlist ?
+                                                            <img src={HeartIconFilled} />
+
+
+                                                            :
+                                                            <img src={HeartIcon} />
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div className='service_provider_s'>
+                                                <div className='service_provider_logo locked_data'>
+
+                                                    <img src={val?.companyLogo ? handleimageUrl(val?.companyLogo) : DewberryLogo} />
+                                                </div>
+                                                <div className='service_provider_d'>
+                                                    <p className='locked_data'>{val?.companyName}.</p>
+                                                    <p>{val?.aboutCompany}</p>
+                                                    <p>{val?.city}, {val?.country}</p>
+                                                </div>
+                                            </div>
+                                            <div className='market_list_btn'><Link to={`/service-provider-detail/${val?._id}`} className='btn btn_primary'>Read More</Link></div>
+                                        </div>
+                                    </div>
+                                ))
+                            }
+
+                            {/* <div className='market_list_itm'>
                                 <div className='market_list_img'><div className='market_list_img_in'><img src={ProfilePhoto} /></div></div>
                                 <div className='market_list_con'>
                                     <div className='market_list_con_in'>
@@ -62,7 +164,7 @@ const ServiceProvider = () => {
                                             <div className='user_detail'>
                                                 <h3 className='heading_type2 locked_data'>John Smith</h3>
                                                 <h4>Electrical Engineer</h4>
-                                            </div>                                            
+                                            </div>
                                             <p className='locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. tempor incididunt ut labore et dolore magna aliqua.</p>
                                             <div className='locked_btn'>
                                                 <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Professional</Link>
@@ -75,7 +177,7 @@ const ServiceProvider = () => {
                                         <div className='heart_ic'><img src={HeartIcon} /></div>
                                     </div>
                                     <div className='service_provider_s'>
-                                        <div className='service_provider_logo locked_data'><img src={DewberryLogo}/></div>
+                                        <div className='service_provider_logo locked_data'><img src={DewberryLogo} /></div>
                                         <div className='service_provider_d'>
                                             <p className='locked_data'>Dewberry Ltd.</p>
                                             <p>Engineering Firm</p>
@@ -96,41 +198,7 @@ const ServiceProvider = () => {
                                             <div className='user_detail'>
                                                 <h3 className='heading_type2 locked_data'>John Smith</h3>
                                                 <h4>Electrical Engineer</h4>
-                                            </div>                                            
-                                            <p className='locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. tempor incididunt ut labore et dolore magna aliqua.</p>
-                                            <div className='locked_btn'>
-                                                <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Professional</Link>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='market_list_right'>
-                                    <div className='market_list_right_con'>
-                                        <div className='heart_ic'><img src={HeartIcon} /></div>
-                                    </div>
-                                    <div className='service_provider_s'>
-                                        <div className='service_provider_logo locked_data'><img src={DewberryLogo}/></div>
-                                        <div className='service_provider_d'>
-                                            <p className='locked_data'>Dewberry Ltd.</p>
-                                            <p>Engineering Firm</p>
-                                            <p>Paris, France</p>
-                                        </div>
-                                    </div>
-                                    <div className='market_list_btn'><Link to="/service-provider-detail" className='btn btn_primary'>Read More</Link></div>
-                                </div>
-                            </div>
-                            <div className='market_list_itm'>
-                                <div className='market_list_img'><div className='market_list_img_in'><img src={ProfilePhoto} /></div></div>
-                                <div className='market_list_con'>
-                                    <div className='market_list_con_in'>
-                                        <div className='market_meta'>
-                                            <div className='market_meta_itm'><div className='market_meta_itm_ic'><img src={VerifiedIc} /></div><span>Verified</span></div>
-                                        </div>
-                                        <div className='market_list_info'>
-                                            <div className='user_detail'>
-                                                <h3 className='heading_type2 locked_data'>John Smith</h3>
-                                                <h4>Electrical Engineer</h4>
-                                            </div>                                            
                                             <p className='locked_data locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. tempor incididunt ut labore et dolore magna aliqua.</p>
                                             <div className='locked_btn'>
                                                 <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Professional</Link>
@@ -143,7 +211,7 @@ const ServiceProvider = () => {
                                         <div className='heart_ic'><img src={HeartIcon} /></div>
                                     </div>
                                     <div className='service_provider_s'>
-                                        <div className='service_provider_logo locked_data'><img src={DewberryLogo}/></div>
+                                        <div className='service_provider_logo locked_data'><img src={DewberryLogo} /></div>
                                         <div className='service_provider_d'>
                                             <p className='locked_data'>Dewberry Ltd.</p>
                                             <p>Engineering Firm</p>
@@ -152,7 +220,7 @@ const ServiceProvider = () => {
                                     </div>
                                     <div className='market_list_btn'><Link to="/service-provider-detail" className='btn btn_primary'>Read More</Link></div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </Container>

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Footer from '../Footer';
-import HeaderLogin from '../HeaderLogin';
+import Header from '../Header';
 
 const LayoutLogin = () => {
     return (
         <>
-            <HeaderLogin />
+            <Header />
             <Outlet />
             <Footer />
         </>

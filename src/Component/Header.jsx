@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Logoimg from '../assets/logo.png';
+import { Link, useLocation } from 'react-router-dom';
+import ProfileUser from '../assets/profileUser.svg';
+import { Dropdown } from 'react-bootstrap';
+import Downarrow from '../assets/downarrow.svg';
+import { handleimageUrl } from '../utils/ApiFunctions';
 
 const Header = () => {
+    const {pathname} = useLocation()
+    const [show, setShow] = useState(false)
+    const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("userDetails")));
+
+    const [token, setToken] = useState(localStorage.getItem("token"));
+    const handleLogut = async () => {
+        setUserDetails(null)
+        setToken(null)
+        setShow(true)
+        localStorage.clear()
+
+    }
+
+    useEffect(() => {
+        setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
+        setToken(localStorage.getItem("token"));
+    }, [token, pathname]);
     return (
         <header className='header-sec'>
             <Navbar expand="lg" className="header_sec">
@@ -14,21 +36,35 @@ const Header = () => {
                     <Navbar.Collapse id="navbarScroll">
                         <div className='navbar-collapse_in'>
                             <Nav className='header_nav'>
-                                <Nav.Link href="/marketplace">Marketplace</Nav.Link>
-                                <Nav.Link href="/service-provider">Service Provider</Nav.Link>
-                                <Nav.Link href="#">Start a StartUp</Nav.Link>
-                                <Nav.Link href="#">StartUp-in-a-Box</Nav.Link>
-                                <Nav.Link href="/about-us">About Us</Nav.Link>
-                                <Nav.Link href="#">Partners</Nav.Link>
+                                <Nav.Link as={Link} to="/marketplace">Marketplace</Nav.Link>
+                                <Nav.Link as={Link} to="/service-provider">Service Providers</Nav.Link>
+                                <Nav.Link as={Link} to="/about-us">About Us</Nav.Link>
+                                <Nav.Link as={Link} to="/the-company">Company</Nav.Link>
                             </Nav>
-                            <Nav className='header_nav_right'>
-                                <Nav.Link href="/login">Sign In</Nav.Link> <span className='nav_seprator'>|</span>
-                                <Nav.Link href="/signup">Sign Up</Nav.Link>
-                            </Nav>
+                            {!token ? <Nav className='header_nav_right'>
+                                <Nav.Link as={Link} to="/login">Sign In</Nav.Link> <span className='nav_seprator'>|</span>
+                                <Nav.Link as={Link} to="/signup">Sign Up</Nav.Link>
+                            </Nav> :
+
+                                <Nav className='header_nav_right'>
+                                    {/* <Nav.Link href="" className='notification_sec'><img className='notification_ic' src={NotificationIc}/></Nav.Link> */}
+                                    <Dropdown className="menu_dropdown">
+                                        <Dropdown.Toggle variant="success" id="dropdown-basic"><div className='profile_user_img'><img src={userDetails?.profileImage ? handleimageUrl(userDetails?.profileImage) : ProfileUser} /></div> <span>
+                                            {userDetails?.name}</span> <img className='dropdown_ic' src={Downarrow} /></Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item as={Link} to="/my-profile">My Profile</Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/my-wishlist">My Wishlist</Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/my-bids">My Bids</Dropdown.Item>
+                                            <Dropdown.Item as={Link} to="/my-business">My Startups</Dropdown.Item>
+                                            <Dropdown.Item onClick={handleLogut} >Logout</Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </Nav>}
                         </div>
-                    </Navbar.Collapse>                    
+                    </Navbar.Collapse>
                 </Container>
-                </Navbar>
+            </Navbar>
         </header>
     );
 }

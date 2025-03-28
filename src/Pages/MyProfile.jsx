@@ -2,8 +2,38 @@ import React from 'react';
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
 import ProfilePhoto from "../assets/profilePhoto.jpg"
 import { Link } from "react-router-dom";
+import { useQuery } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
+import { GetFunction, handleimageUrl, SubmitResponse } from '../utils/ApiFunctions';
+import { baseURL } from '../utils/AxiosInstance';
 
 const MyProfile = () => {
+
+
+
+    const getUserProfile = async () => {
+        const res = await GetFunction(`${baseURL}/userDetail`);
+        if (res?.status == 200) {
+
+            return res?.data
+        }
+        else {
+            toast.error(res?.data?.message)
+        }
+    };
+
+
+
+    const { data, isLoading, refetch } = useQuery({
+        queryKey: ['userDetails'],
+        queryFn: getUserProfile,
+        onError: (error) => {
+            toast.error(error.message);
+        },
+
+
+    })
+
     return (
         <>
             <div className='inner_head'>
@@ -17,21 +47,24 @@ const MyProfile = () => {
                         <Row className='row_space'>
                             <Col lg={8}>
                                 <div className='prodile_sec_s'>
-                                    <div className='prodile_sec_img'><div className='prodile_sec_img_in'><img src={ProfilePhoto}/></div></div>
+                                    <div className='prodile_sec_img'><div className='prodile_sec_img_in'><img src={
+
+                                        data?.profileImage ? handleimageUrl(data?.profileImage) : ProfilePhoto
+                                    } /></div></div>
                                     <div className='prodile_sec_info'>
                                         <h2 className='heading_type2'>Personal Info</h2>
                                         <div className='prodile_sec_itms'>
                                             <div className='prodile_sec_itm market_list_rate'>
                                                 <p>Name</p>
-                                                <h4>Peter Parker</h4>
+                                                <h4>{data?.name}</h4>
                                             </div>
                                             <div className='prodile_sec_itm market_list_rate'>
                                                 <p>Email</p>
-                                                <h4>peterparker@needtech.com</h4>
+                                                <h4>{data?.email} </h4>
                                             </div>
                                             <div className='prodile_sec_itm market_list_rate'>
                                                 <p>Mobile Number</p>
-                                                <h4>+1 982 536 4025</h4>
+                                                <h4>{data?.mobile}</h4>
                                             </div>
                                         </div>
                                         <div className='btn_sec btn_sec_itms'>
@@ -47,19 +80,20 @@ const MyProfile = () => {
                                     <div className='prodile_sec_itms'>
                                         <div className='prodile_sec_itm market_list_rate'>
                                             <p>Business Name</p>
-                                            <h4>Cleaning Products</h4>
+                                            <h4>{data?.buisnessName ? data?.buisnessName : 'N/A'}</h4>
                                         </div>
                                         <div className='prodile_sec_itm market_list_rate'>
                                             <p>Position</p>
-                                            <h4>Board Member</h4>
+                                            <h4>{data?.position ? data?.position : 'N/A'}</h4>
                                         </div>
                                         <div className='prodile_sec_itm market_list_rate'>
                                             <p>Type of business</p>
-                                            <h4>Entrepreneur</h4>
+                                            <h4>{data?.businessType ? data?.businessType : 'N/A'}</h4>
                                         </div>
                                         <div className='prodile_sec_itm market_list_rate'>
                                             <p>Address</p>
-                                            <h4>jacksonville, florida, usa</h4>
+                                            <h4>{data?.buisnessCity ? `${data?.buisnessCity}, ${data?.buisnessState}, ${data?.buisnessCountry}` : 'N/A'}</h4>
+
                                         </div>
                                     </div>
                                 </div>

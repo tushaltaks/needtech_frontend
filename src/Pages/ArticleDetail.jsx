@@ -1,16 +1,53 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import BackIc from "../assets/backIc.svg"
 import BlogDetailimg from "../assets/blogDetailimg.jpg"
 import Calanderic from "../assets/calanderic.svg"
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import { baseURL } from '../utils/AxiosInstance';
+import { GetFunction, handleimageUrl } from '../utils/ApiFunctions';
+import toast from 'react-hot-toast';
+import moment from 'moment';
 
 const ArticleDetail = () => {
+    const { id } = useParams();
+    const [blogDetail, setBlogDetail] = useState('')
+    const [categoryList, setCategoryList] = useState([])
+
+    const getBlogDetails = async () => {
+        const res = await GetFunction(`${baseURL}/getArticleDetail/${id}`)
+        console.log(res)
+        if (res?.status == 200) {
+            setBlogDetail(res?.data)
+        }
+        else {
+            toast.dismiss()
+            toast.error(res?.message);
+        }
+    }
+
+    const getCategoryList = async () => {
+        const res = await GetFunction(`${baseURL}/getCategoryList`);
+
+        if (res?.status == 200) {
+            setCategoryList(res?.data)
+        }
+        else {
+            toast.error(res?.data?.message)
+        }
+    };
+    useEffect(() => {
+        if (id) {
+            getBlogDetails()
+        }
+        getCategoryList()
+    }, [id])
+
     return (
         <>
             <div className='inner_head'>
                 <Container>
-                    <div className='inner_head_in'>
+                    <div className='inner_head_in backbtn_s'>
                         <Link to="/articles"><img src={BackIc} /> Back to Articles</Link>
                     </div>
                 </Container>
@@ -21,16 +58,20 @@ const ArticleDetail = () => {
                         <Row>
                             <Col md={8}>
                                 <div className='article_content'>
-                                    <div className='article_detail_img'><img src={BlogDetailimg} /></div>
+                                    <div className='article_detail_img'><img src={blogDetail?.image ? handleimageUrl(blogDetail?.image) : BlogDetailimg} /></div>
                                     <div className='article_meta'>
-                                        <div className='article_meta_nm'>By Robert Aguilar</div>
-                                        <div className='article_meta_time'><img src={Calanderic} /> 24-12-2025</div>
+                                        <div className='article_meta_nm'>By {blogDetail?.author}</div>
+                                        <div className='article_meta_time'><img src={Calanderic} /> {moment(blogDetail?.createdAt).format('DD-MM-YYYY')}</div>
                                     </div>
                                     <div className='article_info'>
-                                        <h1>Quickly reconceptualize strategic e-tailers</h1>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
+                                        <h1>{blogDetail?.title}</h1>
+                                        <p
+                                            dangerouslySetInnerHTML={{
+                                                __html: blogDetail?.description
+                                            }}
+                                        >
+
+                                        </p>
                                     </div>
                                 </div>
                             </Col>
@@ -39,12 +80,13 @@ const ArticleDetail = () => {
                                     <div className='article_right_itm'>
                                         <h2 className='heading_type2'>Categories</h2>
                                         <ul className='cat_list'>
-                                            <li className='cat_list_itm'><Link to="/">Retail <span>(12)</span></Link></li>
-                                            <li className='cat_list_itm'><Link to="/">Finance Consulting <span>(12)</span></Link></li>
-                                            <li className='cat_list_itm'><Link to="/">Fashion & Beauty <span>(12)</span></Link></li>
-                                            <li className='cat_list_itm'><Link to="/">Food & Beverage <span>(12)</span></Link></li>
-                                            <li className='cat_list_itm'><Link to="/">Health & Wellness <span>(12)</span></Link></li>
-                                            <li className='cat_list_itm'><Link to="/">Home Services <span>(12)</span></Link></li>
+                                            {
+                                                categoryList && categoryList?.map((val, i) => (
+                                                    <li key={i} className='cat_list_itm'><Link to={`/articles?categoryId=${val?._id}`}>{val?.title} <span>({val?.categoryBlogCount || 0})</span></Link></li>
+
+                                                ))
+                                            }
+
                                         </ul>
                                     </div>
                                 </div>

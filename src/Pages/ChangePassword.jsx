@@ -7,11 +7,45 @@ import Loginmetaic2 from '../assets/loginmetaic2.svg';
 import Loginmetaic3 from '../assets/loginmetaic3.svg';
 import BackIc from "../assets/backIc.svg";
 import SendEmail from '../Component/Modals/SendEmail';
+import { ErrorMessage, Field, Formik } from 'formik';
+import { ChangePassowrd } from '../utils/Utils';
+import { SubmitResponse } from '../utils/ApiFunctions';
+import { baseURL, LoginbaseURL } from '../utils/AxiosInstance';
+import toast from 'react-hot-toast';
+import { Eye, EyeOff } from 'lucide-react';
 
 const ChangePassword = () => {
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+
+
+    const [passwordVisible, setPasswordVisible] = useState(false);
+    const [passwordVisible1, setPasswordVisible1] = useState(false);
+    const [passwordVisible2, setPasswordVisible2] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
+    const togglePasswordVisibility1 = () => {
+        setPasswordVisible1(!passwordVisible1);
+    };
+    const togglePasswordVisibility2 = () => {
+        setPasswordVisible2(!passwordVisible2);
+    };
+
+
+    const handleSubmit = async (values) => {
+        const res = await SubmitResponse(`${LoginbaseURL}/changePassword`, values);
+        console.log('ssss', res)
+        if (res?.status == 200) {
+            toast.success(res?.data?.message);
+            setShow(false);
+        }
+
+        else {
+            toast.dismiss()
+            toast.error(res?.message);
+        }
+    }
+
     return (
         <>
             <section className='login_page'>
@@ -22,30 +56,87 @@ const ChangePassword = () => {
                             <Col md={6} className='col_login'>
                                 <div className='login_form'>
                                     <div className='login_form_head'>
-                                        <h2 className='heading_type2'>Chnage Password?</h2>
+                                        <h2 className='heading_type2'>Change Password?</h2>
                                     </div>
-                                    <Form>
-                                        <div className='login_form_in'>
-                                            <Form.Group className="form-group" controlId="formGroupEmail">
-                                                <Form.Label>Old Password</Form.Label>
-                                                <Form.Control type="email" placeholder="Enter Password" />
-                                            </Form.Group>
-                                            <Form.Group className="form-group" controlId="formGroupEmail">
-                                                <Form.Label>New Password</Form.Label>
-                                                <Form.Control type="email" placeholder="Enter Password" />
-                                            </Form.Group>
-                                            <Form.Group className="form-group" controlId="formGroupEmail">
-                                                <Form.Label>Confirm Password</Form.Label>
-                                                <Form.Control type="email" placeholder="Enter Password" />
-                                            </Form.Group>
-                                            <Button as='' className="btn btn_primary w-100">Submit</Button>
-                                        </div>
-                                        <div className='login_para'>
-                                            <div className='inner_head_in'>
-                                                <Link to="/my-profile"><img src={BackIc} /> Back to Profile</Link>
-                                            </div>
-                                        </div>
-                                    </Form>
+                                    <Formik
+                                        initialValues={{
+                                            oldPassword: "",
+                                            newPassword: "",
+                                            confirmPassword: "",
+                                        }}
+                                        validationSchema={ChangePassowrd}
+                                        onSubmit={handleSubmit}
+                                    >
+                                        {({ handleSubmit }) => (
+                                            <Form onSubmit={handleSubmit}>
+                                                <div className="login_form_in">
+                                                    <div className="form-group">
+                                                        <label>Old Password</label>
+                                                        <div className="eye_password">
+                                                            <Field
+                                                                type={passwordVisible ? "text" : "password"}
+
+                                                                name="oldPassword"
+                                                                className="form-control"
+                                                                placeholder="Enter Password"
+                                                            />
+                                                            <div className="password_eye" onClick={togglePasswordVisibility}>
+                                                                {passwordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
+                                                            </div>
+                                                        </div>
+                                                        <ErrorMessage name="oldPassword" component="div" className="text-danger" />
+                                                    </div>
+
+                                                    <div className="form-group">
+                                                        <label>New Password</label>
+                                                        <div className="eye_password">
+                                                            <Field
+                                                                type={passwordVisible1 ? "text" : "password"}
+                                                                name="newPassword"
+                                                                className="form-control"
+                                                                placeholder="Enter Password"
+                                                            />
+
+                                                            <div className="password_eye" onClick={togglePasswordVisibility1}>
+                                                                {passwordVisible1 ? <EyeOff size={20} /> : <Eye size={20} />}
+                                                            </div>
+                                                        </div>
+                                                        <ErrorMessage name="newPassword" component="div" className="text-danger" />
+                                                    </div>
+
+                                                    <div className="form-group">
+                                                        <label>Confirm Password</label>
+                                                        <div className="eye_password">
+
+                                                            <Field
+                                                                type={passwordVisible2 ? "text" : "password"}
+
+                                                                name="confirmPassword"
+                                                                className="form-control"
+                                                                placeholder="Enter Password"
+                                                            />
+                                                            <div className="password_eye" onClick={togglePasswordVisibility2}>
+                                                                {passwordVisible2 ? <EyeOff size={20} /> : <Eye size={20} />}
+                                                            </div>
+                                                        </div>
+                                                        <ErrorMessage name="confirmPassword" component="div" className="text-danger" />
+                                                    </div>
+
+                                                    <Button type="submit" className="btn btn_primary w-100">
+                                                        Submit
+                                                    </Button>
+                                                </div>
+
+                                                <div className="login_para">
+                                                    <div className="inner_head_in">
+                                                        <Link to="/my-profile">
+                                                            <img src={BackIc} alt="Back" /> Back to Profile
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </Form>
+                                        )}
+                                    </Formik>
                                 </div>
                             </Col>
                             <Col md={6} className='col_login'>
@@ -62,32 +153,32 @@ const ChangePassword = () => {
                                             <li>And all other relevant due diligence documents.</li>
                                         </ul>
                                     </div>
-                                    <div className='login_meta'>
+                                    <div className='login_meta why_need_meta'>
                                         <Row>
-                                            <Col sm={4} className='col'>
+                                            <Col className='col-4'>
                                                 <div className='login_meta_itm'>
                                                     <div className='login_meta_ic'><img src={Loginmetaic1} /></div>
                                                     <div className='login_meta_con'>
-                                                        <h2 className='heading_type2'>300+</h2>
-                                                        <p>Happy Customers</p>
+                                                        <p className='heading_t'>First Ever</p>
+                                                        <p>Startup Innovation Machine For Business Generation</p>
                                                     </div>
                                                 </div>
                                             </Col>
-                                            <Col sm={4} className='col'>
+                                            <Col className='col-4'>
                                                 <div className='login_meta_itm'>
                                                     <div className='login_meta_ic'><img src={Loginmetaic2} /></div>
                                                     <div className='login_meta_con'>
-                                                        <h2 className='heading_type2'>50+</h2>
-                                                        <p>Clients Businesses</p>
+                                                        <p className='heading_t'>10,000+</p>
+                                                        <p>Investment-Ready Startups Marketplace</p>
                                                     </div>
                                                 </div>
                                             </Col>
-                                            <Col sm={4} className='col'>
+                                            <Col className='col-4'>
                                                 <div className='login_meta_itm'>
                                                     <div className='login_meta_ic'><img src={Loginmetaic3} /></div>
                                                     <div className='login_meta_con'>
-                                                        <h2 className='heading_type2'>20+</h2>
-                                                        <p>Years of Experience</p>
+                                                        <p className='heading_t'>Empowering</p>
+                                                        <p>Bright Minds From All Walks Of Life</p>
                                                     </div>
                                                 </div>
                                             </Col>
@@ -100,10 +191,6 @@ const ChangePassword = () => {
                 </Container>
             </section>
 
-            <SendEmail
-                show={show}
-                onHide={handleClose}
-            />
         </>
     );
 }

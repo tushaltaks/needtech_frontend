@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
 import HeartIcon from "../assets/heartIc.png"
 import HeartIconFilled from "../assets/heartFilledIc.png"
@@ -10,25 +10,73 @@ import Agric2 from "../assets/agric2.svg"
 import Agric3 from "../assets/agric3.svg"
 import Lokedic from "../assets/lokedic.svg"
 import Startupim1 from "../assets/startupim1.jpg"
-import Startupim2 from "../assets/startupim2.jpg"
-import Startupim3 from "../assets/startupim3.jpg"
-import Startupim4 from "../assets/startupim4.jpg"
-import Startupim5 from "../assets/startupim5.jpg"
-import Startupim6 from "../assets/startupim6.jpg"
+
 import SearchIc from "../assets/searchIc.svg"
 import { Link } from 'react-router-dom';
+import { baseURL } from "../utils/AxiosInstance";
+import toast from "react-hot-toast";
+import { GetFunction, handleimageUrl, SubmitResponse } from "../utils/ApiFunctions";
 
 const Marketplace = () => {
+    const token = localStorage.getItem('token')
+    const userId = localStorage.getItem('userId')
+    const [page, setPage] = useState(1)
+    const [categoryId, setcategoryId] = useState('')
+    const [paginatio, setPagination] = useState({})
+    const [list, setList] = useState([]);
+    const [search, setSearch] = useState('');
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [categoryList, setCategoryList] = useState([]);
     const handleToggle = () => {
         document.body.classList.toggle("active_search");
-      };
-    
-      useEffect(() => {
-        // Cleanup to ensure no unintended behavior on unmount
+    };
+
+    const getBusinessList = async () => {
+        const res = await GetFunction(`${baseURL}/businessList?userId=${token && userId ? userId : ""}&page=${page}&limit=10&search=${search}&categoryId=${categoryId}&minPrice=${minPrice}&maxPrice=${maxPrice}`);
+        if (res?.status == 200) {
+            setPagination({
+                totalRecords: res?.data?.totalRecords, totalPages:
+                    res?.data?.totalPages
+            })
+            setList(res?.data?.data)
+        }
+        else {
+            toast.error(res?.data?.message)
+        }
+    };
+    const getCategoryList = async () => {
+        const res = await GetFunction(`${baseURL}/getCategoryList`);
+
+        if (res?.status == 200) {
+            setCategoryList(res?.data)
+        }
+        else {
+            toast.error(res?.data?.message)
+        }
+    };
+    useEffect(() => {
+        getBusinessList()
+        getCategoryList()
         return () => {
-          document.body.classList.remove("active_search");
+            document.body.classList.remove("active_search");
         };
-      }, []);
+    }, []);
+
+    const addToWishList = async (id) => {
+        const res = await SubmitResponse(`${baseURL}/AddtowishList`, { businessId: id });
+        if (res?.status == 200) {
+            toast.dismiss()
+            toast.success(res?.data?.message)
+            getBusinessList()
+        }
+        else {
+            toast.dismiss()
+            toast.error(res?.data?.message)
+        }
+    }
+
+
     return (
         <>
             <div className='inner_head'>
@@ -36,98 +84,141 @@ const Marketplace = () => {
                     <div className='inner_head_in'><h1 className='heading_type1'>Startups Marketplace</h1></div>
                 </Container>
             </div>
-            <div className='mobile_search'><Container><div className='mobile_search_in btn btn_outline' onClick={handleToggle}>Search <img src={SearchIc}/></div></Container></div>
+            <div className='mobile_search'><Container><div className='mobile_search_in btn btn_outline' onClick={handleToggle}>Search <img src={SearchIc} /></div></Container></div>
             <div className='innner_search'>
                 <Container>
-                    <Form>
-                        <div className='innner_search_form'>
-                            <div className='innner_search_itm'>
-                                <Form.Select aria-label="Default select example">
-                                    <option>Pick a Category</option>
-                                    <option value="1">Pick a Category</option>
-                                    <option value="2">Pick a Category</option>
-                                    <option value="3">Pick a Category</option>
-                                </Form.Select>                                
-                            </div>
-                            <div className='innner_search_itm'>
-                                <Form.Control type='text' placeholder='Industry & Niche' />
-                            </div>
-                            <div className='innner_search_itm'>
-                                <Form.Select aria-label="Default select example">
-                                    <option>Business Model</option>
-                                    <option value="1">Business Model</option>
-                                    <option value="2">Business Model</option>
-                                    <option value="3">Business Model</option>
-                                </Form.Select>                                
-                            </div>
-                            <div className='innner_search_itm'>
-                                <Form.Control type='text' placeholder='Min Price' />
-                            </div>
-                            <div className='innner_search_itm'>
-                                <Form.Control type='text' placeholder='Max Price' />
-                            </div>
-                            <div className='innner_search_itm innner_search_itm_btn'>
-                            <Button className="btn btn_primary" type="submit">Search</Button>
-                            </div>
+
+                    <div className='innner_search_form'>
+                        <div className='innner_search_itm innner_search_itm_big'>
+                            <Form.Select aria-label="Default select example"
+                                value={categoryId}
+                                onChange={(e) => {
+                                    setcategoryId(e.target.value)
+                                }}
+                            >
+                                <option>Pick a Category</option>
+                                {categoryList &&
+                                    categoryList?.map((item, index) => (
+                                        <option key={index} value={item?._id}>{item?.title}</option>
+                                    ))
+                                }
+                            </Form.Select>
                         </div>
-                    </Form>
+                        <div className='innner_search_itm innner_search_itm_nm'>
+                            <Form.Control type='text' placeholder='Search'
+                                value={search}
+                                onChange={(e) => {
+                                    setSearch(e.target.value)
+                                }}
+                            />
+                        </div>
+                        <div className='innner_search_itm innner_search_itm_small'>
+                            <Form.Control type='number' placeholder='Min Price'
+                                value={minPrice}
+                                onChange={(e) => {
+                                    setMinPrice(e.target.value)
+                                }}
+                            />
+                        </div>
+                        <div className='innner_search_itm innner_search_itm_small'>
+                            <Form.Control
+                                value={maxPrice}
+                                onChange={(e) => {
+                                    setMaxPrice(e.target.value)
+                                }}
+
+                                type='number' placeholder='Max Price' />
+                        </div>
+                        <div className='innner_search_itm innner_search_itm_btn'>
+                            <Button className="btn btn_primary"
+                                onClick={getBusinessList}
+                            >Search</Button>
+                        </div>
+                    </div>
+
                 </Container>
             </div>
             <div className='seach_mobile'></div>
             <section className='market_list'>
                 <Container>
                     <div className='market_list_in'>
-                        <div className='results_found'>297 Startups available</div>
+                        <div className='results_found'>{paginatio?.totalRecords || 0} Startups available</div>
                         <div className='market_list_itms'>
-                            <div className='market_list_itm'>
-                                <div className='market_list_img'><div className='market_list_img_in'><img src={Startupim1} /></div></div>
-                                <div className='market_list_con'>
-                                    <div className='market_list_con_in'>
-                                        <div className='market_meta'>
-                                            <div className='market_meta_itm'><div className='market_meta_itm_ic'><img src={VerifiedIc} /></div><span>Verified</span></div>
-                                            <div className='market_meta_itm'><div className='market_meta_itm_ic'><img src={NewIc} /></div><span>New Startup</span></div>
-                                            <div className='market_meta_itm market_meta_itm_data'><span>Health & 2 more</span></div>
-                                        </div>
-                                        <div className='market_list_info'>
-                                            <h3 className='heading_type2'>Novel Fat Formulation</h3>
-                                            <p className="locked_data">A novel fat formulation enables tailored triglyceride compositions to enhance stability and functionality for food, pharmaceuticals, and cosmetics...</p>
-                                            <div className='locked_btn'>
-                                                <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Startup</Link>
+                            {
+                                list && list?.map((val, i) => (
+                                    <div className='market_list_itm' key={i}>
+                                        <div className='market_list_img'><div className='market_list_img_in'><img src={val?.image ? handleimageUrl(val?.image) : Startupim1} /></div></div>
+                                        <div className='market_list_con'>
+                                            <div className='market_list_con_in'>
+                                                <div className='market_meta'>
+                                                    <div className='market_meta_itm'><div className='market_meta_itm_ic'><img src={VerifiedIc} /></div><span>Verified</span></div>
+                                                    <div className='market_meta_itm'><div className='market_meta_itm_ic'><img src={NewIc} /></div><span>New Startup</span></div>
+                                                    <div className='market_meta_itm market_meta_itm_data'>
+                                                        <span>
+                                                            {val?.businessCategory?.[0]?.title}
+                                                            {val?.businessCategory?.length > 1 && ` & ${val.businessCategory.length - 1} more`}
+                                                        </span>
+
+                                                    </div>
+                                                </div>
+                                                <div className='market_list_info'>
+                                                    <h3 className='heading_type2'>{val?.title}</h3>
+                                                    <p className="locked_data">
+                                                        {val?.description}
+                                                    </p>
+                                                    <div className='locked_btn'>
+                                                        <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Startup</Link>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className='market_list_rates'>
+                                                <div className='market_list_rate'>
+                                                    <p>InnovaRate:</p>
+                                                    <h4>{val?.innovaRate || 0} %</h4>
+                                                </div>
+                                                <div className='market_list_rate'>
+                                                    <p>Market Readiness Rate:</p>
+                                                    <h4 className="locked_data">{val?.marketReadiness || 0} %</h4>
+                                                </div>
+                                                <div className='market_list_rate'>
+                                                    <p>Market Growth:</p>
+                                                    <h4 className="locked_data"><img src={GrowIc} /> {val?.marketGrowth} %</h4>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div className='market_list_rates'>
-                                        <div className='market_list_rate'>
-                                            <p>InnovaRate:</p>
-                                            <h4>79%</h4>
+                                        <div className='market_list_right'>
+                                            <div className='market_list_right_con'>
+                                                <div className='market_list_right_con_in'>
+                                                    <p>Asking price:</p>
+                                                    <h4>$ {val?.price}</h4>
+                                                </div>
+                                                <div className='heart_ic cursor-pointer'
+                                                    onClick={() => {
+                                                        addToWishList(val?._id)
+
+                                                    }}
+                                                >
+                                                    {
+                                                        val?.wishlist ?
+                                                            <img src={HeartIconFilled} />
+
+
+                                                            :
+                                                            <img src={HeartIcon} />
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div className='market_list_right_meta'>
+                                                <div className='market_list_right_meta_ic'><img src={Agric1} /></div>
+                                                <div className='market_list_right_meta_ic'><img src={Agric2} /></div>
+                                                <div className='market_list_right_meta_ic'><img src={Agric3} /></div>
+                                            </div>
+                                            <div className='market_list_btn'><Link to={`/market-detail/${val?._id}`} className='btn btn_primary'>Read More</Link></div>
                                         </div>
-                                        <div className='market_list_rate'>
-                                            <p>Market Readiness Rate:</p>
-                                            <h4 className="locked_data">83%</h4>
-                                        </div>
-                                        <div className='market_list_rate'>
-                                            <p>Market Growth:</p>
-                                            <h4 className="locked_data"><img src={GrowIc} /> 9.3%</h4>
-                                        </div>
                                     </div>
-                                </div>
-                                <div className='market_list_right'>
-                                    <div className='market_list_right_con'>
-                                        <div className='market_list_right_con_in'>
-                                            <p>Asking price:</p>
-                                            <h4>$59,700</h4>
-                                        </div>
-                                        <div className='heart_ic'><img src={HeartIconFilled} /></div>
-                                    </div>
-                                    <div className='market_list_right_meta'>
-                                        <div className='market_list_right_meta_ic'><img src={Agric1} /></div>
-                                        <div className='market_list_right_meta_ic'><img src={Agric2} /></div>
-                                        <div className='market_list_right_meta_ic'><img src={Agric3} /></div>
-                                    </div>
-                                    <div className='market_list_btn'><Link to="/market-detail" className='btn btn_primary'>Read More</Link></div>
-                                </div>
-                            </div>
-                            <div className='market_list_itm'>
+                                ))
+                            }
+                            {/* <div className='market_list_itm'>
                                 <div className='market_list_img'><div className='market_list_img_in'><img src={Startupim2} /></div></div>
                                 <div className='market_list_con'>
                                     <div className='market_list_con_in'>
@@ -363,7 +454,7 @@ const Marketplace = () => {
                                     </div>
                                     <div className='market_list_btn'><Link to="/market-detail" className='btn btn_primary'>Read More</Link></div>
                                 </div>
-                            </div>
+                            </div> */}
                         </div>
                     </div>
                 </Container>

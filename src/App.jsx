@@ -1,4 +1,6 @@
+import React, { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+
 import Authlayout from "./Component/layouts/Authlayout"
 import Home from "./Pages/Home"
 import Layout from "./Component/layouts/Layout"
@@ -18,7 +20,7 @@ import BidSubmitted from "./Component/Modals/BidSubmitted"
 import Payment from "./Pages/Payment"
 import LayoutLogin from "./Component/Layouts/LayoutLogin"
 import MarketplaceLogin from "./Pages/MarketplaceLogin"
-import MarketDetailLogin from "./Pages/MarketDetailLogin"
+
 import MyBusiness from "./Pages/MyBusiness"
 import BusinessDetail from "./Pages/BusinessDetail"
 import MyBids from "./Pages/MyBids"
@@ -32,52 +34,83 @@ import ServiceProvider from "./Pages/ServiceProvider"
 import ServiceProviderLogin from "./Pages/ServiceProviderLogin"
 import ServiceProviderDetail from "./Pages/ServiceProviderDetail"
 import ServiceProviderDetailLogin from "./Pages/ServiceProviderDetailLogin"
- 
+import CompleteProfile from "./Pages/CompleteProfile"
+import StepPayment from "./Pages/StepPayment"
+import HelpSupport from "./Pages/HelpSupport"
+import PrivacyPolicy from "./Pages/PrivacyPolicy"
+import TermsConditions from "./Pages/TermsConditions"
+import TheCompany from "./Pages/TheCompany"
+import FAQs from "./Pages/FAQs"
+import { Toaster } from "react-hot-toast"
+import Resetpassword from './Pages/Resetpassword';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+const LoginRoute = lazy(() => import('./Component/Protected_routing/LoginRoute'));
+const Proteted = lazy(() => import('./Component/Protected_routing/Proteted'));
+const queryClient = new QueryClient();
 
 
 function App() {
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Authlayout />}>
-            <Route path='/login' element={<Login />} />
-            <Route path='/signup' element={<SignUp />} />
-            <Route path='/forgot-password' element={<ForgotPassword />} />
-            <Route path='/change-password' element={<ChangePassword />} />
-          </Route>
-          <Route  element={<Layout/>}>
-            <Route path='/' element={<Home />} />
-            <Route path='/marketplace' element={<Marketplace />} />
-            <Route path='/market-detail' element={<MarketDetail />} />
-            <Route path='/locked-market-detail' element={<LockedMarketplaceDetail />} />
-            <Route path='/about-us' element={<AboutUs />} />
-            <Route path='/articles' element={<Articles />} />   
-            <Route path='/article-detail' element={<ArticleDetail />} />  
-            <Route path='/send-email' element={<SendEmail />} />    
-            <Route path='/offer-bid' element={<OfferBid />} />       
-            <Route path='/offer-bid-payment' element={<OfferBidPayment />} /> 
-            <Route path='/bid-submitted' element={<BidSubmitted />} /> 
-            <Route path='/payment' element={<Payment />} />
-            <Route path='/service-provider' element={<ServiceProvider />} />
-            <Route path='/service-provider-detail' element={<ServiceProviderDetail />} />
-          </Route>        
-          <Route  element={<LayoutLogin/>}>
-            <Route path='/marketplace-login' element={<MarketplaceLogin />} />
-            <Route path='/market-detail-login' element={<MarketDetailLogin />} />
-            <Route path='/my-business' element={<MyBusiness />} />
-            <Route path='/business-detail' element={<BusinessDetail />} />
-            <Route path='/my-bids' element={<MyBids />} />
-            <Route path='/bids-detail' element={<BidsDetail />} />
-            <Route path='/my-wishlist' element={<MyWishlist />} />
-            <Route path='/my-profile' element={<MyProfile />} />
-            <Route path='/edit-profile' element={<EditProfile />} />            
-            <Route path='/service-provider-login' element={<ServiceProviderLogin />} />
-            <Route path='/service-provider-detail-login' element={<ServiceProviderDetailLogin />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+
+        <BrowserRouter>
+          <Toaster />
+          <Routes>
+
+            <Route element={<Authlayout />}>
+              <Route element={<LoginRoute />}>
+                <Route path='/login' element={<Login />} />
+                <Route path='/signup' element={<SignUp />} />
+                <Route path='/reset-password' element={<Resetpassword />} />
+                <Route path='/forgot-password' element={<ForgotPassword />} />
+                <Route path='/complete-profile' element={<CompleteProfile />} />
+                <Route path='/step-payment' element={<StepPayment />} />
+              </Route>
+            </Route>
+            <Route element={<Layout />}>
+              <Route path='/' element={<Home />} />
+              <Route path='/marketplace' element={<Marketplace />} />
+
+              <Route path='/market-detail/:id' element={<MarketDetail />} />
+              <Route path='/locked-market-detail' element={<LockedMarketplaceDetail />} />
+              <Route path='/about-us' element={<AboutUs />} />
+              <Route path='/the-company' element={<TheCompany />} />
+              <Route path='/articles' element={<Articles />} />
+              <Route path='/article-detail/:id' element={<ArticleDetail />} />
+              <Route path='/send-email' element={<SendEmail />} />
+              <Route path='/offer-bid' element={<OfferBid />} />
+              <Route path='/offer-bid-payment' element={<OfferBidPayment />} />
+              <Route path='/bid-submitted' element={<BidSubmitted />} />
+              <Route path='/payment' element={<Payment />} />
+              <Route path='/service-provider' element={<ServiceProvider />} />
+              <Route path='/service-provider-detail/:id' element={<ServiceProviderDetail />} />
+              <Route path='/help-support' element={<HelpSupport />} />
+              <Route path='/privacy-policy' element={<PrivacyPolicy />} />
+              <Route path='/terms-conditions' element={<TermsConditions />} />
+              <Route path='/faqs' element={<FAQs />} />
+            </Route>
+            <Route element={<Proteted />}>
+              <Route element={<LayoutLogin />}>
+                <Route path='/marketplace-login' element={<MarketplaceLogin />} />
+
+                <Route path='/my-business' element={<MyBusiness />} />
+                <Route path='/business-detail' element={<BusinessDetail />} />
+                <Route path='/my-bids' element={<MyBids />} />
+                <Route path='/bids-detail' element={<BidsDetail />} />
+                <Route path='/my-wishlist' element={<MyWishlist />} />
+                <Route path='/my-profile' element={<MyProfile />} />
+                <Route path='/change-password' element={<ChangePassword />} />
+
+                <Route path='/edit-profile' element={<EditProfile />} />
+                <Route path='/service-provider-login' element={<ServiceProviderLogin />} />
+                <Route path='/service-provider-detail-login' element={<ServiceProviderDetailLogin />} />
+              </Route>
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </QueryClientProvider>
     </>
   )
 }

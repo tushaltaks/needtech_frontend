@@ -1,16 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import DOMPurify from 'dompurify';
+
 import BlogImg1 from "../assets/blog_img1.jpg"
-import BlogImg2 from "../assets/blog_img2.jpg"
-import BlogImg3 from "../assets/blog_img3.jpg"
-import BlogImg4 from "../assets/blog_img4.jpg"
-import BlogImg5 from "../assets/blog_img5.jpg"
-import BlogImg6 from "../assets/blog_img6.jpg"
-import BlogImg7 from "../assets/blog_img7.jpg"
+
 import RightArrow from "../assets/right_arrow.svg"
 import { Link } from 'react-router-dom';
+import { GetFunction, handleimageUrl } from '../utils/ApiFunctions';
+import { baseURL } from '../utils/AxiosInstance';
+import toast from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
 
 const Articles = () => {
+    const [page, setPage] = React.useState(1);
+    const [limit] = React.useState(10);
+    const [pagination, setPagination] = useState('')
+
+    const searchParams = new URLSearchParams(location.search);
+    const category = searchParams.get("categoryId");
+
+
+    const getBlogs = async () => {
+        const res = await GetFunction(`${baseURL}/getArticle?page=${page}&limit=${10}&category=${category||''}`);
+        // console.log('res', res)
+        if (res?.status == 200) {
+            setPagination({
+                currentPage: res?.data?.currentPage,
+                totalPages: res?.data?.totalPages,
+                totalRecords: res?.data?.totalRecords,
+            });
+            return res?.data?.data
+        }
+        else {
+            toast.dismiss()
+            toast.error(res?.data?.message)
+        }
+    };
+
+
+
+    const { data, isLoading, refetch } = useQuery({
+        queryKey: ['blogs', page, category],
+        queryFn: getBlogs,
+        onError: (error) => {
+            toast.error(error.message);
+        },
+
+
+    })
+
     return (
         <>
             <div className='inner_head'>
@@ -24,102 +62,72 @@ const Articles = () => {
                         <Row className='article_sec_dlt'>
                             <Col md={6}>
                                 <div className='article_sec_itm'>
-                                    <div className='article_sec_img'><img src={BlogImg1} /></div>
+                                    <div className='article_sec_img'><img src={data?.[0]?.image ? handleimageUrl(data?.[0]?.image) : BlogImg1} /></div>
                                     <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to="/article-detail">How to Use Business Listings</Link></h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                                        <Link to="/article-detail" className='readmore_btn'>Read article <img src={RightArrow} /></Link>
+                                        <h2 className='heading_type2'><Link to={`/article-detail/${data?.[0]?._id}`}>{data?.[0]?.title}</Link></h2>
+
+                                        <p>
+                                            {DOMPurify.sanitize(data?.[0]?.description)
+                                                .replace(/<[^>]+>/g, '') // Remove HTML tags
+                                                .substring(0, 100)}
+                                            {data?.[0]?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
+                                        </p>
+
+                                        <Link to={`/article-detail/${data?.[0]?._id}`} className='readmore_btn'>Read article <img src={RightArrow} /></Link>
                                     </div>
                                 </div>
                             </Col>
                             <Col md={6}>
-                                <div className='article_sec_itm'>
-                                    <div className='article_sec_img_main'><div className='article_sec_img'><img src={BlogImg2} /></div></div>
-                                    <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to="/article-detail">How to Use Business Listings</Link></h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                                        <Link to="/article-detail" className='readmore_btn'>Read article <img src={RightArrow} /></Link>
-                                    </div>
-                                </div>
-                                <div className='article_sec_itm'>
-                                <div className='article_sec_img_main'><div className='article_sec_img'><img src={BlogImg3} /></div></div>
-                                    <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to="/article-detail">How to Use Business Listings</Link></h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                                        <Link to="/article-detail" className='readmore_btn'>Read article <img src={RightArrow} /></Link>
-                                    </div>
-                                </div>
-                                <div className='article_sec_itm'>
-                                <div className='article_sec_img_main'><div className='article_sec_img'><img src={BlogImg4} /></div></div>
-                                    <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to="/article-detail">How to Use Business Listings</Link></h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                                        <Link to="/article-detail" className='readmore_btn'>Read article <img src={RightArrow} /></Link>
-                                    </div>
-                                </div>
+                                {
+                                    data?.length > 0 &&
+                                    data?.slice(1, 4).map((item, index) => (
+                                        <div className='article_sec_itm' key={index}>
+                                            <div className='article_sec_img_main'><div className='article_sec_img'><img src={handleimageUrl(item?.image)} /></div></div>
+                                            <div className='article_sec_con'>
+                                                <h2 className='heading_type2'><Link to={`/article-detail/${item._id}`}>{item?.title}</Link></h2>
+
+
+                                                <p>
+                                                    {DOMPurify.sanitize(item?.description)
+                                                        .replace(/<[^>]+>/g, '') // Remove HTML tags
+                                                        .substring(0, 100)}
+                                                    {item?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
+                                                </p>
+                                                <Link to={`/article-detail/${item._id}`} className='readmore_btn'>Read article <img src={RightArrow} /></Link>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+
                             </Col>
                         </Row>
                         <Row className='article_sec_list'>
-                            <Col md={4}>
-                                <div className='article_sec_itm'>
-                                    <div className='article_sec_img'><img src={BlogImg5} /></div>
-                                    <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to="/article-detail">How to Use Business Listings</Link></h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                                        <Link to="/article-detail" className='readmore_btn'>Read article <img src={RightArrow} /></Link>
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md={4}>
-                                <div className='article_sec_itm'>
-                                    <div className='article_sec_img'><img src={BlogImg6} /></div>
-                                    <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to="/article-detail">How to Use Business Listings</Link></h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                                        <Link to="/article-detail" className='readmore_btn'>Read article <img src={RightArrow} /></Link>
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md={4}>
-                                <div className='article_sec_itm'>
-                                    <div className='article_sec_img'><img src={BlogImg7} /></div>
-                                    <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to="/article-detail">How to Use Business Listings</Link></h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                                        <Link to="/article-detail" className='readmore_btn'>Read article <img src={RightArrow} /></Link>
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md={4}>
-                                <div className='article_sec_itm'>
-                                    <div className='article_sec_img'><img src={BlogImg5} /></div>
-                                    <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to="/article-detail">How to Use Business Listings</Link></h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                                        <Link to="/article-detail" className='readmore_btn'>Read article <img src={RightArrow} /></Link>
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md={4}>
-                                <div className='article_sec_itm'>
-                                    <div className='article_sec_img'><img src={BlogImg6} /></div>
-                                    <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to="/article-detail">How to Use Business Listings</Link></h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                                        <Link to="/article-detail" className='readmore_btn'>Read article <img src={RightArrow} /></Link>
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col md={4}>
-                                <div className='article_sec_itm'>
-                                    <div className='article_sec_img'><img src={BlogImg7} /></div>
-                                    <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to="/article-detail">How to Use Business Listings</Link></h2>
-                                        <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.  Lorem Ipsum is simply dummy text of the printing and typesetting industry. </p>
-                                        <Link to="/article-detail" className='readmore_btn'>Read article <img src={RightArrow} /></Link>
-                                    </div>
-                                </div>
-                            </Col>
+
+                            {
+                                data?.length > 4 &&
+                                data?.slice(4).map((item, index) => (
+                                    <Col md={4} key={index}>
+
+                                        <div className='article_sec_itm' >
+                                            <div className='article_sec_img_main'><div className='article_sec_img'><img src={handleimageUrl(item?.image)} /></div></div>
+                                            <div className='article_sec_con'>
+                                                <h2 className='heading_type2'><Link to={`/article-detail/${item._id}`}>{item?.title}</Link></h2>
+
+
+                                                <p>
+                                                    {DOMPurify.sanitize(item?.description)
+                                                        .replace(/<[^>]+>/g, '') // Remove HTML tags
+                                                        .substring(0, 100)}
+                                                    {item?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
+                                                </p>
+                                                <Link to={`/article-detail/${item._id}`} className='readmore_btn'>Read article <img src={RightArrow} /></Link>
+                                            </div>
+                                        </div>
+                                    </Col>
+
+                                ))
+                            }
+
                         </Row>
                     </div>
                 </Container>
