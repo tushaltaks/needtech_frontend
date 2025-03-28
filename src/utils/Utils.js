@@ -53,14 +53,6 @@ export const SelectStles = {
   }),
 };
 
-export const innovaOptions = [
-  { value: "50-60", label: "50-60" },
-  { value: "60-70", label: "60-70" },
-  { value: "70-80", label: "70-80" },
-  { value: "80-90", label: "80-90" },
-  { value: "90-100", label: "90-100" },
-];
-
 export const stepOne = Yup.object().shape({
   businessActivity: Yup.string().required("Please select an option"),
 });
@@ -166,3 +158,11 @@ export const bidpopup = Yup.object().shape({
     .oneOf([true], "You must confirm your bid")
     .required("Required"),
 });
+
+export const innovaOptions = [
+  { value: "50-60", label: "50 - 60" },
+  { value: "61-70", label: "61 - 70" },
+  { value: "71-80", label: "71 - 80" },
+  { value: "81-90", label: "81 - 90" },
+  { value: "91-100", label: "91 - 100" },
+];

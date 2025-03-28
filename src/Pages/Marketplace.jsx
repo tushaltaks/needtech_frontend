@@ -18,10 +18,17 @@ import toast from "react-hot-toast";
 import { GetFunction, handleimageUrl, SubmitResponse } from "../utils/ApiFunctions";
 
 const Marketplace = () => {
+
+    const searchParams = new URLSearchParams(location.search);
+    const category = searchParams.get("category");
+    const innovaRate = searchParams.get("innovaRate");
+
+
     const token = localStorage.getItem('token')
     const userId = localStorage.getItem('userId')
     const [page, setPage] = useState(1)
-    const [categoryId, setcategoryId] = useState('')
+    const [categoryId, setcategoryId] = useState(category ? category : '')
+    const [innova] = useState(innovaRate ? innovaRate : '')
     const [paginatio, setPagination] = useState({})
     const [list, setList] = useState([]);
     const [search, setSearch] = useState('');
@@ -32,8 +39,11 @@ const Marketplace = () => {
         document.body.classList.toggle("active_search");
     };
 
+
+
     const getBusinessList = async () => {
-        const res = await GetFunction(`${baseURL}/businessList?userId=${token && userId ? userId : ""}&page=${page}&limit=10&search=${search}&categoryId=${categoryId}&minPrice=${minPrice}&maxPrice=${maxPrice}`);
+        const res = await GetFunction(`${baseURL}/businessList?userId=${token && userId ? userId : ""}&page=${page}&limit=10&search=${search}&categoryId=${categoryId}&minPrice=${minPrice}&maxPrice=${maxPrice}
+            &innovaRate=${innova}`);
         if (res?.status == 200) {
             setPagination({
                 totalRecords: res?.data?.totalRecords, totalPages:

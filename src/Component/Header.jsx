@@ -31,7 +31,7 @@ const Header = () => {
         <header className='header-sec'>
             <Navbar expand="lg" className="header_sec">
                 <Container>
-                    <Navbar.Brand href="#"><img src={Logoimg} /></Navbar.Brand>
+                    <Navbar.Brand href="/"><img src={Logoimg} /></Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
                         <div className='navbar-collapse_in'>
