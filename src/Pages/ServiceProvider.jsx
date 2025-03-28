@@ -6,15 +6,16 @@ import Lokedic from "../assets/lokedic.svg"
 import ProfilePhoto from "../assets/profilePhoto.jpg"
 import DewberryLogo from "../assets/dewberry_logo.jpg"
 import SearchIc from "../assets/searchIc.svg"
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import toast from "react-hot-toast";
 import HeartIconFilled from "../assets/heartFilledIc.png"
 
 import { GetFunction, handleimageUrl, SubmitResponse } from "../utils/ApiFunctions";
 import { baseURL } from "../utils/AxiosInstance";
+import Pagination from "../Component/Pagination";
 
 const ServiceProvider = () => {
-
+    const navigate = useNavigate()
     const token = localStorage.getItem('token')
     const userId = localStorage.getItem('userId')
     const [page, setPage] = useState(1)
@@ -47,7 +48,7 @@ const ServiceProvider = () => {
         return () => {
             document.body.classList.remove("active_search");
         };
-    }, []);
+    }, [page]);
 
     const addToWishList = async (id) => {
         const res = await SubmitResponse(`${baseURL}/AddtowishList`, { proivider: id });
@@ -62,6 +63,10 @@ const ServiceProvider = () => {
         }
     }
 
+
+    const handlePagination = (page) => {
+        setPage(page);
+    };
 
     return (
         <>
@@ -96,7 +101,7 @@ const ServiceProvider = () => {
                     <div className='market_list_in'>
                         <div className='market_list_itms serviceprovider_list'>
                             {
-                                list && list?.map((val, i) => (
+                                list?.length > 0 ? list?.map((val, i) => (
                                     <div className='market_list_itm' key={i}>
                                         <div className='market_list_img'><div className='market_list_img_in'><img src={handleimageUrl(val?.image)} /></div></div>
                                         <div className='market_list_con'>
@@ -121,10 +126,18 @@ const ServiceProvider = () => {
                                         <div className='market_list_right'>
                                             <div className='market_list_right_con'>
                                                 <div className='heart_ic'
-                                                    onClick={() => {
-                                                        addToWishList(val?._id)
+                                                    onClick={
+                                                        () => {
+                                                            if (!token) {
 
-                                                    }}
+                                                                navigate('/login')
+                                                            }
+                                                            else {
+
+                                                                addToWishList(val?._id)
+                                                            }
+                                                        }
+                                                    }
                                                 >
                                                     {
                                                         val?.wishlist ?
@@ -151,77 +164,22 @@ const ServiceProvider = () => {
                                         </div>
                                     </div>
                                 ))
+                                    :
+                                    <h3 className="my-5">
+                                        <center>No Businesses Found!</center>
+                                    </h3>
                             }
 
-                            {/* <div className='market_list_itm'>
-                                <div className='market_list_img'><div className='market_list_img_in'><img src={ProfilePhoto} /></div></div>
-                                <div className='market_list_con'>
-                                    <div className='market_list_con_in'>
-                                        <div className='market_meta'>
-                                            <div className='market_meta_itm'><div className='market_meta_itm_ic'><img src={VerifiedIc} /></div><span>Verified</span></div>
-                                        </div>
-                                        <div className='market_list_info'>
-                                            <div className='user_detail'>
-                                                <h3 className='heading_type2 locked_data'>John Smith</h3>
-                                                <h4>Electrical Engineer</h4>
-                                            </div>
-                                            <p className='locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. tempor incididunt ut labore et dolore magna aliqua.</p>
-                                            <div className='locked_btn'>
-                                                <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Professional</Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='market_list_right'>
-                                    <div className='market_list_right_con'>
-                                        <div className='heart_ic'><img src={HeartIcon} /></div>
-                                    </div>
-                                    <div className='service_provider_s'>
-                                        <div className='service_provider_logo locked_data'><img src={DewberryLogo} /></div>
-                                        <div className='service_provider_d'>
-                                            <p className='locked_data'>Dewberry Ltd.</p>
-                                            <p>Engineering Firm</p>
-                                            <p>Paris, France</p>
-                                        </div>
-                                    </div>
-                                    <div className='market_list_btn'><Link to="/service-provider-detail" className='btn btn_primary'>Read More</Link></div>
-                                </div>
-                            </div>
-                            <div className='market_list_itm'>
-                                <div className='market_list_img'><div className='market_list_img_in'><img src={ProfilePhoto} /></div></div>
-                                <div className='market_list_con'>
-                                    <div className='market_list_con_in'>
-                                        <div className='market_meta'>
-                                            <div className='market_meta_itm'><div className='market_meta_itm_ic'><img src={VerifiedIc} /></div><span>Verified</span></div>
-                                        </div>
-                                        <div className='market_list_info'>
-                                            <div className='user_detail'>
-                                                <h3 className='heading_type2 locked_data'>John Smith</h3>
-                                                <h4>Electrical Engineer</h4>
-                                            </div>
-                                            <p className='locked_data locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. tempor incididunt ut labore et dolore magna aliqua.</p>
-                                            <div className='locked_btn'>
-                                                <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Professional</Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className='market_list_right'>
-                                    <div className='market_list_right_con'>
-                                        <div className='heart_ic'><img src={HeartIcon} /></div>
-                                    </div>
-                                    <div className='service_provider_s'>
-                                        <div className='service_provider_logo locked_data'><img src={DewberryLogo} /></div>
-                                        <div className='service_provider_d'>
-                                            <p className='locked_data'>Dewberry Ltd.</p>
-                                            <p>Engineering Firm</p>
-                                            <p>Paris, France</p>
-                                        </div>
-                                    </div>
-                                    <div className='market_list_btn'><Link to="/service-provider-detail" className='btn btn_primary'>Read More</Link></div>
-                                </div>
-                            </div> */}
+
                         </div>
+                        {
+                            list?.length > 0 &&
+                            <Pagination
+                                current={page}
+                                total={paginatio?.totalPages}
+                                pagination={handlePagination}
+                            />
+                        }
                     </div>
                 </Container>
             </section>

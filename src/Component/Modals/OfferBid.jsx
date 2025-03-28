@@ -31,7 +31,7 @@ const OfferBid = (props) => {
                                                 className="form-control"
                                                 placeholder="Enter price (in USD)"
                                             />
-                                            <ErrorMessage name="price" component="div" className="text-danger" />
+                                            <ErrorMessage name="price" component="div" className="float-start text-justify  text-danger" />
                                         </Form.Group>
 
                                         <Form.Group className="text-start form-group mb-3" id="formGridCheckbox">

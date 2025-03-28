@@ -35,7 +35,7 @@ const MyWishlist = () => {
 
     const getBusinessList = async () => {
         const res = await GetFunction(`${baseURL}/userWishList?page=${page}&limit=10&search=${search}`);
-       console.log(res)
+        console.log(res)
         if (res?.status == 200) {
             setPagination({
                 totalRecords: res?.total, totalPages:
@@ -83,7 +83,7 @@ const MyWishlist = () => {
         }
     }
 
-    console.log(list)
+
 
     return (
         <>
@@ -108,7 +108,7 @@ const MyWishlist = () => {
 
 
                                 {
-                                    list && list?.[0]?.businessData?.map((val, i) => (
+                                    list?.[0]?.businessData?.length > 0 ? list?.[0]?.businessData?.map((val, i) => (
                                         <div className='market_list_itm' key={i}>
                                             <div className='market_list_img'><div className='market_list_img_in'><img src={val?.image ? handleimageUrl(val?.image) : Startupim1} /></div></div>
                                             <div className='market_list_con'>
@@ -179,7 +179,10 @@ const MyWishlist = () => {
                                                 <div className='market_list_btn'><Link to={`/market-detail/${val?._id}`} className='btn btn_primary'>Read More</Link></div>
                                             </div>
                                         </div>
-                                    ))
+                                    )) :
+                                        <center>
+                                            <h3>No Buisness Found!</h3>
+                                        </center>
                                 }
 
                             </div>
@@ -188,7 +191,7 @@ const MyWishlist = () => {
                             <div className='market_list_in'>
                                 <div className='market_list_itms serviceprovider_list'>
                                     {
-                                        list &&list?.[0]?.serviceProviderData?.map((val, i) => (
+                                        list?.[0]?.serviceProviderData?.length > 0 ? list?.[0]?.serviceProviderData?.map((val, i) => (
                                             <div className='market_list_itm' key={i}>
                                                 <div className='market_list_img'><div className='market_list_img_in'><img src={handleimageUrl(val?.image)} /></div></div>
                                                 <div className='market_list_con'>
@@ -242,6 +245,11 @@ const MyWishlist = () => {
                                                 </div>
                                             </div>
                                         ))
+                                            :
+
+                                            <center className='my-5'>
+                                                <h3>No Service Provider Found!</h3>
+                                            </center>
                                     }
                                 </div>
                             </div>

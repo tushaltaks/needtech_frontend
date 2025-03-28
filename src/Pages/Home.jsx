@@ -47,7 +47,7 @@ function Home() {
                                     <h1 className='heading_type1'>Own Patent-Secured Startups: <span className='d_block'>Pre-Vetted Startup-in-a-Box<sup>TM</sup></span></h1>
                                     <p>Invest in innovative startups, secured by rigorous due diligence and solving real-world challenges, to minimize risk and maximize scaling potential.</p>
                                     <div className='btn_sec btn_sec_itms'>
-                                        <Link to="/signup" className='btn btn_primary'>Startup Now</Link>
+                                        <Link to="/marketplace" className='btn btn_primary'>Startup Now</Link>
                                         <Link to="/the-company" className='btn btn_info'>Read More</Link>
                                     </div>
                                 </div>
@@ -89,7 +89,7 @@ function Home() {
 
                                         onChange={(e) => setInnova(e.target.value)}
                                         aria-label="Default select example">
-                                        <option>InnovaRate<sup>™</sup></option>
+                                        <option value={''}>InnovaRate<sup>™</sup></option>
                                         {
                                             innovaOptions && innovaOptions?.map((val, i) => (
                                                 <option
@@ -184,7 +184,7 @@ function Home() {
                                         <li>And all other relevant due diligence documents.</li>
                                     </ul>
                                     <div className='btn_sec btn_sec_itms'>
-                                        <Link to="/signup" className='btn btn_primary'>Startup Now</Link>
+                                        <Link to="/marketplace" className='btn btn_primary'>Startup Now</Link>
                                     </div>
                                 </div>
                             </Col>

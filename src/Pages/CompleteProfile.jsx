@@ -80,7 +80,7 @@ const CompleteProfile = () => {
         const res = await SubmitResponse(`${baseURL}/updateUserDetails/${userId}`, formData);
         if (res.data?.status == 200) {
             toast.dismiss()
-            toast.success(res?.data?.message);
+            // toast.success(res?.data?.message);
             if (values?.LastStep == 7) {
                 localStorage.setItem('name', res?.data?.data?.name);
                 localStorage.setItem('email', res?.data?.data?.email);

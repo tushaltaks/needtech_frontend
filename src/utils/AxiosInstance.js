@@ -14,10 +14,10 @@ axiosInstacnce.interceptors.response.use(
   },
   (error) => {
     // Check if the error status is 401 (Unauthorized)
-    // if (error.response.status == 401) {
-    //   localStorage.clear(); // Clear local storage (example)
-    //   window.location.href = "/login";
-    // }
+    if (error.response.status == 401) {
+      localStorage.clear(); // Clear local storage (example)
+      window.location.href = "/login";
+    }
     return Promise.reject(error);
   }
 );

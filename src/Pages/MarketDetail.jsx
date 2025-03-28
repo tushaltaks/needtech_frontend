@@ -1,6 +1,6 @@
 import React, { use, useEffect, useState } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import BackIc from "../assets/backIc.svg"
 import HeartIcon from "../assets/heartIc.png"
 import HeartIconFilled from "../assets/heartFilledIc.png"
@@ -21,6 +21,8 @@ import toast from 'react-hot-toast';
 
 const MarketDetail = () => {
     const token = localStorage.getItem('token')
+    const navigate = useNavigate()
+
     const [bid, setBid] = useState()
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -138,7 +140,18 @@ const MarketDetail = () => {
                                                     <h4>(13 years 1 month old)</h4>
                                                 </div>
                                             </div>
-                                            <div className='heart_ic' onClick={addToWishList} >
+                                            <div className='heart_ic' onClick={
+                                                () => {
+                                                    if (!token) {
+
+                                                        navigate('/login')
+                                                    }
+                                                    else {
+
+                                                        addToWishList(val?._id)
+                                                    }
+                                                }
+                                            } >
                                                 {
                                                     business?.wishlist ?
 

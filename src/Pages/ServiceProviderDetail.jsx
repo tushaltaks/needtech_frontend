@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import BackIc from "../assets/backIc.svg"
 import HeartIcon from "../assets/heartIc.png"
 import VerifiedIc from "../assets/verifiedIc.svg"
@@ -20,6 +20,8 @@ import toast from 'react-hot-toast';
 
 const ServiceProviderDetail = () => {
     const [show, setShow] = useState(false);
+    const token = localStorage.getItem('token')
+    const navigate = useNavigate()
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -113,7 +115,15 @@ const ServiceProviderDetail = () => {
                                             </div>
                                             <div className='heart_ic'
                                                 onClick={() => {
-                                                    addToWishList(provider?._id)
+
+                                                    if (!token) {
+
+                                                        navigate('/login')
+                                                    }
+                                                    else {
+
+                                                        addToWishList(val?._id)
+                                                    }
 
                                                 }}
                                             >

@@ -59,7 +59,9 @@ const Step7 = ({ prev, next, setValues, oldValues, updateDetails }) => {
                                                 if (file) {
                                                     setPreview(URL.createObjectURL(file));
                                                     setFieldValue("profileImage", file);
+                                                    event.target.value = "";
                                                 }
+                                                event.target.value = "";
                                             }}
                                             placeholder="Choose a file"
                                             className="file-input"

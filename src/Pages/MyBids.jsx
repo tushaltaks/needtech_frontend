@@ -66,6 +66,7 @@ const MyBids = () => {
             toast.error(res?.data?.message)
         }
     }
+    console.log('data', data)
     return (
         <>
             <div className='inner_head mb-0'>
@@ -81,7 +82,7 @@ const MyBids = () => {
                             {
                                 data && data?.map((val, i) => (
                                     <div className='market_list_itm' key={i}>
-                                        <div className='market_list_img'><div className='market_list_img_in'><img src={val?.businessData?.image ? handleimageUrl(val?.businessData?.image) : BusinessImg1} /></div></div>
+                                        <div className='market_list_img'><div className='market_list_img_in'><img src={val?.businessId?.image ? handleimageUrl(val?.businessId?.image) : BusinessImg1} /></div></div>
                                         <div className='market_list_con'>
                                             <div className='market_list_con_in'>
                                                 <div className='bid_data'>
@@ -96,27 +97,27 @@ const MyBids = () => {
                                                             " status_pending bid_status"}>{FirstLettCapital(val?.status)}</div>
                                                 </div>
                                                 <div className='market_list_info'>
-                                                    <h3 className='heading_type2'>{val?.businessData?.title}</h3>
+                                                    <h3 className='heading_type2'>{val?.businessId?.title}</h3>
                                                     <p>
-                                                        {DOMPurify.sanitize(val?.businessData?.description)
+                                                        {DOMPurify.sanitize(val?.businessId?.description)
                                                             .replace(/<[^>]+>/g, '') // Remove HTML tags
                                                             .substring(0, 100)}
-                                                        {val?.businessData?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
+                                                        {val?.businessId?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
                                                     </p>
                                                 </div>
                                             </div>
                                             <div className='market_list_rates'>
                                                 <div className='market_list_rate'>
                                                     <p>InnovaRate:</p>
-                                                    <h4>{val?.businessData?.innovaRate}%</h4>
+                                                    <h4>{val?.businessId?.innovaRate}%</h4>
                                                 </div>
                                                 <div className='market_list_rate'>
                                                     <p>Market Readiness Rate:</p>
-                                                    <h4>{val?.businessData?.marketReadiness}%</h4>
+                                                    <h4>{val?.businessId?.marketReadiness}%</h4>
                                                 </div>
                                                 <div className='market_list_rate'>
                                                     <p>Market Growth:</p>
-                                                    <h4><img src={GrowIc} /> {val?.businessData?.marketGrowth}%</h4>
+                                                    <h4><img src={GrowIc} /> {val?.businessId?.marketGrowth}%</h4>
                                                 </div>
                                             </div>
                                         </div>
@@ -124,16 +125,16 @@ const MyBids = () => {
                                             <div className='market_list_right_con'>
                                                 <div className='market_list_right_con_in'>
                                                     <p>Asking price:</p>
-                                                    <h4>${val?.businessData?.price}</h4>
+                                                    <h4>${val?.businessId?.price}</h4>
                                                 </div>
                                                 {/* <div className='heart_ic cursor-pointer'
                                                     onClick={() => {
-                                                        addToWishList(val?.businessData?._id)
+                                                        addToWishList(val?.businessId?._id)
 
                                                     }}
                                                 >
                                                     {
-                                                        val?.businessData?.wishlist ?
+                                                        val?.businessId?.wishlist ?
                                                             <img src={HeartIconFilled} />
 
 
@@ -147,7 +148,7 @@ const MyBids = () => {
                                                 <div className='market_list_right_meta_ic'><img src={Agric2} /></div>
                                                 <div className='market_list_right_meta_ic'><img src={Agric3} /></div>
                                             </div>
-                                            <div className='market_list_btn'><Link to={`/market-detail/${val?.businessData?._id}`} className='btn btn_primary'>Read More</Link></div>
+                                            <div className='market_list_btn'><Link to={`/market-detail/${val?.businessId?._id}`} className='btn btn_primary'>Read More</Link></div>
                                         </div>
                                     </div>
                                 ))

@@ -220,8 +220,8 @@ const SignUp = () => {
                                                     </Row>
                                                     <div className='login_with'><span>Or Signup With</span></div>
                                                     <div className='login_social'>
-                                                        <Link to='/'><img src={GoogleIcon} alt='Google' /></Link>
-                                                        <Link to='/'><img src={FacebookIcon} alt='Facebook' /></Link>
+                                                        <Link to='#'><img src={GoogleIcon} alt='Google' /></Link>
+                                                        <Link to='#'><img src={FacebookIcon} alt='Facebook' /></Link>
                                                     </div>
                                                 </div>
                                                 <div className='login_para'><p>Already have an account? <Link to='/login' className='login_a'>Login</Link></p></div>
