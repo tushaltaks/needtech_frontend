@@ -55,6 +55,28 @@ const MarketDetail = () => {
             toast.error(res?.data?.message)
         }
     }
+
+
+    const RequestBid = async (values) => {
+        const res = await SubmitResponse(`${baseURL}/requestBidByUser`, {
+            businessId: id,
+            bidAmount: values?.price
+        });
+        if (res?.status == 200) {
+            toast.dismiss()
+            toast.success(res?.data?.message)
+            getSingleBusiness()
+            handleClose()
+        }
+        else {
+            handleClose()
+
+            toast.dismiss()
+            toast.error(res?.message)
+        }
+    }
+
+
     return (
         <>
             <div className='inner_head'>
@@ -182,8 +204,9 @@ const MarketDetail = () => {
             </section>
             <OfferBid
                 show={show}
-                business={business}
+                // business={business}
                 onHide={handleClose}
+                callBack={RequestBid}
             />
         </>
     );

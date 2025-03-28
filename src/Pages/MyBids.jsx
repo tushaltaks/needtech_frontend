@@ -90,7 +90,10 @@ const MyBids = () => {
                                                         <h4>${val?.bidAmount}</h4>
                                                     </div>
                                                     {/* <div className='bid_status status_rejected'>Rejected</div> */}
-                                                    <div className={val?.status == "accepted" ? ' bid_status status_accepted' : val?.status == "rejected" ? 'status_rejected bid_status' : " bid_status"}>{FirstLettCapital(val?.status)}</div>
+                                                    <div className={val?.status == "accepted" ?
+                                                        ' bid_status status_accepted' : val?.status == "rejected" ?
+                                                            'status_rejected bid_status' :
+                                                            " status_pending bid_status"}>{FirstLettCapital(val?.status)}</div>
                                                 </div>
                                                 <div className='market_list_info'>
                                                     <h3 className='heading_type2'>{val?.businessData?.title}</h3>

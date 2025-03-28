@@ -156,3 +156,13 @@ export const updateProfile = Yup.object().shape({
   buisnessState: Yup.string().required("State is required"),
   buisnessCity: Yup.string().required("City is required"),
 });
+
+export const bidpopup = Yup.object().shape({
+  price: Yup.number()
+    .typeError("Price must be a number")
+    .min(1, "Price must be at least 1 USD")
+    .required("Price is required"),
+  confirmBid: Yup.boolean()
+    .oneOf([true], "You must confirm your bid")
+    .required("Required"),
+});
