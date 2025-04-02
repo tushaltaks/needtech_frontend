@@ -1,7 +1,11 @@
 import { toast } from "react-hot-toast";
 import AxiosInstance, { baseURL } from "../utils/AxiosInstance";
-export const ImageBaseUrl = import.meta.env.VITE_IMAGE_BASE_URL;
+import CryptoJS from "crypto-js";
 
+// export const STRIPE_MODE = "test";
+export const STRIPE_TYPE = import.meta.env.VITE_STRIPE_TYPE;
+export const STRIPE_MODE = import.meta.env.VITE_STRIPE_MODE;
+export const ImageBaseUrl = import.meta.env.VITE_IMAGE_BASE_URL;
 export const PDfUrl =
   "https://png.pngtree.com/png-vector/20220606/ourmid/pngtree-pdf-file-icon-png-png-image_4899509.png";
 
@@ -197,3 +201,17 @@ export const Limits = [
   { value: 20, label: 20 },
   { value: 50, label: 50 },
 ];
+
+const key = CryptoJS.enc.Utf8.parse("JSONTEXTNEEDTECHWORKBYJPLOFT.COM"); // Must be 32 bytes for AES-256
+const iv = CryptoJS.enc.Utf8.parse("JSONTEXTNEEDTECH");
+
+export const decryptValue = (encryptedData) => {
+  const decrypted = CryptoJS.AES.decrypt(encryptedData, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC, // Use CBC mode
+    padding: CryptoJS.pad.Pkcs7, // Use PKCS7 padding
+  });
+
+  // Convert decrypted bytes to a UTF-8 string
+  return decrypted.toString(CryptoJS.enc.Utf8);
+};

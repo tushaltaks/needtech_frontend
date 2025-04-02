@@ -122,7 +122,7 @@ const ServiceProviderDetail = () => {
                                                     }
                                                     else {
 
-                                                        addToWishList(val?._id)
+                                                        addToWishList(provider?._id)
                                                     }
 
                                                 }}

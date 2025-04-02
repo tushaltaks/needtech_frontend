@@ -3,23 +3,40 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Logoimg from '../assets/logo.png';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ProfileUser from '../assets/profileUser.svg';
 import { Dropdown } from 'react-bootstrap';
 import Downarrow from '../assets/downarrow.svg';
 import { handleimageUrl } from '../utils/ApiFunctions';
+import Swal from 'sweetalert2';
 
 const Header = () => {
-    const {pathname} = useLocation()
+    const navigate = useNavigate()
+    const { pathname } = useLocation()
     const [show, setShow] = useState(false)
     const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("userDetails")));
 
     const [token, setToken] = useState(localStorage.getItem("token"));
     const handleLogut = async () => {
-        setUserDetails(null)
-        setToken(null)
-        setShow(true)
-        localStorage.clear()
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "you want to logout?",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                setUserDetails(null)
+                setToken(null)
+                setShow(true)
+                localStorage.clear()
+                navigate('/login')
+            }
+        });
+
 
     }
 

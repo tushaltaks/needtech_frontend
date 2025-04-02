@@ -17,8 +17,8 @@ import DownloadIc from "../assets/downloadIc.svg"
 
 const MarketDetailLogin = () => {
     const [show, setShow] = useState(false);
-        const handleClose = () => setShow(false);
-        const handleShow = () => setShow(true);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
     return (
         <>
             <div className='inner_head'>
@@ -74,15 +74,12 @@ const MarketDetailLogin = () => {
                                         <div className='market_detail_right_con'>
                                             <div className='market_detail_right_in'>
                                                 <div className='market_detail_logo'><img src={Logo_approved} /></div>
-                                                {/* <div className='market_detail_time'>
-                                                    <p>Business Started</p>
-                                                    <h4>(13 years 1 month old)</h4>
-                                                </div> */}
+
                                             </div>
                                             <div className='heart_ic'><img src={HeartIcon} /></div>
                                         </div>
                                         <div className='acquired_sec'>
-                                            <div className='acquired_sec_img'><img src={Businessic}/></div>
+                                            <div className='acquired_sec_img'><img src={Businessic} /></div>
                                             <h2 className='acquired_heading'>Acquired</h2>
                                             <p className='acquired_date'>January 23rd, 2025</p>
                                         </div>
@@ -122,15 +119,15 @@ const MarketDetailLogin = () => {
                                         <h2 className='heading_type2'>Assets Included</h2>
                                         <ul className='list_type1'>
                                             <li>Business Plan</li>
-                                            <div className='download_assets'><Link to="/market-detail-login"><img src={DownloadIc}/> Download Now</Link></div>
+                                            <div className='download_assets'><Link to="/market-detail-login"><img src={DownloadIc} /> Download Now</Link></div>
                                             <li>Executive Summary</li>
-                                            <div className='download_assets'><Link to="/market-detail-login"><img src={DownloadIc}/> Download Now</Link></div>
+                                            <div className='download_assets'><Link to="/market-detail-login"><img src={DownloadIc} /> Download Now</Link></div>
                                             <li>Provisional Patent</li>
-                                            <div className='download_assets'><Link to="/market-detail-login"><img src={DownloadIc}/> Download Now</Link></div>
+                                            <div className='download_assets'><Link to="/market-detail-login"><img src={DownloadIc} /> Download Now</Link></div>
                                             <li>FTO Certificate</li>
-                                            <div className='download_assets'><Link to="/market-detail-login"><img src={DownloadIc}/> Download Now</Link></div>
+                                            <div className='download_assets'><Link to="/market-detail-login"><img src={DownloadIc} /> Download Now</Link></div>
                                             <li>3rd Party Valuation</li>
-                                            <div className='download_assets'><Link to="/market-detail-login"><img src={DownloadIc}/> Download Now</Link></div>
+                                            <div className='download_assets'><Link to="/market-detail-login"><img src={DownloadIc} /> Download Now</Link></div>
                                         </ul>
                                     </div>
                                 </Col>

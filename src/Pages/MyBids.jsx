@@ -80,7 +80,7 @@ const MyBids = () => {
                     <div className='market_list_in'>
                         <div className='market_list_itms bid_list_itms'>
                             {
-                                data && data?.map((val, i) => (
+                                data?.length > 0 ? data?.map((val, i) => (
                                     <div className='market_list_itm' key={i}>
                                         <div className='market_list_img'><div className='market_list_img_in'><img src={val?.businessId?.image ? handleimageUrl(val?.businessId?.image) : BusinessImg1} /></div></div>
                                         <div className='market_list_con'>
@@ -151,7 +151,10 @@ const MyBids = () => {
                                             <div className='market_list_btn'><Link to={`/market-detail/${val?.businessId?._id}`} className='btn btn_primary'>Read More</Link></div>
                                         </div>
                                     </div>
-                                ))
+                                )) :
+                                    <>
+                                        <center><h3>No Bids!</h3></center>
+                                    </>
                             }
 
 

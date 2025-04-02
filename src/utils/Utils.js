@@ -166,3 +166,32 @@ export const innovaOptions = [
   { value: "81-90", label: "81 - 90" },
   { value: "91-100", label: "91 - 100" },
 ];
+
+export const paymentFormStripe = Yup.object().shape({
+  name: Yup.string().required("Cardholder name is required"),
+  cardNumber: Yup.boolean().oneOf([true], "Invalid card number"),
+  expiry: Yup.boolean().oneOf([true], "Invalid expiry date"),
+  cvv: Yup.boolean().oneOf([true], "Invalid CVV"),
+});
+
+export const subscrptionPurchase = Yup.object().shape({
+  name: Yup.string().required("Cardholder name is required"),
+
+  cardNumber: Yup.boolean().test(
+    "is-true",
+    "Card number is required",
+    (value) => value == true
+  ),
+
+  expiry: Yup.boolean().test(
+    "is-true",
+    "Expiry is required",
+    (value) => value == true
+  ),
+
+  cvv: Yup.boolean().test(
+    "is-true",
+    "CVV is required",
+    (value) => value == true
+  ),
+});

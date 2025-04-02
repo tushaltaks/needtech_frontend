@@ -5,6 +5,8 @@ import HeartIconFilled from "../assets/heartFilledIc.png"
 import VerifiedIc from "../assets/verifiedIc.svg"
 import NewIc from "../assets/newIc.svg"
 import GrowIc from "../assets/grow_ic.svg"
+import DOMPurify from 'dompurify';
+
 import Agric1 from "../assets/agric1.svg"
 import Agric2 from "../assets/agric2.svg"
 import Agric3 from "../assets/agric3.svg"
@@ -19,7 +21,7 @@ import { GetFunction, handleimageUrl, SubmitResponse } from "../utils/ApiFunctio
 import Pagination from "../Component/Pagination";
 
 const Marketplace = () => {
-
+    const subscriptionId = localStorage.getItem('subscriptionId')
     const searchParams = new URLSearchParams(location.search);
     const category = searchParams.get("category");
     const innovaRate = searchParams.get("innovaRate");
@@ -184,12 +186,18 @@ const Marketplace = () => {
                                                     </div>
                                                     <div className='market_list_info'>
                                                         <h3 className='heading_type2'>{val?.title}</h3>
-                                                        <p className="locked_data">
-                                                            {val?.description}
+                                                        <p className={subscriptionId ? "" : "locked_data"}>
+
+                                                            {DOMPurify.sanitize(val?.description)
+                                                                .replace(/<[^>]+>/g, '') // Remove HTML tags
+                                                                .substring(0, 100)}
+                                                            {val?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
                                                         </p>
-                                                        <div className='locked_btn'>
-                                                            <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Startup</Link>
-                                                        </div>
+                                                        {subscriptionId ? "" :
+
+                                                            <div className={"locked_btn"}>
+                                                                <Link to="/buy-plan" className='btn btn_outline'><img src={Lokedic} /> Unlock Startup</Link>
+                                                            </div>}
                                                     </div>
                                                 </div>
                                                 <div className='market_list_rates'>
@@ -199,11 +207,11 @@ const Marketplace = () => {
                                                     </div>
                                                     <div className='market_list_rate'>
                                                         <p>Market Readiness Rate:</p>
-                                                        <h4 className="locked_data">{val?.marketReadiness || 0} %</h4>
+                                                        <h4 className={subscriptionId ? "" : "locked_data"}>{val?.marketReadiness || 0} %</h4>
                                                     </div>
                                                     <div className='market_list_rate'>
                                                         <p>Market Growth:</p>
-                                                        <h4 className="locked_data"><img src={GrowIc} /> {val?.marketGrowth} %</h4>
+                                                        <h4 className={subscriptionId ? "" : "locked_data"}><img src={GrowIc} /> {val?.marketGrowth} %</h4>
                                                     </div>
                                                 </div>
                                             </div>

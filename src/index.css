@@ -3930,3 +3930,6 @@ button.Prev_pas:hover {
   display: inline-block;
   width: 100%;
 }
+.text-danger {
+  color: red;
+}

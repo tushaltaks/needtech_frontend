@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
 import HeartIcon from "../assets/heartIc.png"
+import DOMPurify from 'dompurify';
+
 import VerifiedIc from "../assets/verifiedIc.svg"
 import Lokedic from "../assets/lokedic.svg"
 import ProfilePhoto from "../assets/profilePhoto.jpg"
@@ -16,6 +18,8 @@ import Pagination from "../Component/Pagination";
 
 const ServiceProvider = () => {
     const navigate = useNavigate()
+    const subscriptionId = localStorage.getItem('subscriptionId')
+
     const token = localStorage.getItem('token')
     const userId = localStorage.getItem('userId')
     const [page, setPage] = useState(1)
@@ -113,13 +117,19 @@ const ServiceProvider = () => {
                                                 </div>
                                                 <div className='market_list_info'>
                                                     <div className='user_detail'>
-                                                        <h3 className='heading_type2 locked_data'>John Smith</h3>
-                                                        <h4>Electrical Engineer</h4>
+                                                        <h3 className={subscriptionId ? "heading_type2" : " heading_type2 locked_data"}>{ val?.name}</h3>
+                                                        <h4>{val?.jobTitle}</h4>
                                                     </div>
-                                                    <p className='locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. tempor incididunt ut labore et dolore magna aliqua.</p>
-                                                    <div className='locked_btn'>
-                                                        <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Professional</Link>
-                                                    </div>
+                                                    <p className={subscriptionId ? "" : "locked_data"}>
+
+                                                        {DOMPurify.sanitize(val?.description)
+                                                            .replace(/<[^>]+>/g, '') // Remove HTML tags
+                                                            .substring(0, 100)}
+                                                        {val?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
+                                                    </p>
+                                                    {subscriptionId ? '' : <div className='locked_btn'>
+                                                        <Link to="/buy-plan" className='btn btn_outline'><img src={Lokedic} /> Unlock Professional</Link>
+                                                    </div>}
                                                 </div>
                                             </div>
                                         </div>
@@ -150,12 +160,12 @@ const ServiceProvider = () => {
                                                 </div>
                                             </div>
                                             <div className='service_provider_s'>
-                                                <div className='service_provider_logo locked_data'>
+                                                <div className={subscriptionId ? "service_provider_logo" : "service_provider_logo locked_data"}  >
 
                                                     <img src={val?.companyLogo ? handleimageUrl(val?.companyLogo) : DewberryLogo} />
                                                 </div>
                                                 <div className='service_provider_d'>
-                                                    <p className='locked_data'>{val?.companyName}.</p>
+                                                    <p className={subscriptionId ? "" : "locked_data"}>{val?.companyName}.</p>
                                                     <p>{val?.aboutCompany}</p>
                                                     <p>{val?.city}, {val?.country}</p>
                                                 </div>

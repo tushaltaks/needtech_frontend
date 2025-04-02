@@ -31,6 +31,9 @@ const Login = () => {
                 toast.dismiss()
                 toast.success(res?.data?.message);
                 localStorage.setItem("name", res?.data?.data?.name);
+                localStorage.setItem("subscriptionId", res?.data?.data?.subscrptionId);
+                localStorage.setItem("subscritpionStartDate", res?.data?.data?.subscriptionStartDate);
+                localStorage.setItem("subscritpionEndDate", res?.data?.data?.subscriptionEndDate);
                 localStorage.setItem("userId", res?.data?.data?._id);
                 localStorage.setItem("token", res?.data?.token);
                 localStorage.setItem("userDetails", JSON.stringify(res?.data?.data));
