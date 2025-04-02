@@ -21,15 +21,19 @@ import { FirstLettCapital, GetFunction, handleimageUrl, SubmitResponse } from '.
 import { baseURL } from '../utils/AxiosInstance';
 import toast from 'react-hot-toast';
 import moment from 'moment';
+import BidSuccess from '../Component/Modals/BidSuccess';
 
 const MarketDetail = () => {
     const token = localStorage.getItem('token')
-    const subscriptionId = localStorage.getItem('subscriptionId')
+    const validSubscriptionId = localStorage.getItem('subscriptionId');
+    const subscriptionId = validSubscriptionId && validSubscriptionId !== 'null' ? validSubscriptionId : '';
     const navigate = useNavigate()
     const userId = localStorage.getItem('userId')
     const [buisnessDate, setBuisnessdate] = useState('')
     const [bid, setBid] = useState()
     const [show, setShow] = useState(false);
+    const [show1, setShow1] = useState(false);
+    const [bidPrice, setBidPrice] = useState("");
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [business, setBusiness] = useState({})
@@ -86,11 +90,14 @@ const MarketDetail = () => {
             businessId: id,
             bidAmount: values?.price
         });
+        setBidPrice(values?.price)
+
         if (res?.status == 200) {
             toast.dismiss()
-            toast.success(res?.data?.message)
+            // toast.success(res?.data?.message)
             getSingleBusiness()
             handleClose()
+            setShow1(true)
         }
         else {
             handleClose()
@@ -100,7 +107,6 @@ const MarketDetail = () => {
         }
     }
 
-    console.log('business', business)
 
     return (
         <>
@@ -208,6 +214,7 @@ const MarketDetail = () => {
                                                     <h4>${business?.price}</h4>
                                                 </div>
                                                 {token &&
+                                                    subscriptionId ?
                                                     <div className='market_list_btn'>
                                                         <Link to={`/payment/${id}`} className='btn btn_primary'>Buy Now</Link>
                                                         {business?.bidDetailReletedtoBusiness == null &&
@@ -215,7 +222,18 @@ const MarketDetail = () => {
                                                                 onClick={() => {
                                                                     handleShow()
                                                                 }}>Offer a Bid</Button>}
-                                                    </div>}
+                                                    </div>
+                                                    :
+                                                    <div className='market_list_btn'>
+                                                        <Link to={`/buy-plan`} className='btn btn_primary'>Buy Now</Link>
+                                                        {business?.bidDetailReletedtoBusiness == null &&
+                                                            <Button className='btn btn_outline'
+                                                                onClick={() => {
+                                                                    navigate('/buy-plan')
+                                                                }}>Offer a Bid</Button>}
+                                                    </div>
+
+                                                }
 
                                                 {
                                                     token && business?.bidDetailReletedtoBusiness &&
@@ -378,13 +396,23 @@ const MarketDetail = () => {
                         }
                     </div>
                 </Container>
-            </section>
+            </section >
             <OfferBid
                 show={show}
                 // business={business}
                 onHide={handleClose}
                 callBack={RequestBid}
             />
+
+            <BidSuccess
+                show={show1}
+                bidPrice={bidPrice}
+                onHide={() => {
+                    setShow1(false)
+                }}
+            />
+
+
         </>
     );
 }

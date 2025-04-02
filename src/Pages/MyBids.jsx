@@ -16,11 +16,13 @@ import { Link } from 'react-router-dom';
 import { baseURL } from '../utils/AxiosInstance';
 import { FirstLettCapital, GetFunction, handleimageUrl } from '../utils/ApiFunctions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
+import Loader from '../Component/Loader';
 
 const MyBids = () => {
 
     const [page, setPage] = React.useState(1);
     const [limit] = React.useState(10);
+    const [loader, setLoader] = useState(true)
 
     const [paginatio, setPagination] = useState({})
     const queryClient = useQueryClient()
@@ -30,6 +32,7 @@ const MyBids = () => {
         const res = await GetFunction(`${baseURL}/bidListByUser?page=${page}&limit=${10}`);
         // console.log('res', res)
         if (res?.status == 200) {
+            setLoader(false)
             setPagination({
                 currentPage: res?.data?.currentPage,
                 totalPages: res?.data?.totalPages,
@@ -38,6 +41,8 @@ const MyBids = () => {
             return res?.data?.data
         }
         else {
+            setLoader(false)
+
             toast.dismiss()
             toast.error(res?.data?.message)
         }
@@ -66,7 +71,10 @@ const MyBids = () => {
             toast.error(res?.data?.message)
         }
     }
-    console.log('data', data)
+    if (loader) {
+        return <Loader />;
+    }
+
     return (
         <>
             <div className='inner_head mb-0'>
@@ -152,9 +160,9 @@ const MyBids = () => {
                                         </div>
                                     </div>
                                 )) :
-                                    <>
+                                    <div className='nodata'>
                                         <center><h3>No Bids!</h3></center>
-                                    </>
+                                    </div>
                             }
 
 

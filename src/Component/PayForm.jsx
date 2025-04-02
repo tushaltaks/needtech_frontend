@@ -129,7 +129,7 @@ function PayForm({ subscription }) {
                                             }`}
                                     >
                                         <CardNumberElement
-                                            options={CARD_OPTIONS}
+                                            options={{...CARD_OPTIONS, showAutofill: false}}
                                             onChange={(e) => {
                                                 if (e.complete) {
                                                     setFieldValue("cardNumber", e.complete);
@@ -137,6 +137,7 @@ function PayForm({ subscription }) {
                                                     setFieldValue("cardNumber", e.empty);
                                                 }
                                             }}
+
                                         />
                                     </div>
                                     <ErrorMessage

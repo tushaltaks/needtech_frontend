@@ -14,16 +14,21 @@ import { baseURL } from "../utils/AxiosInstance";
 import toast from "react-hot-toast";
 import Pagination from "../Component/Pagination";
 import { GetFunction, handleimageUrl } from "../utils/ApiFunctions";
+import Loader from "../Component/Loader";
 
 const MyBusiness = () => {
     const [page, setPage] = useState(1)
     const [limit] = useState(10)
+    const [loader, setLoader] = useState(true)
+
     const [pagination, setPagination] = useState({})
     const [list, setList] = useState([]);
     const getBusinessList = async () => {
         const res = await GetFunction(`${baseURL}/myBuisness?page=${page}&limit=${limit}`);
-        console.log(res)
+        setLoader(false)
+
         if (res?.status == 200) {
+
             setPagination({
                 totalRecords: res?.data?.pagination?.totalRecords, totalPages:
                     res?.data?.pagination?.totalPages
@@ -42,7 +47,11 @@ const MyBusiness = () => {
     const handlePagination = (page) => {
         setPage(page);
     };
-    console.log('list', list)
+
+    if (loader) {
+        return <Loader />;
+    }
+
     return (
         <>
             <div className='inner_head mb-0'>
@@ -398,7 +407,7 @@ const MyBusiness = () => {
                                     </div>
                                 )) :
                                 <h3 className="my-5">
-                                    <center>No Businesses Found!</center>
+                                    <center className='nodata'>No Startups Found!</center>
                                 </h3>
                         }
 

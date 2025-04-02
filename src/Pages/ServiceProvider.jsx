@@ -15,11 +15,13 @@ import HeartIconFilled from "../assets/heartFilledIc.png"
 import { GetFunction, handleimageUrl, SubmitResponse } from "../utils/ApiFunctions";
 import { baseURL } from "../utils/AxiosInstance";
 import Pagination from "../Component/Pagination";
+import Loader from "../Component/Loader";
 
 const ServiceProvider = () => {
     const navigate = useNavigate()
-    const subscriptionId = localStorage.getItem('subscriptionId')
-
+    const validSubscriptionId = localStorage.getItem('subscriptionId');
+    const subscriptionId = validSubscriptionId && validSubscriptionId !== 'null' ? validSubscriptionId : '';
+    const [loader, setLoader] = useState(true)
     const token = localStorage.getItem('token')
     const userId = localStorage.getItem('userId')
     const [page, setPage] = useState(1)
@@ -36,6 +38,7 @@ const ServiceProvider = () => {
     const getBusinessList = async () => {
         const res = await GetFunction(`${baseURL}/serviceProviderList?userId=${token && userId ? userId : ""}&page=${page}&limit=10&search=${search}&categoryId=${categoryId}&minPrice=${minPrice}&maxPrice=${maxPrice}`);
         if (res?.status == 200) {
+            setLoader(false)
             setPagination({
                 totalRecords: res?.data?.totalRecords, totalPages:
                     res?.data?.totalPages
@@ -43,6 +46,8 @@ const ServiceProvider = () => {
             setList(res?.data?.data)
         }
         else {
+            setLoader(false)
+
             toast.error(res?.data?.message)
         }
     };
@@ -71,7 +76,9 @@ const ServiceProvider = () => {
     const handlePagination = (page) => {
         setPage(page);
     };
-
+    if (loader) {
+        return <Loader />;
+    }
     return (
         <>
             <div className='inner_head'>
@@ -117,7 +124,7 @@ const ServiceProvider = () => {
                                                 </div>
                                                 <div className='market_list_info'>
                                                     <div className='user_detail'>
-                                                        <h3 className={subscriptionId ? "heading_type2" : " heading_type2 locked_data"}>{ val?.name}</h3>
+                                                        <h3 className={subscriptionId ? "heading_type2" : " heading_type2 locked_data"}>{val?.name}</h3>
                                                         <h4>{val?.jobTitle}</h4>
                                                     </div>
                                                     <p className={subscriptionId ? "" : "locked_data"}>
@@ -175,8 +182,8 @@ const ServiceProvider = () => {
                                     </div>
                                 ))
                                     :
-                                    <h3 className="my-5">
-                                        <center>No Businesses Found!</center>
+                                    <h3  className="nodata">
+                                        <center>No Service Provider Found!</center>
                                     </h3>
                             }
 

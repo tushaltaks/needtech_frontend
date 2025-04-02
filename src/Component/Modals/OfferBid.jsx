@@ -54,6 +54,7 @@ const OfferBid = (props) => {
                         </Formik>
                     </div>
                 </Modal.Body>
+
             </Modal>
         </>
     );

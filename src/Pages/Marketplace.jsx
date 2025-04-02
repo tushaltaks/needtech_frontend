@@ -19,9 +19,14 @@ import { baseURL } from "../utils/AxiosInstance";
 import toast from "react-hot-toast";
 import { GetFunction, handleimageUrl, SubmitResponse } from "../utils/ApiFunctions";
 import Pagination from "../Component/Pagination";
+import Loader from "../Component/Loader";
 
 const Marketplace = () => {
-    const subscriptionId = localStorage.getItem('subscriptionId')
+
+    const validSubscriptionId = localStorage.getItem('subscriptionId');
+    const subscriptionId = validSubscriptionId && validSubscriptionId !== 'null' ? validSubscriptionId : '';
+    const [loader, setLoader] = useState(true)
+
     const searchParams = new URLSearchParams(location.search);
     const category = searchParams.get("category");
     const innovaRate = searchParams.get("innovaRate");
@@ -41,11 +46,12 @@ const Marketplace = () => {
         document.body.classList.toggle("active_search");
     };
 
-
+    console.log('subscriptionId', subscriptionId)
 
     const getBusinessList = async () => {
         const res = await GetFunction(`${baseURL}/businessList?userId=${token && userId ? userId : ""}&page=${page}&limit=10&search=${search}&categoryId=${categoryId}&minPrice=${minPrice ? minPrice : ''}&maxPrice=${maxPrice ? maxPrice : ''}&innovaRate=${innova}`);
         if (res?.status == 200) {
+            setLoader(false)
             setPagination({
                 totalRecords: res?.data?.totalRecords, totalPages:
                     res?.data?.totalPages
@@ -53,6 +59,8 @@ const Marketplace = () => {
             setList(res?.data?.data)
         }
         else {
+            setLoader(false)
+
             toast.error(res?.data?.message)
         }
     };
@@ -98,6 +106,9 @@ const Marketplace = () => {
     const handlePagination = (page) => {
         setPage(page);
     };
+    if (loader) {
+        return <Loader />;
+    }
 
     return (
         <>
@@ -164,7 +175,12 @@ const Marketplace = () => {
             <section className='market_list'>
                 <Container>
                     <div className='market_list_in'>
-                        <div className='results_found'>{pagination?.totalRecords || 0} Startups available</div>
+                        <div className='results_found'>
+                            {
+                                pagination?.totalRecords > 0 &&
+                                pagination?.totalRecords + " Startups available"
+                           }
+                        </div>
                         <div className='market_list_itms'>
                             {
                                 list?.length > 0 ?
@@ -254,7 +270,7 @@ const Marketplace = () => {
                                             </div>
                                         </div>
                                     )) :
-                                    <h3 className="my-5">
+                                    <h3 className="my-5 nodata">
                                         <center>No Businesses Found!</center>
                                     </h3>
                             }

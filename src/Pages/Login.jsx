@@ -37,7 +37,7 @@ const Login = () => {
                 localStorage.setItem("userId", res?.data?.data?._id);
                 localStorage.setItem("token", res?.data?.token);
                 localStorage.setItem("userDetails", JSON.stringify(res?.data?.data));
-                navigate('/')
+                navigate(-1)
             }
             else {
                 toast.dismiss()

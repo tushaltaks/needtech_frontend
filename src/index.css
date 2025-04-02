@@ -3930,6 +3930,42 @@ button.Prev_pas:hover {
   display: inline-block;
   width: 100%;
 }
+
 .text-danger {
   color: red;
+}
+
+.nodata {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+}
+.bid_price{
+  color: #333333;
+  font-family: Montserrat;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-align: center;
+
+}
+.your_price{
+  font-family: Montserrat;
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 120%;
+    letter-spacing: 0%;
+
+    vertical-align: middle;
+}
+.bid_descr{
+
+  font-family: Montserrat;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 26px;
+  letter-spacing: 0%;
+  text-align: center;
 }

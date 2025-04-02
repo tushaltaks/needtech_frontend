@@ -19,10 +19,12 @@ import { Link } from 'react-router-dom';
 import { GetFunction, handleimageUrl, SubmitResponse } from '../utils/ApiFunctions';
 import { baseURL } from '../utils/AxiosInstance';
 import toast from 'react-hot-toast';
+import Loader from '../Component/Loader';
 
 const MyWishlist = () => {
 
     const [key, setKey] = useState('buisness');
+    const [loader, setLoader] = useState(true)
 
 
     const [page, setPage] = useState(1)
@@ -35,7 +37,8 @@ const MyWishlist = () => {
 
     const getBusinessList = async () => {
         const res = await GetFunction(`${baseURL}/userWishList?page=${page}&limit=10&search=${search}`);
-        console.log(res)
+        setLoader(false)
+
         if (res?.status == 200) {
             setPagination({
                 totalRecords: res?.total, totalPages:
@@ -83,6 +86,10 @@ const MyWishlist = () => {
         }
     }
 
+
+    if (loader) {
+        return <Loader />;
+    }
 
 
     return (
@@ -180,7 +187,7 @@ const MyWishlist = () => {
                                             </div>
                                         </div>
                                     )) :
-                                        <center>
+                                        <center className='nodata'>
                                             <h3>No Buisness Found!</h3>
                                         </center>
                                 }
@@ -247,7 +254,7 @@ const MyWishlist = () => {
                                         ))
                                             :
 
-                                            <center className='my-5'>
+                                            <center className='nodata'>
                                                 <h3>No Service Provider Found!</h3>
                                             </center>
                                     }

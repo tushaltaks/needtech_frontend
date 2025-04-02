@@ -57,7 +57,7 @@ const ServiceProviderDetail = () => {
         }
     }
 
-    console.log('serviceProviderDetail', provider)
+
     return (
         <>
             <div className='inner_head'>
