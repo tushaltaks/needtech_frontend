@@ -3,6 +3,8 @@ import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import BackIc from "../assets/backIc.svg"
 import HeartIcon from "../assets/heartIc.png"
+import DownloadIc from "../assets/downloadIc.svg"
+
 import HeartIconFilled from "../assets/heartFilledIc.png"
 import Businessic from "../assets/businessic.svg"
 
@@ -44,18 +46,48 @@ const MarketDetail = () => {
         }
         const res = await SubmitResponse(`${baseURL}/businessDetails/${id}`, data);
         if (res?.status == 200) {
-            if (res?.data?.data?.businessStarted) {
 
-                const fromDate = moment(res?.data?.data?.businessStarted, 'DD-MM-YYYY');
-                const toDate = moment(); // Current date
 
-                const years = toDate.diff(fromDate, 'years');
-                const months = toDate.diff(fromDate.add(years, 'years'), 'months');
+            const fromDate = new Date(res.data.data.businessStarted);
+            const toDate = new Date();
 
-                const result = `${years} year${years !== 1 ? 's' : ''} ${months} month${months !== 1 ? 's' : ''}`;
-
-                setBuisnessdate(result)
+            if (fromDate > toDate) {
+                setBuisnessdate("0 years 0 months"); // Future date
+                return;
             }
+
+            let years = toDate.getFullYear() - fromDate.getFullYear();
+            let months = toDate.getMonth() - fromDate.getMonth();
+            let days = toDate.getDate() - fromDate.getDate();
+
+            if (days < 0) {
+                months -= 1;
+                let previousMonth = new Date(toDate.getFullYear(), toDate.getMonth(), 0);
+                days += previousMonth.getDate();
+            }
+
+            if (months < 0) {
+                years -= 1;
+                months += 12;
+            }
+
+            let result = "";
+
+            if (years > 0) {
+                result = `${years} year${years !== 1 ? 's' : ''}`;
+            }
+            if (months > 0) {
+                result = `${years} year${years !== 1 ? 's' : ''} ${months} month${months !== 1 ? 's' : ''}`;
+            } else {
+                let weeks = Math.floor(days / 7);
+                days = days % 7;
+
+                if (weeks > 0) result = `${weeks} week${weeks !== 1 ? 's' : ''}`;
+                else result = `${days} day${days !== 1 ? 's' : ''}`;
+            }
+
+            console.log('months', months)
+            setBuisnessdate(result);
             setBusiness(res?.data?.data)
         }
         else {
@@ -167,7 +199,7 @@ const MarketDetail = () => {
                                                     <div className='market_detail_logo'><img src={Logo_approved} /></div>
 
                                                 </div>
-                                                <div className='heart_ic'><img src={HeartIcon} /></div>
+
                                             </div>
                                             <div className='acquired_sec'>
                                                 <div className='acquired_sec_img'><img src={Businessic} /></div>
@@ -303,22 +335,9 @@ const MarketDetail = () => {
                                             }} >
 
                                             </p>
-                                            <h2 className='heading_type2'>Abstract</h2>
-                                            <p>{
-                                                business?.abstract ? business?.abstract : 'N/A'
-                                            }</p>
-                                            <h2 className='heading_type2'>Methodology</h2>
-                                            <p >
-                                                {
-                                                    business?.methodology ? business?.methodology : 'N/A'
-                                                }
-                                            </p>
-                                            <h2 className='heading_type2'>Technology</h2>
-                                            <p >
-                                                {
-                                                    business?.technology ? business?.technology : 'N/A'
-                                                }
-                                            </p>
+
+
+
                                             <h2 className='heading_type2'>Features</h2>
                                             <ul className='list_type1'>
                                                 {
@@ -331,25 +350,45 @@ const MarketDetail = () => {
                                                 }
 
                                             </ul>
-                                            <h2 className='heading_type2'>Practical Use</h2>
-                                            <ul className='list_type1'>
-                                                <li>Food Industry: The composition can serve as a healthier alternative to hydrogenated fats in processed foods, offering similar textural properties without introducing trans fats.</li>
-                                                <li>Pharmaceuticals: Its stable nature makes it suitable for use as an excipient in drug formulations, enhancing the delivery and stability of active compounds.</li>
-                                                <li>Cosmetics: This composition provides a robust base in skin care and cosmetic products, enhancing product texture and delivering consistent sensory qualities.</li>
-                                            </ul>
-                                            <p>Overall, this innovative Fat Formulation provides a versatile, stable, and customizable platform suitable for a broad range of applications, addressing both functional needs and health considerations.</p>
+
                                         </div>
                                     </Col>
                                     <Col md={4}>
                                         <div className='product_detail_assets'>
                                             <h2 className='heading_type2'>Assets Included</h2>
-                                            <ul className='list_type1'>
-                                                <li>Business Plan</li>
-                                                <li>Executive Summary</li>
-                                                <li>Provisional Patent</li>
-                                                <li>FTO Certificate</li>
-                                                <li>3rd Party Valuation</li>
-                                            </ul>
+                                            {
+
+                                                (business?.buisnessOwnedBy == userId && token) ?
+                                                    <ul className='list_type1'>
+                                                        {business?.assetsIncluded?.map((val, i) => (
+                                                            <>
+                                                                <li>{val?.name}</li>
+                                                                <div className='download_assets'>
+
+                                                                    <Link to={handleimageUrl(val.file)} target="_blank" download>
+                                                                        <img src={DownloadIc} />
+                                                                        Download Now
+                                                                    </Link>
+                                                                </div>
+
+                                                            </>
+                                                        ))}
+                                                    </ul>
+                                                    :
+
+                                                    <ul className='list_type1'>
+                                                        {business?.assetsIncluded?.map((val, i) => (
+                                                            <>
+                                                                <li>{val?.name}</li>
+
+
+                                                            </>
+                                                        ))}
+                                                    </ul>
+
+
+                                            }
+
                                         </div>
                                     </Col>
                                 </Row>

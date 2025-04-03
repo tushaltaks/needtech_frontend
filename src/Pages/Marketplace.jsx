@@ -26,7 +26,6 @@ const Marketplace = () => {
     const validSubscriptionId = localStorage.getItem('subscriptionId');
     const subscriptionId = validSubscriptionId && validSubscriptionId !== 'null' ? validSubscriptionId : '';
     const [loader, setLoader] = useState(true)
-
     const searchParams = new URLSearchParams(location.search);
     const category = searchParams.get("category");
     const innovaRate = searchParams.get("innovaRate");
@@ -46,7 +45,6 @@ const Marketplace = () => {
         document.body.classList.toggle("active_search");
     };
 
-    console.log('subscriptionId', subscriptionId)
 
     const getBusinessList = async () => {
         const res = await GetFunction(`${baseURL}/businessList?userId=${token && userId ? userId : ""}&page=${page}&limit=10&search=${search}&categoryId=${categoryId}&minPrice=${minPrice ? minPrice : ''}&maxPrice=${maxPrice ? maxPrice : ''}&innovaRate=${innova}`);
@@ -146,7 +144,7 @@ const Marketplace = () => {
                             />
                         </div>
                         <div className='innner_search_itm innner_search_itm_small'>
-                            <Form.Control type='number' placeholder='Min Price'
+                            <Form.Control type='number' placeholder='$ Min Price'
                                 value={minPrice}
                                 onChange={(e) => {
                                     setMinPrice(e.target.value)
@@ -160,7 +158,7 @@ const Marketplace = () => {
                                     setMaxPrice(e.target.value)
                                 }}
 
-                                type='number' placeholder='Max Price' />
+                                type='number' placeholder='$ Max Price' />
                         </div>
                         <div className='innner_search_itm innner_search_itm_btn'>
                             <Button className="btn btn_primary"
@@ -204,10 +202,10 @@ const Marketplace = () => {
                                                         <h3 className='heading_type2'>{val?.title}</h3>
                                                         <p className={subscriptionId ? "" : "locked_data"}>
 
-                                                            {DOMPurify.sanitize(val?.description)
+                                                            {DOMPurify.sanitize(val?.shortDescription)
                                                                 .replace(/<[^>]+>/g, '') // Remove HTML tags
                                                                 .substring(0, 100)}
-                                                            {val?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
+                                                            {val?.shortDescription?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
                                                         </p>
                                                         {subscriptionId ? "" :
 

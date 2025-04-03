@@ -15,15 +15,15 @@ function PaymentSuccess() {
             sessionId: sessionId,
             buisnessId: buisnessId
         }
-        const res = await SubmitResponse(`${baseURL}/paymentSuccess`,  data )
-        console.log(res)
-        if (res?.data?.status == 200) {
+        const res = await SubmitResponse(`${baseURL}/paymentSuccess`, data)
+
+        if (res?.data?.status == 200 || res?.status == 200) {
             navigate('/my-business')
             toast.success(res?.data?.message)
         }
         else {
             navigate('/')
-            toast.error(res?.data?.message)
+            toast.error(res?.message)
             setLoading(false)
         }
     }
@@ -33,8 +33,26 @@ function PaymentSuccess() {
 
     return (
         <div>
-            {loading ? <div>Loading...</div> : <div>Payment Success</div>}
+
+            <div className="container d-flex justify-content-center align-items-center vh-100">
+                <div className="card text-center shadow-lg p-4 success-card">
+                    <div className="check-icon">
+                        <i className="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h2 className="text-success fw-bold">Payment Successful!</h2>
+                    <p className="text-muted">Your order has been placed successfully.</p>
+                    <p className="text-muted">You will be automatically redirected from here please wait.</p>
+
+                    <div className="d-flex justify-content-center gap-3 mt-4">
+                     {   loading &&
+                        <div className="spinner-border text-success" role="status">
+                        </div>}
+                    </div>
+                </div>
+            </div>
         </div>
+
+
     )
 }
 

@@ -121,7 +121,7 @@ const PaymentForm = ({ business, price }) => {
                     <div className='btn_sec btn_sec_itms'>
                         <Button type="submit" disabled={isSubmitting} className='btn btn_primary'>
 
-                            Pay Now
+                            {isSubmitting ? 'Please Wait':'Pay Now'}
                         </Button>
                         <Button type='button' className='btn btn_outline' onClick={() => {
                             navigate(-1)
