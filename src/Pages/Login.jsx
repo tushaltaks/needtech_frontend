@@ -1,8 +1,10 @@
 import React, { useState } from 'react'; // Import useState
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Eye, EyeOff } from "lucide-react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import GoogleIcon from '../assets/google_icon.svg';
+import BackIc from "../assets/backIc.svg"
+
 import FacebookIcon from '../assets/facebook_icon.svg';
 import Logoimg from '../assets/logo.png';
 import Loginmetaic1 from '../assets/loginmetaic1.svg';
@@ -16,6 +18,7 @@ import toast from 'react-hot-toast';
 
 const Login = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [passwordVisible, setPasswordVisible] = useState(false);
     const togglePasswordVisibility = () => {
         setPasswordVisible(!passwordVisible);
@@ -44,7 +47,6 @@ const Login = () => {
                 toast.error('Profile not completed');
                 localStorage.setItem("userDetails", JSON.stringify(res?.data?.data));
                 localStorage.setItem("userId", res?.data?.data?._id);
-
                 navigate('/complete-profile?lastStep=' + parseInt(res?.data?.data?.LastStep + 1))
             }
 
@@ -58,6 +60,30 @@ const Login = () => {
 
     return (
         <>
+            <div className='inner_head'>
+                <Container>
+                    <div className='inner_head_in backbtn_s'>
+                        <Link to="/marketplace"
+                        //     onClick={() => {
+                        //     const from = location.state?.from?.pathname?.toString();
+                        //     console.log('locatioaaan', typeof (from));
+                        //     if (from === undefined) {
+                        //         console.log('ddddddddd', navigate(-1))
+                        //        // fallback if no previous route
+                        //     } else {
+                        //         navigate(from);
+
+                        //     }
+                        // }}
+
+                        // onClick={() => {
+                        //     navigate('/marketplace');
+                        // }}
+                        >
+                            <img src={BackIc} /> Back</Link>
+                    </div>
+                </Container>
+            </div>
             <section className='login_page'>
                 <Container>
                     <div className='login_page_in'>

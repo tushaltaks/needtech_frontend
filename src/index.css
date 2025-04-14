@@ -231,7 +231,8 @@ select {
 .video_play_ic {
   position: absolute;
   top: 50%;
-  left: 0;
+  /* left: 0; */
+left: -81px;
   text-align: center;
   transform: translateY(-50%);
   right: 0;
@@ -3968,4 +3969,10 @@ button.Prev_pas:hover {
   line-height: 26px;
   letter-spacing: 0%;
   text-align: center;
+}
+
+.btn-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }

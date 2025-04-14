@@ -24,7 +24,7 @@ const Header = () => {
             text: "you want to logout?",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#3085d6",
+            confirmButtonColor: "#5FD1FA",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes"
         }).then((result) => {

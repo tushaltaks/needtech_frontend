@@ -58,6 +58,7 @@ const HelpSupport = () => {
                                 name: "",
                                 email: "",
                                 phone: "",
+
                                 message: "",
                             }}
                             validationSchema={helpSupport}

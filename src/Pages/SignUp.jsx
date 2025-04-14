@@ -2,6 +2,8 @@ import React, { useState } from 'react'; // Import useState
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Eye, EyeOff } from "lucide-react";
 import { Link } from 'react-router-dom';
+import BackIc from "../assets/backIc.svg"
+
 import GoogleIcon from '../assets/google_icon.svg';
 import FacebookIcon from '../assets/facebook_icon.svg';
 import Logoimg from '../assets/logo.png';
@@ -81,6 +83,31 @@ const SignUp = () => {
 
     return (
         <>
+
+              <div className='inner_head'>
+                            <Container>
+                                <div className='inner_head_in backbtn_s'>
+                                    <Link to="/marketplace"
+                                    //     onClick={() => {
+                                    //     const from = location.state?.from?.pathname?.toString();
+                                    //     console.log('locatioaaan', typeof (from));
+                                    //     if (from === undefined) {
+                                    //         console.log('ddddddddd', navigate(-1))
+                                    //        // fallback if no previous route
+                                    //     } else {
+                                    //         navigate(from);
+
+                                    //     }
+                                    // }}
+
+                                    // onClick={() => {
+                                    //     navigate('/marketplace');
+                                    // }}
+                                    >
+                                        <img src={BackIc} /> Back</Link>
+                                </div>
+                            </Container>
+                        </div>
             <section className='login_page'>
                 <Container>
                     <div className='login_page_in'>

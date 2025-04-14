@@ -145,7 +145,7 @@ const MarketDetail = () => {
             <div className='inner_head'>
                 <Container>
                     <div className='inner_head_in'>
-                        <Link to="/marketplace"><img src={BackIc} /> Back to Products</Link>
+                        <Link to="/marketplace"><img src={BackIc} /> Back to Marketplace</Link>
                     </div>
                 </Container>
             </div>
@@ -179,14 +179,26 @@ const MarketDetail = () => {
                                                 <p>InnovaRate:</p>
                                                 <h4>{business?.innovaRate}%</h4>
                                             </div>
-                                            <div className='market_list_rate'>
+                                            <div className='market_list_rate'
+
+
+
+                                            >
                                                 <p>Market Readiness Rate:</p>
-                                                <h4 className=''>{business?.marketReadiness}%</h4>
+                                                <h4  className={
+                                                    token &&
+                                                        subscriptionId ? '' : ' locked_data'
+                                                }
+                                                >{business?.marketReadiness}%</h4>
                                                 {/* <h4 className='locked_data'>{business?.marketReadiness}%</h4> */}
                                             </div>
                                             <div className='market_list_rate'>
                                                 <p>Market Growth:</p>
-                                                <h4 className=''>{business?.marketGrowth}% <img src={GrowIc} /></h4>
+                                                <h4 className={
+                                                    token &&
+                                                        subscriptionId ? '' : ' locked_data'
+                                                }
+                                                >{business?.marketGrowth}% <img src={GrowIc} /></h4>
                                             </div>
                                         </div>
                                     </div>

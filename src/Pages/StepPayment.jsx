@@ -76,13 +76,12 @@ const StepPayment = () => {
             <div className="cp_s_in">
               {/* Header Section */}
               <div className="cp_s_head">
-                <Link to="/" className="cp_s_logo">
+                {/* <Link to="/" className="cp_s_logo">
                   <img src={Logoimg} alt="Logo" />
-                </Link>
+                </Link> */}
                 <h2 className="heading_type2">Payment</h2>
                 <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-                  tempor incididunt ut labore et dolore magna aliqua.
+                  Unlock full access to our marketplace. You will be charged $100 today and then automatically each month, giving you continuous access until you decide to cancel.
                 </p>
               </div>
 

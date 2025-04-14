@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Col, Container, Row, Form, Button } from 'react-bootstrap'
 import DashboardImg from "../assets/dashboard_img.png"
 import Partnerlogo1 from "../assets/partnerlogo1.png"
@@ -11,13 +11,17 @@ import HomeImg1 from "../assets/home_img1.png"
 import HomeImg2 from "../assets/home_img2.png"
 import { Link, useNavigate } from 'react-router-dom'
 import { baseURL } from '../utils/AxiosInstance'
-import { GetFunction } from '../utils/ApiFunctions'
+import { GetFunction, handleimageUrl } from '../utils/ApiFunctions'
 import toast from 'react-hot-toast'
 import { innovaOptions } from '../utils/Utils'
 
 
 function Home() {
+    const videoRef = useRef(null);
+
     const navigate = useNavigate()
+    const [cmsData, setCmsData] = useState('')
+    const [showPlayIcon, setShowPlayIcon] = useState(true);
     const [selectedCategory, setSelectedCategory] = React.useState('');
     const [innova, setInnova] = React.useState('');
     const [categoryList, setCategoryList] = React.useState([])
@@ -32,10 +36,32 @@ function Home() {
             toast.error(res?.data?.message)
         }
     };
-    useEffect(() => {
 
+
+    const getCmsData = async () => {
+        const res = await GetFunction(`${baseURL}/getCms/Home Video`);
+        if (res?.status == 200) {
+            setCmsData(res?.data?.[0]?.homeVideo)
+        }
+        else {
+            toast.error(res?.data?.message)
+        }
+    };
+
+    useEffect(() => {
+        getCmsData()
         getCategoryList()
     }, [])
+
+
+    const playVideo = () => {
+        if (videoRef.current) {
+            videoRef.current.play();
+            setShowPlayIcon(false);
+        }
+    };
+
+
     return (
         <>
             <section className='sec_type1 bg_gray'>
@@ -133,8 +159,21 @@ function Home() {
                             </Col>
                             <Col md={6}>
                                 <div className='sec_type2_img'>
-                                    <img src={VideoIimg} />
-                                    <div className='video_play_ic'><img src={VideoPlay} /></div>
+
+                                    <video
+                                        src={handleimageUrl(cmsData)}
+                                        controls
+                                        className=""
+                                        ref={videoRef}
+                                        onPlay={() => setShowPlayIcon(false)}
+                                        onPause={() => setShowPlayIcon(true)}
+
+                                    />
+                                    {showPlayIcon&& <div
+                                        onClick={playVideo}
+                                        className='video_play_ic'>
+                                        <img src={VideoPlay} />
+                                    </div>}
                                 </div>
                             </Col>
                         </Row>

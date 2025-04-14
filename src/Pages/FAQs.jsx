@@ -61,7 +61,13 @@ const FAQs = () => {
                                     <Accordion.Item eventKey={i}>
                                         <Accordion.Header>{val?.question}</Accordion.Header>
                                         <Accordion.Body>
-                                            {val?.answer}
+                                            <div
+                                                dangerouslySetInnerHTML={{
+                                                    __html: `${val?.answer || 'N/A'}`
+                                                }}
+                                            >
+
+                                            </div>
                                         </Accordion.Body>
                                     </Accordion.Item>
                                 ))

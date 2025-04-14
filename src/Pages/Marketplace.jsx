@@ -177,7 +177,7 @@ const Marketplace = () => {
                             {
                                 pagination?.totalRecords > 0 &&
                                 pagination?.totalRecords + " Startups available"
-                           }
+                            }
                         </div>
                         <div className='market_list_itms'>
                             {
@@ -200,6 +200,17 @@ const Marketplace = () => {
                                                     </div>
                                                     <div className='market_list_info'>
                                                         <h3 className='heading_type2'>{val?.title}</h3>
+                                                        {
+                                                            !subscriptionId &&
+                                                            <span className={"mb-3"}>
+                                                                {DOMPurify.sanitize(val?.shortDescription)
+                                                                    .replace(/<[^>]+>/g, '') // Remove HTML tags
+                                                                    .substring(0, 40)}
+                                                                {val?.shortDescription?.replace(/<[^>]+>/g, '').length > 40 ? '...' : ''}
+                                                            </span>
+
+
+                                                        }
                                                         <p className={subscriptionId ? "" : "locked_data"}>
 
                                                             {DOMPurify.sanitize(val?.shortDescription)

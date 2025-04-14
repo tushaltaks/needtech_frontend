@@ -118,7 +118,9 @@ const OTP = (props) => {
                 <Modal.Body>
                     <div className='modal_sec_in'>
                         <h2 className='text-center heading_type2'>Email Verification</h2>
-                        <p>Please check your email and enter the code we have sent you.</p>
+                        <p>
+                            We've emailed a 4-digit code. Please find it in your inbox (or spam folder) and enter it here
+                        </p>
 
                         <Form>
                             <div className="login_form_in">
