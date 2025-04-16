@@ -3,6 +3,7 @@ import React, { useState } from 'react'; // Import useState
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { helpSupport } from '../utils/Utils';
+import { IoMdPin, IoMdCall, IoMdMail } from "react-icons/io";
 import PhoneInput from 'react-phone-input-2';
 import { baseURL } from '../utils/AxiosInstance';
 import { SubmitResponse } from '../utils/ApiFunctions';
@@ -138,11 +139,58 @@ const HelpSupport = () => {
                                                 Submit
                                             </Button>
                                         </Col>
+
+
+
+
                                     </Row>
                                 </Form>
                             )}
                         </Formik>
                     </div>
+                    <center>
+                        <Row>
+                            <Col md={12}>
+                                <div className='blue-left-border'>
+                                    <div className='detail-contact '>
+                                        <span >
+                                            <IoMdPin />{" "}
+                                        </span>
+
+
+                                        <Link to={"https://maps.app.goo.gl/N63yHbjxPc5yAoj36"} target='_blank'>
+                                            <span className='text-black'>
+                                                1 Nahal Gamla St.
+                                                Suite 37 Kiryat Ono 55450, Israel
+                                            </span>
+
+                                        </Link>
+                                    </div>
+                                    <div className=' detail-contacts mt-2'>
+                                        <span>
+                                            <IoMdCall /> {" "}
+
+
+                                        </span> <span className='phone-color'>+972-52-4785336</span>
+                                    </div>
+                                    <div className=' detail-contacts mt-2 '>
+                                        <span>
+                                            <IoMdMail />{" "}
+
+                                        </span>
+                                        <span className='text-blue'>
+                                            {/* sales@rapidrim.com */}
+                                            <Link to="mailto:support@needtechlabs.com">
+                                                support@needtechlabs.com
+                                            </Link>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </Col>
+                        </Row>
+                    </center>
+
                 </Container>
             </section>
         </>

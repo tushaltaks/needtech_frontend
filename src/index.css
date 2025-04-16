@@ -232,7 +232,7 @@ select {
   position: absolute;
   top: 50%;
   /* left: 0; */
-left: -81px;
+  left: -81px;
   text-align: center;
   transform: translateY(-50%);
   right: 0;
@@ -1779,6 +1779,7 @@ h4 {
 .service_provider_logo img {
   max-height: 100%;
   max-width: 100%;
+  object-fit: contain;
 }
 
 .market_detail_right .service_provider_d {
@@ -2246,7 +2247,7 @@ h4 {
 }
 
 .provider_d_itm .service_provider_logo {
-  max-height: 25px;
+  max-height: 100px;
   height: auto;
   max-width: 100%;
   display: inline-flex;
@@ -3942,26 +3943,29 @@ button.Prev_pas:hover {
   justify-content: center;
   height: 70vh;
 }
-.bid_price{
+
+.bid_price {
   color: #333333;
   font-family: Montserrat;
-    font-weight: 500;
-    font-size: 28px;
-    line-height: 100%;
-    letter-spacing: 0%;
-    text-align: center;
+  font-weight: 500;
+  font-size: 28px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  text-align: center;
 
 }
-.your_price{
+
+.your_price {
   font-family: Montserrat;
-    font-weight: 300;
-    font-size: 18px;
-    line-height: 120%;
-    letter-spacing: 0%;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 120%;
+  letter-spacing: 0%;
 
-    vertical-align: middle;
+  vertical-align: middle;
 }
-.bid_descr{
+
+.bid_descr {
 
   font-family: Montserrat;
   font-weight: 400;
@@ -3975,4 +3979,19 @@ button.Prev_pas:hover {
   display: flex;
   align-items: center;
   justify-content: space-around;
+}
+
+.blue-left-border {
+  margin-bottom: 10px;
+
+}
+
+.blue-left-border a {
+  text-decoration: none;
+}
+
+.btn:disabled {
+  background-color: #5FD1FA;
+  border-color: #5FD1FA;
+  opacity: 1 !important;
 }

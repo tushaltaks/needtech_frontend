@@ -136,7 +136,9 @@ const Login = () => {
                                                     </Form.Group>
 
                                                     {/* Login Button */}
-                                                    <Button type="submit" className="btn btn_primary w-100">Login</Button>
+                                                    <Button type="submit"
+
+                                                        className="btn btn_primary w-100">Login</Button>
 
                                                     {/* Social Login */}
                                                     <div className="login_with"><span>Or Login With</span></div>

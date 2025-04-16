@@ -29,10 +29,10 @@ const Step8 = ({ prev }) => {
                     <p>
                         You have finished the Onboarding Process successfully! :)
                     </p>
-                    <p>You have finished the Onboarding process. Now, in order to unlock our unique Marketplace. Please activate your membership for ${subscription?.price}/month</p>
+                    <p> Now, in order to unlock our unique Marketplace. Please activate your membership for ${subscription?.price}/month</p>
                     <div className='btn-flex'>
                         <div className='modal_flx'>
-                            <Button as={Link} to="/buy-plan" className="btn btn_primary">Activate Membership</Button>
+                            <Button as={Link} to="/buy-plan" className="btn btn_primary">Activate Membership Now</Button>
 
                         </div>
 

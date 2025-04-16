@@ -52,8 +52,19 @@ const ServiceProvider = () => {
         }
     };
 
+    const getServiceCategoryList = async () => {
+
+        const res = await GetFunction(`${baseURL}/getServiceCategoryList?pages=all`);
+        if (res?.status == 200) {
+            setCategoryList(res?.data)
+        }
+        else {
+            toast.error(res?.data?.message)
+        }
+    };
     useEffect(() => {
         getBusinessList()
+        getServiceCategoryList()
         return () => {
             document.body.classList.remove("active_search");
         };
@@ -79,6 +90,9 @@ const ServiceProvider = () => {
     if (loader) {
         return <Loader />;
     }
+
+
+
     return (
         <>
             <div className='inner_head'>
@@ -86,21 +100,34 @@ const ServiceProvider = () => {
                     <div className='inner_head_in'><h1 className='heading_type1'>Professional Services</h1></div>
                 </Container>
             </div>
-            <div className='mobile_search'><Container><div className='mobile_search_in btn btn_outline' onClick={handleToggle}>Search <img src={SearchIc} /></div></Container></div>
+            <div className='mobile_search'><Container>
+                <div className='mobile_search_in btn btn_outline' onClick={handleToggle}>Search <img src={SearchIc} /></div></Container></div>
             <div className='innner_search servidersearch'>
                 <Container>
                     <Form>
                         <div className='innner_search_form'>
                             <div className='innner_search_itm'>
-                                <Form.Select aria-label="Default select example">
-                                    <option>Select a Professional Service</option>
-                                    <option value="1">Professional Service</option>
-                                    <option value="2">Professional Service</option>
-                                    <option value="3">Professional Service</option>
+                                <Form.Select aria-label="Default select example"
+                                    onChange={(e) => {
+                                        setcategoryId(e.target.value)
+                                    }}
+                                >
+                                    <option value={''}>Select a Professional Service</option>
+                                    {categoryList && categoryList?.map((val, i) => (
+                                        <option value={val?._id}> {val?.title}</option>
+
+                                    ))
+
+                                    }
                                 </Form.Select>
                             </div>
                             <div className='innner_search_itm innner_search_itm_btn'>
-                                <Button className="btn btn_primary" type="submit">Search</Button>
+                                <Button className="btn btn_primary" onClick={() => {
+                                    getBusinessList()
+
+                                }
+
+                                }>Search</Button>
                             </div>
                         </div>
                     </Form>
@@ -182,7 +209,7 @@ const ServiceProvider = () => {
                                     </div>
                                 ))
                                     :
-                                    <h3  className="nodata">
+                                    <h3 className="nodata">
                                         <center>No Service Provider Found!</center>
                                     </h3>
                             }

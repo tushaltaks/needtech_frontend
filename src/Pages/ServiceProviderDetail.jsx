@@ -14,19 +14,22 @@ import Logo_approved from "../assets/logo_approved.png"
 import OfferBid from '../Component/Modals/OfferBid';
 import ProfilePhoto from "../assets/profilePhoto.jpg"
 import ProviderDetails from '../Component/Modals/ProviderDetails';
-import { handleimageUrl, SubmitResponse } from '../utils/ApiFunctions';
+import { GetFunction, handleimageUrl, SubmitResponse } from '../utils/ApiFunctions';
 import { baseURL } from '../utils/AxiosInstance';
 import toast from 'react-hot-toast';
 
 const ServiceProviderDetail = () => {
     const [show, setShow] = useState(false);
     const token = localStorage.getItem('token')
+    const validSubscriptionId = localStorage.getItem('subscriptionId');
+    const subscriptionId = validSubscriptionId && validSubscriptionId !== 'null' ? validSubscriptionId : '';
     const navigate = useNavigate()
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
 
     const [provider, setProvider] = useState({})
+    const [providerCategory, setProviderCategoryList] = useState([])
     const { id } = useParams()
     const getsingleProvider = async () => {
         const data = {
@@ -40,6 +43,8 @@ const ServiceProviderDetail = () => {
             toast.error(res?.data?.message)
         }
     };
+
+
     useEffect(() => {
         getsingleProvider()
     }, [])
@@ -58,12 +63,13 @@ const ServiceProviderDetail = () => {
     }
 
 
+
     return (
         <>
             <div className='inner_head'>
                 <Container>
                     <div className='inner_head_in backbtn_s'>
-                        <Link to="/service-provider-login"><img src={BackIc} /> Back to Service Providers</Link>
+                        <Link to="/service-provider"><img src={BackIc} /> Back to Service Providers</Link>
                     </div>
                 </Container>
             </div>
@@ -84,12 +90,12 @@ const ServiceProviderDetail = () => {
                                                 <div className='market_meta_itm'><div className='market_meta_itm_ic'><img src={VerifiedIc} /></div><span>Verified</span></div>
                                             </div>
                                             <div className='market_detail_heading'>
-                                                <h1 className='heading_type1'>{provider?.name}</h1>
+                                                <h1 className={token && subscriptionId ? 'heading_type1' : 'heading_type1 locked_data'}>{provider?.name}</h1>
                                                 <h4>{provider?.jobTitle}</h4>
                                             </div>
                                             <div className='service_provider_lisitng'>
                                                 <h2 className='heading_type2'>Areas of Experties</h2>
-                                                <ul className='list_type1'>
+                                                <ul className={token && subscriptionId ? 'list_type1' : 'list_type1 locked_data'}>
                                                     {
                                                         provider?.areaofExpertise &&
                                                         provider?.areaofExpertise?.map((item, index) => (
@@ -108,7 +114,7 @@ const ServiceProviderDetail = () => {
                                         <div className='market_detail_right_con'>
                                             <div className='market_detail_right_in'>
                                                 <div className='market_detail_logo'><img src={Logo_approved} /></div>
-                                                <div className='market_detail_serviceprovider'>
+                                                <div className={token && subscriptionId ? 'market_detail_serviceprovider' : 'market_detail_serviceprovider locked_data'}>
                                                     <h4>Approved Partner</h4>
                                                     <p>{provider?.professionalExperience} years in provider</p>
                                                 </div>
@@ -137,7 +143,7 @@ const ServiceProviderDetail = () => {
                                                 }
                                             </div>
                                         </div>
-                                        <div className='service_provider_s'>
+                                        <div className={token && subscriptionId ? 'service_provider_s' : 'service_provider_s locked_data'}>
                                             <div className='service_provider_logo'><img
                                                 src={provider?.companyLogo ? handleimageUrl(provider?.companyLogo) : DewberryLogo}
                                             /></div>
@@ -157,20 +163,18 @@ const ServiceProviderDetail = () => {
                         <div className='product_detail'>
                             <Row>
                                 <Col md={8}>
-                                    <div className='product_detail_in content_gap'
-
-
-
-                                    >
+                                    <div className='product_detail_in content_gap'>
                                         <p
+                                            className={token && subscriptionId ? '' : ' locked_data'}
                                             dangerouslySetInnerHTML={{
                                                 __html: provider?.description
                                             }}
                                         >
-
                                         </p>
-                                        <h2 className='heading_type2 mt-4'>Product Detail</h2>
-                                        <p>
+                                        <h2 className='heading_type2 mt-4'>Provider Detail</h2>
+                                        <p
+                                            className={token && subscriptionId ? '' : ' locked_data'}
+                                        >
                                             {provider?.producDetails}
                                         </p>
                                     </div>

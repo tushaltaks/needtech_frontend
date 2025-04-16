@@ -21,7 +21,7 @@ const Header = () => {
 
         Swal.fire({
             title: "Are you sure?",
-            text: "you want to logout?",
+            text: "Please confirm that you want to logout?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#5FD1FA",

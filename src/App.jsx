@@ -109,9 +109,10 @@ function App() {
                 <Route path='/change-password' element={<ChangePassword />} />
                 <Route path='/edit-profile' element={<EditProfile />} />
                 <Route path='/service-provider-login' element={<ServiceProviderLogin />} />
-                <Route path='/service-provider-detail-login' element={<ServiceProviderDetailLogin />} />
               </Route>
             </Route>
+            <Route path='/service-provider-detail-login' element={<ServiceProviderDetailLogin />} />
+
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

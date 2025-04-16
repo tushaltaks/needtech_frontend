@@ -226,10 +226,10 @@ const MarketDetail = () => {
                                             <div className='market_detail_right_con'>
                                                 <div className='market_detail_right_in'>
                                                     <div className='market_detail_logo'><img src={Logo_approved} /></div>
-                                                    <div className='market_detail_time'>
+                                                    {/* <div className='market_detail_time'>
                                                         <p>Business Started</p>
                                                         <h4>({buisnessDate ? buisnessDate : 'N/A'})</h4>
-                                                    </div>
+                                                    </div> */}
                                                 </div>
                                                 <div className='heart_ic' onClick={
                                                     () => {

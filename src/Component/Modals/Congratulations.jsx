@@ -12,7 +12,7 @@ const Congratulations = (props) => {
                     <div className='modal_sec_in'>
                         <div className='modal_ic'><img src={CheckIc}/></div>
                         <h2 className='text-center heading_type2'>Congratulations!</h2>
-                        <p>You have finished the Onboarding process. Now, in order to unlock our unique Marketplace. Please activate your membership for $99/month</p>
+                        <p> Now, in order to unlock our unique Marketplace. Please activate your membership for $99/month</p>
                         <div className='modal_flx'>
                             <Button as={Link} to="/buy-plan" className="btn btn_primary">Activate Membership</Button>
                             <small>Unlock Startups Now!</small>

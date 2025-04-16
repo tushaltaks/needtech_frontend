@@ -205,13 +205,13 @@ const Marketplace = () => {
                                                             <span className={"mb-3"}>
                                                                 {DOMPurify.sanitize(val?.shortDescription)
                                                                     .replace(/<[^>]+>/g, '') // Remove HTML tags
-                                                                    .substring(0, 40)}
-                                                                {val?.shortDescription?.replace(/<[^>]+>/g, '').length > 40 ? '...' : ''}
+                                                                    .substring(0, 130)}
+                                                                {val?.shortDescription?.replace(/<[^>]+>/g, '').length > 130 ? '...' : ''}
                                                             </span>
 
 
                                                         }
-                                                        <p className={subscriptionId ? "" : "locked_data"}>
+                                                        {/* <p className={subscriptionId ? "" : "locked_data"}>
 
                                                             {DOMPurify.sanitize(val?.shortDescription)
                                                                 .replace(/<[^>]+>/g, '') // Remove HTML tags
@@ -222,7 +222,7 @@ const Marketplace = () => {
 
                                                             <div className={"locked_btn"}>
                                                                 <Link to="/buy-plan" className='btn btn_outline'><img src={Lokedic} /> Unlock Startup</Link>
-                                                            </div>}
+                                                            </div>} */}
                                                     </div>
                                                 </div>
                                                 <div className='market_list_rates'>
