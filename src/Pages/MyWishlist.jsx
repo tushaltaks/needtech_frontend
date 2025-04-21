@@ -103,12 +103,12 @@ const MyWishlist = () => {
                 <Container>
 
                     <Tabs
-                        id="controlled-tab-example"
+                        id="Tabs-List"
                         activeKey={key}
                         onSelect={(k) => setKey(k)}
                         className="mb-3"
                     >
-                        <Tab eventKey="buisness" title="Buisness">
+                        <Tab eventKey="buisness" title="Startups">
 
                             <div className='market_list_itms'>
 
@@ -194,7 +194,7 @@ const MyWishlist = () => {
 
                             </div>
                         </Tab>
-                        <Tab eventKey="providers" title="Providers">
+                        <Tab eventKey="providers" title="Service Providers">
                             <div className='market_list_in'>
                                 <div className='market_list_itms serviceprovider_list'>
                                     {

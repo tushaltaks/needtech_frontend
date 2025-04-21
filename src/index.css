@@ -3995,3 +3995,11 @@ button.Prev_pas:hover {
   border-color: #5FD1FA;
   opacity: 1 !important;
 }
+.market_list ul li .nav-link.active {
+  color: #fff !important  ;
+  background: #5FD1FA !important  ;
+}
+
+.market_list ul li .nav-link {
+  color: #000 !important;
+}

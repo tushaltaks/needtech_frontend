@@ -8,6 +8,7 @@ import { baseURL } from '../utils/AxiosInstance';
 import { GetFunction, handleimageUrl } from '../utils/ApiFunctions';
 import toast from 'react-hot-toast';
 import moment from 'moment';
+import { Helmet } from 'react-helmet';
 
 const ArticleDetail = () => {
     const { id } = useParams();
@@ -45,6 +46,10 @@ const ArticleDetail = () => {
 
     return (
         <>
+            <Helmet>
+                <title>{blogDetail?.title}</title>
+
+            </Helmet>
             <div className='inner_head'>
                 <Container>
                     <div className='inner_head_in backbtn_s'>

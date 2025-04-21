@@ -21,7 +21,7 @@ const Articles = () => {
 
 
     const getBlogs = async () => {
-        const res = await GetFunction(`${baseURL}/getArticle?page=${page}&limit=${10}&category=${category||''}`);
+        const res = await GetFunction(`${baseURL}/getArticle?page=${page}&limit=${10}&category=${category || ''}`);
         // console.log('res', res)
         if (res?.status == 200) {
             setPagination({
@@ -60,11 +60,11 @@ const Articles = () => {
                 <Container>
                     <div className='article_sec_in'>
                         <Row className='article_sec_dlt'>
-                            <Col md={6}>
+                            {data?.[0] && <Col md={6}>
                                 <div className='article_sec_itm'>
-                                    <div className='article_sec_img'><img src={data?.[0]?.image ? handleimageUrl(data?.[0]?.image) : BlogImg1} /></div>
+                                    <div className='article_sec_img'><img src={data?.[0]?.image ? handleimageUrl(data?.[0]?.image) : ''} /></div>
                                     <div className='article_sec_con'>
-                                        <h2 className='heading_type2'><Link to={`/article-detail/${data?.[0]?._id}`}>{data?.[0]?.title}</Link></h2>
+                                        <h2 className='heading_type2'><Link to={`/article-detail/${data?.[0]?.slug}`}>{data?.[0]?.title}</Link></h2>
 
                                         <p>
                                             {DOMPurify.sanitize(data?.[0]?.description)
@@ -73,10 +73,10 @@ const Articles = () => {
                                             {data?.[0]?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
                                         </p>
 
-                                        <Link to={`/article-detail/${data?.[0]?._id}`} className='readmore_btn'>Read article <img src={RightArrow} /></Link>
+                                        <Link to={`/article-detail/${data?.[0]?.slug}`} className='readmore_btn'>Read article <img src={RightArrow} /></Link>
                                     </div>
                                 </div>
-                            </Col>
+                            </Col>}
                             <Col md={6}>
                                 {
                                     data?.length > 0 &&
@@ -84,7 +84,7 @@ const Articles = () => {
                                         <div className='article_sec_itm' key={index}>
                                             <div className='article_sec_img_main'><div className='article_sec_img'><img src={handleimageUrl(item?.image)} /></div></div>
                                             <div className='article_sec_con'>
-                                                <h2 className='heading_type2'><Link to={`/article-detail/${item._id}`}>{item?.title}</Link></h2>
+                                                <h2 className='heading_type2'><Link to={`/article-detail/${item.slug}`}>{item?.title}</Link></h2>
 
 
                                                 <p>
@@ -93,7 +93,7 @@ const Articles = () => {
                                                         .substring(0, 100)}
                                                     {item?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
                                                 </p>
-                                                <Link to={`/article-detail/${item._id}`} className='readmore_btn'>Read article <img src={RightArrow} /></Link>
+                                                <Link to={`/article-detail/${item.slug}`} className='readmore_btn'>Read article <img src={RightArrow} /></Link>
                                             </div>
                                         </div>
                                     ))
@@ -111,7 +111,7 @@ const Articles = () => {
                                         <div className='article_sec_itm' >
                                             <div className='article_sec_img_main'><div className='article_sec_img'><img src={handleimageUrl(item?.image)} /></div></div>
                                             <div className='article_sec_con'>
-                                                <h2 className='heading_type2'><Link to={`/article-detail/${item._id}`}>{item?.title}</Link></h2>
+                                                <h2 className='heading_type2'><Link to={`/article-detail/${item.slug}`}>{item?.title}</Link></h2>
 
 
                                                 <p>
@@ -120,7 +120,7 @@ const Articles = () => {
                                                         .substring(0, 100)}
                                                     {item?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
                                                 </p>
-                                                <Link to={`/article-detail/${item._id}`} className='readmore_btn'>Read article <img src={RightArrow} /></Link>
+                                                <Link to={`/article-detail/${item.slug}`} className='readmore_btn'>Read article <img src={RightArrow} /></Link>
                                             </div>
                                         </div>
                                     </Col>
@@ -129,6 +129,11 @@ const Articles = () => {
                             }
 
                         </Row>
+                        <center>
+                            <Col>
+                            <h3>No Blogs Found!</h3>
+                            </Col>
+                        </center>
                     </div>
                 </Container>
             </section>

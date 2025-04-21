@@ -201,13 +201,13 @@ const Marketplace = () => {
                                                     <div className='market_list_info'>
                                                         <h3 className='heading_type2'>{val?.title}</h3>
                                                         {
-                                                            !subscriptionId &&
-                                                            <span className={"mb-3"}>
+
+                                                            <p className={subscriptionId ? "" : "locked_data"}>
                                                                 {DOMPurify.sanitize(val?.shortDescription)
-                                                                    .replace(/<[^>]+>/g, '') // Remove HTML tags
-                                                                    .substring(0, 130)}
-                                                                {val?.shortDescription?.replace(/<[^>]+>/g, '').length > 130 ? '...' : ''}
-                                                            </span>
+                                                                    .replace(/<[^>]+>/g, '')}
+
+
+                                                            </p>
 
 
                                                         }
