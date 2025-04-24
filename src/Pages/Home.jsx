@@ -16,8 +16,59 @@ import toast from 'react-hot-toast'
 import { innovaOptions } from '../utils/Utils'
 
 
-function Home() {
+const renderVideo = (videoUrl) => {
     const videoRef = useRef(null);
+
+    const lower = videoUrl.toLowerCase();
+
+    if (lower.includes("youtube.com") || lower.includes("youtu.be")) {
+        // Extract YouTube video ID
+        const videoId = lower.includes("youtu.be")
+            ? lower.split("youtu.be/")[1]
+            : new URLSearchParams(new URL(videoUrl)?.search)?.get("v");
+
+        return (
+            <iframe
+                width="100%"
+                height="400"
+                src="https://www.youtube.com/embed/eSUPbqtiOrE"
+                title="YouTube Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="rounded-md shadow-md"
+            />
+        );
+    } else if (lower.includes("facebook.com")) {
+        return (
+            <iframe
+                src={`https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(videoUrl)}&show_text=false&autoplay=0`}
+                width="100%"
+                height="400"
+                style={{ border: "none", overflow: "hidden" }}
+                scrolling="no"
+                frameBorder="0"
+                allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                allowFullScreen
+                className="rounded-md shadow-md"
+            ></iframe>
+        );
+    } else if (lower.endsWith(".mp4")) {
+        return (
+            <video width="100%" controls>
+                <source src={videoUrl} type="video/mp4" />
+                Your browser does not support the video tag.
+            </video>
+        );
+    } else {
+        return (
+            <p className="text-red-500">Unsupported video format or link</p>
+        );
+    }
+};
+
+
+function Home() {
 
     const navigate = useNavigate()
     const [cmsData, setCmsData] = useState('')
@@ -39,9 +90,11 @@ function Home() {
 
 
     const getCmsData = async () => {
-        const res = await GetFunction(`${baseURL}/getCms/Home Video`);
+        const res = await GetFunction(`${baseURL}/getCms/Home VideoURL`);
         if (res?.status == 200) {
-            setCmsData(res?.data?.[0]?.homeVideo)
+            console.log('ddddddddddddddddddd', res?.data)
+
+            setCmsData(res?.data?.[0]?.homeVideoUrl)
         }
         else {
             toast.error(res?.data?.message)
@@ -61,6 +114,7 @@ function Home() {
         }
     };
 
+    console.log('ddddddddddddddddddd', cmsData)
 
     return (
         <>
@@ -159,8 +213,8 @@ function Home() {
                             </Col>
                             <Col md={6}>
                                 <div className='sec_type2_img'>
-
-                                    <video
+                                    {renderVideo(handleimageUrl(cmsData))}
+                                    {/* <video
                                         src={handleimageUrl(cmsData)}
                                         controls
                                         className=""
@@ -168,12 +222,12 @@ function Home() {
                                         onPlay={() => setShowPlayIcon(false)}
                                         onPause={() => setShowPlayIcon(true)}
 
-                                    />
-                                    {showPlayIcon&& <div
+                                    /> */}
+                                    {/* {showPlayIcon&& <div
                                         onClick={playVideo}
                                         className='video_play_ic'>
                                         <img src={VideoPlay} />
-                                    </div>}
+                                    </div>} */}
                                 </div>
                             </Col>
                         </Row>

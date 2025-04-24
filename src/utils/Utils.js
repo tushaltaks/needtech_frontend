@@ -203,7 +203,7 @@ export const getFirst500WordsFromHTML = (htmlString) => {
   const text = tempDiv.textContent || tempDiv.innerText || "";
 
   // 2. Split into words and limit
-  const words = text.split(/\s+/).slice(0, 110).join(" ");
+  const words = text.split(/\s+/).slice(0, 40).join(" ");
 
   return words;
 };

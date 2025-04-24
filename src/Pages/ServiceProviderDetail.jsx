@@ -97,7 +97,7 @@ const ServiceProviderDetail = () => {
                                                 <h4>{provider?.jobTitle}</h4>
                                             </div>
                                             <div className='service_provider_lisitng'>
-                                                <h2 className='heading_type2'>Areas of Experties</h2>
+                                                <h2 className='heading_type2'>Professinal Services</h2>
                                                 <ul className={token && subscriptionId ? 'list_type1' : 'list_type1 locked_data'}>
                                                     {
                                                         provider?.professionalService &&
