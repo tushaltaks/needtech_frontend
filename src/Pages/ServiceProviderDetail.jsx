@@ -3,6 +3,8 @@ import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import BackIc from "../assets/backIc.svg"
 import HeartIcon from "../assets/heartIc.png"
+import Lokedic from "../assets/lokedic.svg"
+
 import VerifiedIc from "../assets/verifiedIc.svg"
 import DewberryLogo from "../assets/dewberry_logo.jpg"
 
@@ -17,6 +19,7 @@ import ProviderDetails from '../Component/Modals/ProviderDetails';
 import { GetFunction, handleimageUrl, SubmitResponse } from '../utils/ApiFunctions';
 import { baseURL } from '../utils/AxiosInstance';
 import toast from 'react-hot-toast';
+import { getFirst500WordsFromHTML } from '../utils/Utils';
 
 const ServiceProviderDetail = () => {
     const [show, setShow] = useState(false);
@@ -29,7 +32,7 @@ const ServiceProviderDetail = () => {
 
 
     const [provider, setProvider] = useState({})
-    const [providerCategory, setProviderCategoryList] = useState([])
+
     const { id } = useParams()
     const getsingleProvider = async () => {
         const data = {
@@ -50,7 +53,7 @@ const ServiceProviderDetail = () => {
     }, [])
 
     const addToWishList = async () => {
-        const res = await SubmitResponse(`${baseURL}/AddtowishList`, { proivider: id });
+        const res = await SubmitResponse(`${baseURL}/AddtowishList`, { proivider: provider?._id });
         if (res?.status == 200) {
             toast.dismiss()
             toast.success(res?.data?.message)
@@ -97,9 +100,9 @@ const ServiceProviderDetail = () => {
                                                 <h2 className='heading_type2'>Areas of Experties</h2>
                                                 <ul className={token && subscriptionId ? 'list_type1' : 'list_type1 locked_data'}>
                                                     {
-                                                        provider?.areaofExpertise &&
-                                                        provider?.areaofExpertise?.map((item, index) => (
-                                                            <li key={index}>{item}</li>
+                                                        provider?.professionalService &&
+                                                        provider?.professionalService?.map((item, index) => (
+                                                            <li key={index}>{item?.title}</li>
                                                         ))
                                                     }
 
@@ -116,7 +119,7 @@ const ServiceProviderDetail = () => {
                                                 <div className='market_detail_logo'><img src={Logo_approved} /></div>
                                                 <div className={token && subscriptionId ? 'market_detail_serviceprovider' : 'market_detail_serviceprovider locked_data'}>
                                                     <h4>Approved Partner</h4>
-                                                    <p>{provider?.professionalExperience} years in provider</p>
+                                                    <p>{provider?.professionalExperience} {provider?.professionalExperience > 1 ? 'years' : 'year'} of experience </p>
                                                 </div>
                                             </div>
                                             <div className='heart_ic'
@@ -163,40 +166,73 @@ const ServiceProviderDetail = () => {
                         <div className='product_detail'>
                             <Row>
                                 <Col md={8}>
-                                    <div className='product_detail_in content_gap'>
-                                        <p
-                                            className={token && subscriptionId ? '' : ' locked_data'}
-                                            dangerouslySetInnerHTML={{
-                                                __html: provider?.description
-                                            }}
-                                        >
-                                        </p>
-                                        <h2 className='heading_type2 mt-4'>Provider Detail</h2>
-                                        <p
-                                            className={token && subscriptionId ? '' : ' locked_data'}
-                                        >
-                                            {provider?.producDetails}
-                                        </p>
-                                    </div>
+                                    {token && subscriptionId ?
+                                        <div className='product_detail_in content_gap'>
+                                            <p
+                                                dangerouslySetInnerHTML={{
+                                                    __html: provider?.description
+                                                }}
+                                            >
+
+                                            </p>
+
+
+
+                                        </div> :
+                                        <div className='product_detail_in content_gap'>
+                                            <p
+                                                className={token && subscriptionId ? '' : ' locked_data'}
+                                                dangerouslySetInnerHTML={{
+
+                                                    __html: getFirst500WordsFromHTML(provider?.description)
+
+                                                }}
+                                            >
+                                            </p>
+                                            <div
+                                                className='locked_sec'
+                                            >
+                                                <div className='locked_sec_img'>
+                                                    <img src={Lokedic} alt="Locked Icon" />
+                                                </div>
+
+                                                <div className='locked_sec_con'>
+                                                    <h2 className='heading_type2'>Unlock Provider</h2>
+                                                    <p>You can get full access for this Provider</p>
+
+                                                    <Button
+
+                                                        onClick={
+                                                            () => {
+                                                                navigate('/buy-plan')
+                                                            }
+                                                        }
+                                                        className='btn btn_primary'
+                                                    >
+                                                        Unlock Now
+                                                    </Button>
+                                                </div>
+                                            </div>
+
+
+
+                                        </div>
+                                    }
                                 </Col>
-                                <Col md={4}>
+                                {/* <Col md={4}>
                                     <div className='product_detail_assets'>
                                         <h2 className='heading_type2'>Company's Services</h2>
                                         <ul className='list_type1'>
-                                            {/* <li>Primary domain and all site</li> */}
+
                                             {
                                                 provider?.companyServices?.map((item, index) => (
                                                     <li key={index}>{item}</li>
                                                 ))
                                             }
-                                            {/* <li>Amazon Seller Central Account</li>
-                                            <li>Supplier Relationships</li>
-                                            <li>Walmart and Shopify Accounts</li>
-                                            <li>Social Media Accounts</li>
-                                            <li>Trademarks</li> */}
+
                                         </ul>
                                     </div>
-                                </Col>
+                                </Col> */}
                             </Row>
                         </div>
                     </div>
@@ -204,6 +240,7 @@ const ServiceProviderDetail = () => {
             </section>
             <ProviderDetails
                 show={show}
+                showdata={token && subscriptionId ? true : false}
                 provider={provider}
                 onHide={handleClose}
             />

@@ -612,6 +612,13 @@ select {
 
 .locked_data {
   filter: blur(7.5px);
+  pointer-events: none;
+  user-select: none
+}
+
+.service_provider_logo-new {
+  height: 120px;
+  width: 120px;
 }
 
 .locked_btn .btn {
@@ -792,6 +799,33 @@ select {
   right: 0;
 }
 
+.unlocktext {
+  position: relative;
+}
+
+.tooltip-box {
+  border-radius: 15px;
+  background: #FFF;
+  box-shadow: 0px 4px 44px 0px rgba(0, 0, 0, 0.25);
+  padding: 20px;
+  text-align: center;
+  display: inline-block;
+  max-width: 500px;
+  position: absolute;
+  top: -250px;
+  margin: 0 auto;
+  left: 0;
+  right: 0;
+}
+
+.tooltip-list {
+  list-style: none;
+  text-align: justify;
+}
+.tooltip-list  li{
+    margin-top: 10px;
+}
+
 .locked_sec_con .heading_type2 {
   margin-bottom: 0;
 }
@@ -940,6 +974,8 @@ select {
   left: 0;
   background: rgba(0, 0, 0, .5);
   height: 100%;
+  width: 100%;
+
   padding: 20px;
   border-radius: 10px;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.00) 48.97%, #000 99.9%);
@@ -2237,7 +2273,7 @@ h4 {
 }
 
 .provider_d_itm_bor {
-  border-bottom: 1px solid #ddd;
+  /* border-bottom: 1px solid #ddd; */
   padding-bottom: 15px;
   margin-bottom: 20px;
 }
@@ -3995,9 +4031,10 @@ button.Prev_pas:hover {
   border-color: #5FD1FA;
   opacity: 1 !important;
 }
+
 .market_list ul li .nav-link.active {
-  color: #fff !important  ;
-  background: #5FD1FA !important  ;
+  color: #fff !important;
+  background: #5FD1FA !important;
 }
 
 .market_list ul li .nav-link {

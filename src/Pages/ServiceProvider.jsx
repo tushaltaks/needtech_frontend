@@ -161,8 +161,10 @@ const ServiceProvider = () => {
                                                             .substring(0, 100)}
                                                         {val?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
                                                     </p>
-                                                    {subscriptionId ? '' : <div className='locked_btn'>
-                                                        <Link to="/buy-plan" className='btn btn_outline'><img src={Lokedic} /> Unlock Professional</Link>
+                                                    {subscriptionId ? '' :
+                                                        <div className='locked_btn'>
+                                                            <Link to="/buy-plan" className='btn btn_outline'>
+                                                                <img src={Lokedic} /> Unlock Professional</Link>
                                                     </div>}
                                                 </div>
                                             </div>
@@ -204,7 +206,7 @@ const ServiceProvider = () => {
                                                     <p>{val?.city}, {val?.country}</p>
                                                 </div>
                                             </div>
-                                            <div className='market_list_btn'><Link to={`/service-provider-detail/${val?._id}`} className='btn btn_primary'>Read More</Link></div>
+                                            <div className='market_list_btn'><Link to={`/service-provider-detail/${val?.slug}`} className='btn btn_primary'>Read More</Link></div>
                                         </div>
                                     </div>
                                 ))

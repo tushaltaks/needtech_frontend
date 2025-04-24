@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import BackIc from "../assets/backIc.svg"
@@ -24,8 +24,14 @@ import { baseURL } from '../utils/AxiosInstance';
 import toast from 'react-hot-toast';
 import moment from 'moment';
 import BidSuccess from '../Component/Modals/BidSuccess';
+import { getFirst500WordsFromHTML } from '../utils/Utils';
+import { CheckCircle } from 'lucide-react';
+import UnloackRequestPopup from '../Component/Modals/UnloackRequestPopup';
+import { Helmet } from 'react-helmet';
 
 const MarketDetail = () => {
+    const [showPopup1, setShowPopup1] = useState(false)
+    const [showPopup, setShowPopup] = useState(false)
     const token = localStorage.getItem('token')
     const validSubscriptionId = localStorage.getItem('subscriptionId');
     const subscriptionId = validSubscriptionId && validSubscriptionId !== 'null' ? validSubscriptionId : '';
@@ -86,7 +92,7 @@ const MarketDetail = () => {
                 else result = `${days} day${days !== 1 ? 's' : ''}`;
             }
 
-            console.log('months', months)
+
             setBuisnessdate(result);
             setBusiness(res?.data?.data)
         }
@@ -99,7 +105,7 @@ const MarketDetail = () => {
     }, [])
 
     const addToWishList = async () => {
-        const res = await SubmitResponse(`${baseURL}/AddtowishList`, { businessId: id });
+        const res = await SubmitResponse(`${baseURL}/AddtowishList`, { businessId: business?._id });
         if (res?.status == 200) {
             toast.dismiss()
             toast.success(res?.data?.message)
@@ -139,9 +145,30 @@ const MarketDetail = () => {
         }
     }
 
+    const timeoutRef = useRef(null);
+
+    const handleMouseEnter = () => {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+            setShowPopup(true);
+        }, 200); // Optional delay
+    };
+
+    const handleMouseLeave = () => {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+            setShowPopup(false);
+        }, 200); // Optional delay
+    };
+
+
 
     return (
         <>
+            <Helmet>
+                <title>{business?.title}</title>
+
+            </Helmet>
             <div className='inner_head'>
                 <Container>
                     <div className='inner_head_in'>
@@ -185,7 +212,7 @@ const MarketDetail = () => {
 
                                             >
                                                 <p>Market Readiness Rate:</p>
-                                                <h4  className={
+                                                <h4 className={
                                                     token &&
                                                         subscriptionId ? '' : ' locked_data'
                                                 }
@@ -269,11 +296,13 @@ const MarketDetail = () => {
                                                     </div>
                                                     :
                                                     <div className='market_list_btn'>
-                                                        <Link to={`/buy-plan`} className='btn btn_primary'>Buy Now</Link>
+                                                        <span onClick={() => {
+                                                            setShowPopup1(true)
+                                                        }} className='btn btn_primary'>Buy Now</span>
                                                         {business?.bidDetailReletedtoBusiness == null &&
                                                             <Button className='btn btn_outline'
                                                                 onClick={() => {
-                                                                    navigate('/buy-plan')
+                                                                    setShowPopup1(true)
                                                                 }}>Offer a Bid</Button>}
                                                     </div>
 
@@ -406,48 +435,92 @@ const MarketDetail = () => {
                                 </Row>
                             </div> :
 
-                            <div className='product_detail'>
+                            <div className='product_detail '>
                                 <Row>
+
+
                                     <Col md={8}>
-                                        <div className='product_detail_in content_gap'>
-                                            <h2 className='heading_type2'>Product Detail</h2>
-                                            <p className='locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation. Lorem ipsum dolor sit amet. veniam, quis nostrud exercitation. magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation.</p>
-                                            <p className='locked_data'>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod  tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation. Lorem ipsum dolor sit amet. veniam, quis nostrud exercitation. magna aliqua. Ut enim ad minim  veniam, quis nostrud exercitation.</p>
-                                            <div className='locked_sec'>
-                                                <div className='locked_sec_img'><img src={Lokedic} /></div>
-                                                <div className='locked_sec_con'>
-                                                    <h2 className='heading_type2'
 
-                                                    >Unlock Product</h2>
-                                                    <p>You can get full access for this product</p>
-                                                    <Button
 
-                                                        onClick={() => {
-                                                            navigate('/buy-plan')
-                                                        }} className='btn btn_primary'>Unlock Now</Button>
+                                        <div className='unlocktext'>
+
+
+                                            <div className='product_detail_in content_gap'>
+                                                <h2 className='heading_type2'>Product Detail</h2>
+
+                                                <p
+                                                    className='locked_data'
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: getFirst500WordsFromHTML(business?.description)
+                                                    }}
+                                                >
+
+                                                </p>
+                                                {showPopup && (
+                                                    <div className="tooltip-box">
+                                                        <p className="tooltip-title">
+                                                            Unlocking this listing will grant you full access to:
+                                                        </p>
+                                                        <ul className="tooltip-list">
+                                                            <li>
+                                                                <CheckCircle color='green' className="icon" /> The abstract of the provisional patent
+                                                            </li>
+                                                            <li>
+                                                                <CheckCircle color='green' className="icon" /> A business overview to grasp the central concept
+                                                            </li>
+                                                            <li>
+                                                                <CheckCircle color='green' className="icon" /> The assets list included with this startup
+                                                            </li>
+                                                            <li>
+                                                                <CheckCircle color='green' className="icon" /> The ability to make a purchase or place a bid
+                                                            </li>
+                                                            <li>
+                                                                <CheckCircle color='green' className="icon" /> Access to a wide range of innovative startups
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                                <div
+                                                    className='locked_sec'
+                                                >
+                                                    <div className='locked_sec_img'>
+                                                        <img src={Lokedic} alt="Locked Icon" />
+                                                    </div>
+
+                                                    <div className='locked_sec_con'>
+                                                        <h2 className='heading_type2'>Unlock Startup</h2>
+                                                        <p>You can get full access for this product</p>
+
+                                                        <Button
+                                                            onMouseEnter={handleMouseEnter}
+                                                            onMouseLeave={handleMouseLeave}
+                                                            onClick={
+                                                                () => {
+                                                                    navigate('/buy-plan')
+                                                                }
+                                                            }
+                                                            className='btn btn_primary'
+                                                        >
+                                                            Unlock Now
+                                                        </Button>
+                                                    </div>
+
+
                                                 </div>
                                             </div>
                                         </div>
+
+
                                     </Col>
-                                    <Col md={4}>
-                                        <div className='product_detail_assets'>
-                                            <h2 className='heading_type2'>Assets Included</h2>
-                                            <ul className='list_type1 locked_data'>
-                                                <li>Primary domain and all site</li>
-                                                <li>Amazon Seller Central Account</li>
-                                                <li>Supplier Relationships</li>
-                                                <li>Walmart and Shopify Accounts</li>
-                                                <li>Social Media Accounts</li>
-                                                <li>Trademarks</li>
-                                            </ul>
-                                        </div>
-                                    </Col>
+
                                 </Row>
                             </div>
                         }
                     </div>
                 </Container>
             </section >
+
+
             <OfferBid
                 show={show}
                 // business={business}
@@ -461,6 +534,15 @@ const MarketDetail = () => {
                 onHide={() => {
                     setShow1(false)
                 }}
+            />
+
+            <UnloackRequestPopup
+                show={showPopup1}
+
+                onHide={() => {
+                    setShowPopup1(false)
+                }}
+
             />
 
 

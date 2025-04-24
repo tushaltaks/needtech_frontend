@@ -195,3 +195,15 @@ export const subscrptionPurchase = Yup.object().shape({
     (value) => value == true
   ),
 });
+
+export const getFirst500WordsFromHTML = (htmlString) => {
+  // 1. Strip all HTML tags to get raw text
+  const tempDiv = document.createElement("div");
+  tempDiv.innerHTML = htmlString || "";
+  const text = tempDiv.textContent || tempDiv.innerText || "";
+
+  // 2. Split into words and limit
+  const words = text.split(/\s+/).slice(0, 110).join(" ");
+
+  return words;
+};

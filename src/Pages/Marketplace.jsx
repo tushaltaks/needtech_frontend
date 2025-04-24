@@ -200,17 +200,23 @@ const Marketplace = () => {
                                                     </div>
                                                     <div className='market_list_info'>
                                                         <h3 className='heading_type2'>{val?.title}</h3>
-                                                        {
-
-                                                            <p className={subscriptionId ? "" : "locked_data"}>
-                                                                {DOMPurify.sanitize(val?.shortDescription)
-                                                                    .replace(/<[^>]+>/g, '')}
 
 
-                                                            </p>
+                                                        <p className={token ? "" : "locked_data"}>
+                                                            {DOMPurify.sanitize(val?.shortDescription)
+                                                                .replace(/<[^>]+>/g, '')}
 
 
-                                                        }
+                                                        </p>
+                                                        {token ? "" :
+
+                                                            <div className={"locked_btn"}>
+                                                                <Link to="/login" className='btn btn_outline'><img src={Lokedic} /> Unlock Startup</Link>
+                                                            </div>}
+
+
+
+
                                                         {/* <p className={subscriptionId ? "" : "locked_data"}>
 
                                                             {DOMPurify.sanitize(val?.shortDescription)
@@ -275,7 +281,7 @@ const Marketplace = () => {
                                                     <div className='market_list_right_meta_ic'><img src={Agric2} /></div>
                                                     <div className='market_list_right_meta_ic'><img src={Agric3} /></div>
                                                 </div>
-                                                <div className='market_list_btn'><Link to={`/market-detail/${val?._id}`} className='btn btn_primary'>Read More</Link></div>
+                                                <div className='market_list_btn'><Link to={`/market-detail/${val?.slug}`} className='btn btn_primary'>Read More</Link></div>
                                             </div>
                                         </div>
                                     )) :

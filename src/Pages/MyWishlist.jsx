@@ -183,7 +183,7 @@ const MyWishlist = () => {
                                                     <div className='market_list_right_meta_ic'><img src={Agric2} /></div>
                                                     <div className='market_list_right_meta_ic'><img src={Agric3} /></div>
                                                 </div>
-                                                <div className='market_list_btn'><Link to={`/market-detail/${val?._id}`} className='btn btn_primary'>Read More</Link></div>
+                                                <div className='market_list_btn'><Link to={`/market-detail/${val?.slug}`} className='btn btn_primary'>Read More</Link></div>
                                             </div>
                                         </div>
                                     )) :
@@ -248,7 +248,7 @@ const MyWishlist = () => {
                                                             <p>{val?.city}, {val?.country}</p>
                                                         </div>
                                                     </div>
-                                                    <div className='market_list_btn'><Link to={`/service-provider-detail/${val?._id}`} className='btn btn_primary'>Read More</Link></div>
+                                                    <div className='market_list_btn'><Link to={`/service-provider-detail/${val?.slug}`} className='btn btn_primary'>Read More</Link></div>
                                                 </div>
                                             </div>
                                         ))

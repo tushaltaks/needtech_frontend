@@ -402,7 +402,7 @@ const MyBusiness = () => {
                                                 <div className='market_list_right_meta_ic'><img src={Agric2} /></div>
                                                 <div className='market_list_right_meta_ic'><img src={Agric3} /></div>
                                             </div>
-                                            <div className='market_list_btn'><Link to={`/market-detail/${businessId?._id}`} className='btn btn_primary'>Read More</Link></div>
+                                            <div className='market_list_btn'><Link to={`/market-detail/${businessId?.slug}`} className='btn btn_primary'>Read More</Link></div>
                                         </div>
                                     </div>
                                 )) :

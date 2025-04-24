@@ -59,18 +59,7 @@ const MyBids = () => {
 
     })
 
-    const addToWishList = async (id) => {
-        const res = await SubmitResponse(`${baseURL}/AddtowishList`, { businessId: id });
-        if (res?.status == 200) {
-            toast.dismiss()
-            toast.success(res?.data?.message)
-            queryClient.invalidateQueries("bids"); // Ref
-        }
-        else {
-            toast.dismiss()
-            toast.error(res?.data?.message)
-        }
-    }
+
     if (loader) {
         return <Loader />;
     }
@@ -156,7 +145,7 @@ const MyBids = () => {
                                                 <div className='market_list_right_meta_ic'><img src={Agric2} /></div>
                                                 <div className='market_list_right_meta_ic'><img src={Agric3} /></div>
                                             </div>
-                                            <div className='market_list_btn'><Link to={`/market-detail/${val?.businessId?._id}`} className='btn btn_primary'>Read More</Link></div>
+                                            <div className='market_list_btn'><Link to={`/market-detail/${val?.businessId?.slug}`} className='btn btn_primary'>Read More</Link></div>
                                         </div>
                                     </div>
                                 )) :
