@@ -34,19 +34,21 @@ const OfferBid = (props) => {
                                             <ErrorMessage name="price" component="div" className="float-start text-justify  text-danger" />
                                         </Form.Group>
 
-                                        <Form.Group className="text-start form-group mb-3" id="formGridCheckbox">
-                                            <Field
-                                                type="checkbox"
-                                                name="confirmBid"
-                                                className="form-check-input mx-2"
-                                                id="confirmBid"
-                                            />
-                                            <label htmlFor="confirmBid" className="form-check-label mt-1">
-                                                I confirm this bid is correct.
-                                            </label>
-                                            <ErrorMessage name="confirmBid" component="div" className="text-danger" />
-                                        </Form.Group>
+                                        <div>
+                                            <Form.Group className="float-start form-group mb-3" id="formGridCheckbox">
+                                                <Field
+                                                    type="checkbox"
+                                                    name="confirmBid"
+                                                    className="form-check-input me-2"
+                                                    id="confirmBid"
+                                                />
+                                                <label htmlFor="confirmBid" className="form-check-label mt-1">
+                                                    I confirm this bid is correct.
+                                                </label>
+                                                <ErrorMessage name="confirmBid" component="div" className="text-danger" />
+                                            </Form.Group>
 
+                                      </div>
                                         <button type="submit" className="btn btn_primary w-100">Submit</button>
                                     </div>
                                 </Form>

@@ -9,26 +9,30 @@ import { GetFunction, handleimageUrl } from '../utils/ApiFunctions';
 import toast from 'react-hot-toast';
 import moment from 'moment';
 import { Helmet } from 'react-helmet';
+import Loader from '../Component/Loader';
 
 const ArticleDetail = () => {
     const { id } = useParams();
+    const [loader, setLoader] = useState(true)
     const [blogDetail, setBlogDetail] = useState('')
     const [categoryList, setCategoryList] = useState([])
 
     const getBlogDetails = async () => {
         const res = await GetFunction(`${baseURL}/getArticleDetail/${id}`)
-        console.log(res)
+
         if (res?.status == 200) {
+
             setBlogDetail(res?.data)
         }
         else {
             toast.dismiss()
             toast.error(res?.message);
         }
+        setLoader(false)
     }
 
     const getCategoryList = async () => {
-        const res = await GetFunction(`${baseURL}/getCategoryList`);
+        const res = await GetFunction(`${baseURL}/getCategroyForBlog`);
 
         if (res?.status == 200) {
             setCategoryList(res?.data)
@@ -43,7 +47,9 @@ const ArticleDetail = () => {
         }
         getCategoryList()
     }, [id])
-
+    if (loader) {
+        return <Loader />;
+    }
     return (
         <>
             <Helmet>

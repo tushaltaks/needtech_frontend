@@ -25,13 +25,13 @@ const Marketplace = () => {
 
     const validSubscriptionId = localStorage.getItem('subscriptionId');
     const subscriptionId = validSubscriptionId && validSubscriptionId !== 'null' ? validSubscriptionId : '';
+    const token = localStorage.getItem('token')
+    const userId = localStorage.getItem('userId')
     const [loader, setLoader] = useState(true)
     const searchParams = new URLSearchParams(location.search);
     const category = searchParams.get("category");
     const innovaRate = searchParams.get("innovaRate");
     const navigate = useNavigate()
-    const token = localStorage.getItem('token')
-    const userId = localStorage.getItem('userId')
     const [page, setPage] = useState(1)
     const [categoryId, setcategoryId] = useState(category ? category : '')
     const [innova] = useState(innovaRate ? innovaRate : '')
@@ -286,7 +286,7 @@ const Marketplace = () => {
                                         </div>
                                     )) :
                                     <h3 className="my-5 nodata">
-                                        <center>No Businesses Found!</center>
+                                        <center>No Startups Found!</center>
                                     </h3>
                             }
 

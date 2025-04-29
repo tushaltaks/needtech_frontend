@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { GetFunction, handleimageUrl, SubmitResponse } from '../utils/ApiFunctions';
 import { baseURL } from '../utils/AxiosInstance';
+import Loader from '../Component/Loader';
 
 const MyProfile = () => {
 
@@ -33,7 +34,10 @@ const MyProfile = () => {
 
 
     })
-
+    if (isLoading)
+    {
+        return <Loader />
+    }
     return (
         <>
             <div className='inner_head'>
@@ -47,10 +51,11 @@ const MyProfile = () => {
                         <Row className='row_space'>
                             <Col lg={8}>
                                 <div className='prodile_sec_s'>
-                                    <div className='prodile_sec_img'><div className='prodile_sec_img_in'><img src={
+                                    <div className='prodile_sec_img'>
+                                        <div className='prodile_sec_img_in'><img src={
 
-                                        data?.profileImage ? handleimageUrl(data?.profileImage) : ProfilePhoto
-                                    } /></div></div>
+                                            data?.profileImage ? handleimageUrl(data?.profileImage) : ProfilePhoto
+                                        } /></div></div>
                                     <div className='prodile_sec_info'>
                                         <h2 className='heading_type2'>Personal Info</h2>
                                         <div className='prodile_sec_itms'>
@@ -80,7 +85,7 @@ const MyProfile = () => {
                                     <div className='prodile_sec_itms'>
                                         <div className='prodile_sec_itm market_list_rate'>
                                             <p>Business Name</p>
-                                            <h4>{data?.buisnessName ? data?.buisnessName : 'N/A'}</h4>
+                                            <h4>{data?.businessName ? data?.businessName : 'N/A'}</h4>
                                         </div>
                                         <div className='prodile_sec_itm market_list_rate'>
                                             <p>Position</p>

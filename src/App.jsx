@@ -47,6 +47,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PaymentSuccess from './Pages/PaymentSuccess';
 import PaymentFailed from './Pages/PaymentFailed';
 import MarketDetailLogin from './Pages/BusinessDetail';
+// import Home2 from './Pages/Home2';
 
 const LoginRoute = lazy(() => import('./Component/Protected_routing/LoginRoute'));
 const Proteted = lazy(() => import('./Component/Protected_routing/Proteted'));
@@ -74,6 +75,7 @@ function App() {
 
             <Route element={<Layout />}>
               <Route path='/' element={<Home />} />
+              {/* <Route path='/index2' element={<Home2 />} /> */}
               <Route path='/MarketDetailLogin' element={<MarketDetailLogin />} />
               <Route path='/marketplace' element={<Marketplace />} />
               <Route path='/market-detail/:id' element={<MarketDetail />} />

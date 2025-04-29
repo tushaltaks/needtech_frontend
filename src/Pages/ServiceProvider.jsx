@@ -195,7 +195,7 @@ const ServiceProvider = () => {
                                                     }
                                                 </div>
                                             </div>
-                                            <div className='service_provider_s'>
+                                            <div className='service_provider_s service_provider_s_lg'>
                                                 <div className={subscriptionId ? "service_provider_logo" : "service_provider_logo locked_data"}  >
 
                                                     <img src={val?.companyLogo ? handleimageUrl(val?.companyLogo) : DewberryLogo} />

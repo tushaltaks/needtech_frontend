@@ -129,11 +129,11 @@ const Articles = () => {
                             }
 
                         </Row>
-                        <center>
+                        {data?.length == 0 && <center>
                             <Col>
-                            <h3>No Blogs Found!</h3>
+                                <h3>No Blogs Found!</h3>
                             </Col>
-                        </center>
+                        </center>}
                     </div>
                 </Container>
             </section>

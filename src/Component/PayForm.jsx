@@ -236,7 +236,7 @@ function PayForm({ subscription }) {
                             </Button>
                             <Button
                                 onClick={() => {
-                                    navigate("/marketplace");
+                                    navigate(-1);
                                 }}
                                 type="button" className="btn_outline">
                                 Cancel

@@ -17,6 +17,10 @@ import { LoginbaseURL } from '../utils/AxiosInstance';
 import toast from 'react-hot-toast';
 
 const Login = () => {
+    const remembered = localStorage.getItem('rememberMe') || false;
+    const savedEmail = localStorage.getItem('savedemail') || '';
+    const savePassword = localStorage.getItem('savedpassword') || '';
+
     const navigate = useNavigate();
     const location = useLocation();
     const [passwordVisible, setPasswordVisible] = useState(false);
@@ -95,11 +99,15 @@ const Login = () => {
                                         <h2 className='heading_type2'>Login</h2>
                                     </div>
                                     <Formik
-                                        initialValues={{ email: "", password: "", rememberMe: false }}
+                                        initialValues={{
+                                            email: savedEmail || "", password: savePassword || "",
+                                            rememberMe: remembered || false
+                                        }}
                                         validationSchema={loginSchma}
+                                        enableReinitialize
                                         onSubmit={handleSubmit}
                                     >
-                                        {({ handleSubmit }) => (
+                                        {({ handleSubmit, values,setFieldValue }) => (
                                             <Form onSubmit={handleSubmit}>
                                                 <div className="login_form_in">
                                                     {/* Email Field */}
@@ -130,9 +138,39 @@ const Login = () => {
                                                     </Form.Group>
 
                                                     {/* Remember Me Checkbox */}
-                                                    <Form.Group className="form-group" id="formGridCheckbox">
-                                                        <Field type="checkbox" name="rememberMe" className="me-2" />
-                                                        <label>Remember me</label>
+
+                                                    <Form.Group className="form-group">
+                                                        <Form.Check
+                                                            type="checkbox"
+                                                            id="reviewterms_conditions"
+                                                            className="mb-2"
+                                                            label={
+                                                                <>
+                                                                    Remember me
+                                                                </>
+                                                            }
+                                                            as={Field}
+                                                            checked={values.rememberMe}
+                                                            onChange={() => {
+                                                                if (values.rememberMe) {
+                                                                    localStorage.removeItem('savedpassword')
+                                                                    localStorage.removeItem('savedemail')
+                                                                    localStorage.removeItem('rememberMe')
+                                                                    setFieldValue('rememberMe',false)
+                                                                }
+                                                                else {
+                                                                    if (values?.email && values?.password)
+                                                                    {
+                                                                        localStorage.setItem('savedpassword',values?.password)
+                                                                        localStorage.setItem('savedemail', values?.email)
+                                                                        localStorage.setItem('rememberMe',true)
+                                                                        setFieldValue('rememberMe', true)
+                                                                    }
+                                                                }
+                                                            }}
+                                                            name="reviewterms_conditions"
+                                                        />
+
                                                     </Form.Group>
 
                                                     {/* Login Button */}

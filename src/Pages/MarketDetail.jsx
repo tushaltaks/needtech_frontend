@@ -28,8 +28,10 @@ import { getFirst500WordsFromHTML } from '../utils/Utils';
 import { CheckCircle } from 'lucide-react';
 import UnloackRequestPopup from '../Component/Modals/UnloackRequestPopup';
 import { Helmet } from 'react-helmet';
+import Loader from '../Component/Loader';
 
 const MarketDetail = () => {
+    const [loader,setLoader] = useState(true)
     const [showPopup1, setShowPopup1] = useState(false)
     const [showPopup, setShowPopup] = useState(false)
     const token = localStorage.getItem('token')
@@ -92,11 +94,13 @@ const MarketDetail = () => {
                 else result = `${days} day${days !== 1 ? 's' : ''}`;
             }
 
-
             setBuisnessdate(result);
             setBusiness(res?.data?.data)
+            setLoader(false)
         }
         else {
+            setLoader(false)
+
             toast.error(res?.data?.message)
         }
     };
@@ -125,7 +129,7 @@ const MarketDetail = () => {
             return
         }
         const res = await SubmitResponse(`${baseURL}/requestBidByUser`, {
-            businessId: id,
+            businessId: business?._id,
             bidAmount: values?.price
         });
         setBidPrice(values?.price)
@@ -160,7 +164,9 @@ const MarketDetail = () => {
             setShowPopup(false);
         }, 200); // Optional delay
     };
-
+    if (loader) {
+        return <Loader />;
+    }
 
 
     return (
@@ -370,7 +376,7 @@ const MarketDetail = () => {
                                 <Row>
                                     <Col md={8}>
                                         <div className='product_detail_in content_gap'>
-                                            <h2 className='heading_type2'>Product Detail</h2>
+                                            {/* <h2 className='heading_type2'>Product Detail</h2> */}
                                             <p dangerouslySetInnerHTML={{
                                                 __html: business?.description
                                             }} >
@@ -379,18 +385,21 @@ const MarketDetail = () => {
 
 
 
-                                            <h2 className='heading_type2'>Features</h2>
-                                            <ul className='list_type1'>
-                                                {
-                                                    business?.features ? business?.features?.map((val, i) => (
+                                            {business?.features?.length > 0 &&
+                                                <>
+                                                    <h2 className='heading_type2'>Features</h2>
+                                                    <ul className='list_type1'>
+                                                        {
+                                                            business?.features ? business?.features?.filter((val)=>val!='')?.map((val, i) => (
+                                                                <li key={i}>
+                                                                    {val}
+                                                                </li>
+                                                            )) : ''
+                                                        }
 
-                                                        <li key={i}>
-                                                            {val}
-                                                        </li>
-                                                    )) : ''
-                                                }
-
-                                            </ul>
+                                                    </ul>
+                                                </>
+                                            }
 
                                         </div>
                                     </Col>
@@ -445,8 +454,8 @@ const MarketDetail = () => {
                                         <div className='unlocktext'>
 
 
-                                            <div className='product_detail_in content_gap'>
-                                                <h2 className='heading_type2'>Product Detail</h2>
+                                            <div className='product_detail_in content_gap lockedData'>
+                                                {/* <h2 className='heading_type2'>Product Detail</h2> */}
 
                                                 <p
                                                     className='locked_data'

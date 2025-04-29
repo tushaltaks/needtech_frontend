@@ -22,7 +22,10 @@ import toast from 'react-hot-toast';
 import Loader from '../Component/Loader';
 
 const MyWishlist = () => {
-
+    const validSubscriptionId = localStorage.getItem('subscriptionId');
+    const subscriptionId = validSubscriptionId && validSubscriptionId !== 'null' ? validSubscriptionId : '';
+    const token = localStorage.getItem('token')
+    const userId = localStorage.getItem('userId')
     const [key, setKey] = useState('buisness');
     const [loader, setLoader] = useState(true)
 
@@ -133,11 +136,11 @@ const MyWishlist = () => {
                                                     </div>
                                                     <div className='market_list_info'>
                                                         <h3 className='heading_type2'>{val?.title}</h3>
-                                                        <p>
-                                                            {DOMPurify.sanitize(val?.description)
+                                                        <p className={token ? "" : "locked_data"}>
+                                                            {DOMPurify.sanitize(val?.shortDescription)
                                                                 .replace(/<[^>]+>/g, '') // Remove HTML tags
                                                                 .substring(0, 100)}
-                                                            {val?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
+                                                            {val?.shortDescription?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
                                                         </p>
                                                         {/* <div className=''>
                                                             <Link to="/" className='btn btn_outline'><img src={Lokedic} /> Unlock Startup</Link>
@@ -151,11 +154,13 @@ const MyWishlist = () => {
                                                     </div>
                                                     <div className='market_list_rate'>
                                                         <p>Market Readiness Rate:</p>
-                                                        <h4 className="">{val?.marketReadiness || 0} %</h4>
+                                                        <h4 className={subscriptionId ? "" : "locked_data"}>{val?.marketReadiness || 0} %</h4>
+
                                                     </div>
                                                     <div className='market_list_rate'>
                                                         <p>Market Growth:</p>
-                                                        <h4 className=""><img src={GrowIc} /> {val?.marketGrowth} %</h4>
+                                                        <h4 className={subscriptionId ? "" : "locked_data"}><img src={GrowIc} /> {val?.marketGrowth} %</h4>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -188,7 +193,7 @@ const MyWishlist = () => {
                                         </div>
                                     )) :
                                         <center className='nodata'>
-                                            <h3>No Buisness Found!</h3>
+                                            <h3>No Startups Found!</h3>
                                         </center>
                                 }
 
@@ -210,40 +215,57 @@ const MyWishlist = () => {
                                                         </div>
                                                         <div className='market_list_info'>
                                                             <div className='user_detail'>
-                                                                <h3 className='heading_type2 '>{val?.name}</h3>
+                                                                <h3 className={subscriptionId ? "heading_type2" : " heading_type2 locked_data"}>{val?.name}</h3>
                                                                 <h4>{val?.jobTitle}</h4>
                                                             </div>
-                                                            <p className=''>
-                                                                <p>
-                                                                    {DOMPurify.sanitize(val?.description)
-                                                                        .replace(/<[^>]+>/g, '') // Remove HTML tags
-                                                                        .substring(0, 100)}
-                                                                    {val?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
-                                                                </p>
-                                                            </p>
+                                                            <p className={subscriptionId ? "" : "locked_data"}>
 
+                                                                {DOMPurify.sanitize(val?.description)
+                                                                    .replace(/<[^>]+>/g, '') // Remove HTML tags
+                                                                    .substring(0, 100)}
+                                                                {val?.description?.replace(/<[^>]+>/g, '').length > 100 ? '...' : ''}
+                                                            </p>
+                                                            {subscriptionId ? '' :
+                                                                <div className='locked_btn'>
+                                                                    <Link to="/buy-plan" className='btn btn_outline'>
+                                                                        <img src={Lokedic} /> Unlock Professional</Link>
+                                                                </div>}
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className='market_list_right'>
                                                     <div className='market_list_right_con'>
                                                         <div className='heart_ic'
-                                                            onClick={() => {
-                                                                addToWishList(val?._id)
+                                                            onClick={
+                                                                () => {
+                                                                    if (!token) {
 
-                                                            }}
+                                                                        navigate('/login')
+                                                                    }
+                                                                    else {
+
+                                                                        addToWishList(val?._id)
+                                                                    }
+                                                                }
+                                                            }
                                                         >
-                                                            <img src={HeartIconFilled} />
+                                                            {
+                                                                val?.wishlist ?
+                                                                    <img src={HeartIconFilled} />
 
+
+                                                                    :
+                                                                    <img src={HeartIcon} />
+                                                            }
                                                         </div>
                                                     </div>
                                                     <div className='service_provider_s'>
-                                                        <div className='service_provider_logo '>
+                                                        <div className={subscriptionId ? "service_provider_logo" : "service_provider_logo locked_data"}  >
 
                                                             <img src={val?.companyLogo ? handleimageUrl(val?.companyLogo) : DewberryLogo} />
                                                         </div>
                                                         <div className='service_provider_d'>
-                                                            <p className=''>{val?.companyName}.</p>
+                                                            <p className={subscriptionId ? "" : "locked_data"}>{val?.companyName}.</p>
                                                             <p>{val?.aboutCompany}</p>
                                                             <p>{val?.city}, {val?.country}</p>
                                                         </div>

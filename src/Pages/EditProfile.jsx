@@ -4,7 +4,7 @@ import Profile from "../assets/profilePhoto.jpg"
 import { Link, useNavigate } from "react-router-dom";
 import BackIc from "../assets/backIc.svg";
 import { ErrorMessage, Field, Formik } from 'formik';
-import { updateProfile } from '../utils/Utils';
+import { countries, updateProfile } from '../utils/Utils';
 import { handleimageUrl, SubmitResponse } from '../utils/ApiFunctions';
 import { baseURL } from '../utils/AxiosInstance';
 import toast from 'react-hot-toast';
@@ -188,9 +188,12 @@ const EditProfile = () => {
                                                                     <Form.Label>Country</Form.Label>
                                                                     <Field as="select" name="buisnessCountry" className="form-control">
                                                                         <option value="">Select Country</option>
-                                                                        <option value="USA">USA</option>
-                                                                        <option value="Canada">Canada</option>
-                                                                        <option value="UK">UK</option>
+
+                                                                        {countries.map((country) => (
+                                                                            <option key={country} value={country}>
+                                                                                {country}
+                                                                            </option>
+                                                                        ))}
                                                                     </Field>
                                                                     <ErrorMessage name="buisnessCountry" component="div" className="text-danger" />
                                                                 </Form.Group>

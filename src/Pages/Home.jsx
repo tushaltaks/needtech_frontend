@@ -23,15 +23,17 @@ const renderVideo = (videoUrl) => {
 
     if (lower.includes("youtube.com") || lower.includes("youtu.be")) {
         // Extract YouTube video ID
-        const videoId = lower.includes("youtu.be")
-            ? lower.split("youtu.be/")[1]
-            : new URLSearchParams(new URL(videoUrl)?.search)?.get("v");
+        // const videoId = lower.includes("youtu.be")
+        //     ? lower.split("youtu.be/")[1]
+        //     : new URLSearchParams(new URL(videoUrl)?.search)?.get("v");
+
+        const videoId = videoUrl.split("/").pop(); // returns 'LBC16jhiwak'
 
         return (
             <iframe
                 width="100%"
                 height="400"
-                src="https://www.youtube.com/embed/eSUPbqtiOrE"
+                src={`https://www.youtube.com/embed/${videoId}`}
                 title="YouTube Video"
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -56,6 +58,8 @@ const renderVideo = (videoUrl) => {
     } else if (lower.endsWith(".mp4")) {
         return (
             <video width="100%" controls>
+                {/* <source src={'https://stage.tasksplan.com:6900/uploads/homeVideo-1744616369467.mp4'} type="video/mp4" /> */}
+                {/* <source src={handleimageUrl(videoUrl)} type="video/mp4" /> */}
                 <source src={videoUrl} type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
@@ -213,7 +217,7 @@ function Home() {
                             </Col>
                             <Col md={6}>
                                 <div className='sec_type2_img'>
-                                    {renderVideo(handleimageUrl(cmsData))}
+                                    {renderVideo(cmsData)}
                                     {/* <video
                                         src={handleimageUrl(cmsData)}
                                         controls

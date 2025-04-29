@@ -32,7 +32,13 @@ const Header = () => {
                 setUserDetails(null)
                 setToken(null)
                 setShow(true)
-                localStorage.clear()
+                localStorage.removeItem('subscriptionId')
+                localStorage.removeItem('name')
+                localStorage.removeItem('subscritpionEndDate')
+                localStorage.removeItem('subscritpionStartDate')
+                localStorage.removeItem('token')
+                localStorage.removeItem('userDetails')
+                localStorage.removeItem('userId')
                 navigate('/login')
             }
         });

@@ -113,8 +113,8 @@ const OTP = (props) => {
 
     return (
         <>
-            <Modal {...props} centered>
-                <Modal.Header closeButton></Modal.Header>
+            <Modal {...props} centered backdrop="static" keyboard={false}>
+                <Modal.Header ></Modal.Header>
                 <Modal.Body>
                     <div className='modal_sec_in'>
                         <h2 className='text-center heading_type2'>Email Verification</h2>

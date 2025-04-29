@@ -20,9 +20,11 @@ import { GetFunction, handleimageUrl, SubmitResponse } from '../utils/ApiFunctio
 import { baseURL } from '../utils/AxiosInstance';
 import toast from 'react-hot-toast';
 import { getFirst500WordsFromHTML } from '../utils/Utils';
+import Loader from '../Component/Loader';
 
 const ServiceProviderDetail = () => {
     const [show, setShow] = useState(false);
+    const [loader, setLoader] = useState(true);
     const token = localStorage.getItem('token')
     const validSubscriptionId = localStorage.getItem('subscriptionId');
     const subscriptionId = validSubscriptionId && validSubscriptionId !== 'null' ? validSubscriptionId : '';
@@ -40,15 +42,18 @@ const ServiceProviderDetail = () => {
         }
         const res = await SubmitResponse(`${baseURL}/serviceProviderDetails/${id}`, data);
         if (res?.status == 200) {
+            setLoader(false)
             setProvider(res?.data?.data)
         }
         else {
+            setLoader(false)
             toast.error(res?.data?.message)
         }
     };
 
 
     useEffect(() => {
+
         getsingleProvider()
     }, [])
 
@@ -65,6 +70,9 @@ const ServiceProviderDetail = () => {
         }
     }
 
+     if (loader) {
+            return <Loader />;
+        }
 
 
     return (
@@ -117,10 +125,10 @@ const ServiceProviderDetail = () => {
                                         <div className='market_detail_right_con'>
                                             <div className='market_detail_right_in'>
                                                 <div className='market_detail_logo'><img src={Logo_approved} /></div>
-                                                <div className={token && subscriptionId ? 'market_detail_serviceprovider' : 'market_detail_serviceprovider locked_data'}>
-                                                    <h4>Approved Partner</h4>
-                                                    <p>{provider?.professionalExperience} {provider?.professionalExperience > 1 ? 'years' : 'year'} of experience </p>
-                                                </div>
+                                            </div>
+                                            <div className={token && subscriptionId ? 'market_detail_serviceprovider' : 'market_detail_serviceprovider locked_data'}>
+                                                <h4>Approved Partner</h4>
+                                                <p>{provider?.professionalExperience} {provider?.professionalExperience > 1 ? 'years' : 'year'} of experience </p>
                                             </div>
                                             <div className='heart_ic'
                                                 onClick={() => {
