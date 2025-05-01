@@ -57,12 +57,11 @@ const renderVideo = (videoUrl) => {
         );
     } else if (lower.endsWith(".mp4")) {
         return (
-            <video width="100%" controls>
-                {/* <source src={'https://stage.tasksplan.com:6900/uploads/homeVideo-1744616369467.mp4'} type="video/mp4" /> */}
-                {/* <source src={handleimageUrl(videoUrl)} type="video/mp4" /> */}
-                <source src={videoUrl} type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>
+            <div className='home_unlck_sec_video'>
+                <div class="rwd-media">
+                    <iframe src={videoUrl} width="448" height="252" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+                </div>
+            </div>
         );
     } else {
         return (
@@ -96,7 +95,7 @@ function Home() {
     const getCmsData = async () => {
         const res = await GetFunction(`${baseURL}/getCms/Home VideoURL`);
         if (res?.status == 200) {
-            console.log('ddddddddddddddddddd', res?.data)
+
 
             setCmsData(res?.data?.[0]?.homeVideoUrl)
         }

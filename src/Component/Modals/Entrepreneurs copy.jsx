@@ -5,7 +5,7 @@ import { handleimageUrl } from '../../utils/ApiFunctions';
 import Enterpre from "../../assets/enterpre.webp"
 import { Link } from 'react-router-dom';
 
-const Entrepreneurs = (props) => {
+const Investor = (props) => {
 
     return (
         <>
@@ -19,7 +19,7 @@ const Entrepreneurs = (props) => {
                             <p>At NeedTech Labs, Entrepreneurs take advantage of empowerment through Innovation.<br></br>
                                 We deliver business-ready, IP-protected startups that solve real-world needs, creating impactful solutions for untapped markets.</p>
                             <div className='home2_btn'>
-                                <Link to="/the-company" className='btn btn_primary'>Learn More</Link>
+                                <Link to="/" className='btn btn_primary'>Learn More</Link>
                             </div>
                         </div>
                     </div>
@@ -29,4 +29,4 @@ const Entrepreneurs = (props) => {
     );
 }
 
-export default Entrepreneurs;
+export default Investor;

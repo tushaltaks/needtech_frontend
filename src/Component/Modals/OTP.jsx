@@ -82,7 +82,6 @@ const OTP = (props) => {
         for (let i = 0; i < pastedData.length; i++) {
             newOtp[i] = pastedData[i];
         }
-
         setOtp(newOtp);
     };
 
@@ -113,7 +112,7 @@ const OTP = (props) => {
 
     return (
         <>
-            <Modal {...props} centered backdrop="static" keyboard={false}>
+            <Modal {...props} centered backdrop="static" >
                 <Modal.Header ></Modal.Header>
                 <Modal.Body>
                     <div className='modal_sec_in'>

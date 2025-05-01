@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -50,13 +50,45 @@ const Header = () => {
         setUserDetails(JSON.parse(localStorage.getItem("userDetails")));
         setToken(localStorage.getItem("token"));
     }, [token, pathname]);
+
+    const collapseRef = useRef(null);
+    const togglerRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                collapseRef.current &&
+                !collapseRef.current.contains(event.target) &&
+                togglerRef.current &&
+                !togglerRef.current.contains(event.target)
+            ) {
+                if (collapseRef.current.classList.contains("show")) {
+                    togglerRef.current.click(); // Programmatically collapse
+                }
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
+    useEffect(() => {
+        if (
+            collapseRef.current &&
+            collapseRef.current.classList.contains("show") &&
+            togglerRef.current
+        ) {
+            togglerRef.current.click(); // Collapse on route change
+        }
+    }, [pathname]);
     return (
         <header className='header-sec'>
             <Navbar expand="lg" className="header_sec">
                 <Container>
                     <Navbar.Brand href="/"><img src={Logoimg} /></Navbar.Brand>
-                    <Navbar.Toggle aria-controls="navbarScroll" />
-                    <Navbar.Collapse id="navbarScroll">
+                    <Navbar.Toggle aria-controls="navbarScroll" ref={togglerRef} />
+                    <Navbar.Collapse id="navbarScroll" ref={collapseRef} >
                         <div className='navbar-collapse_in'>
                             <Nav className='header_nav'>
                                 <Nav.Link as={Link} to="/marketplace">Marketplace</Nav.Link>
