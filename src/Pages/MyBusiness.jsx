@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom';
 import { baseURL } from "../utils/AxiosInstance";
 import toast from "react-hot-toast";
 import Pagination from "../Component/Pagination";
-import { GetFunction, handleimageUrl } from "../utils/ApiFunctions";
+import { GetFunction, handleErrorImage, handleimageUrl } from "../utils/ApiFunctions";
 import Loader from "../Component/Loader";
 
 const MyBusiness = () => {
@@ -348,7 +348,10 @@ const MyBusiness = () => {
                             list?.length > 0 ?
                                 list?.map(({ businessId }, i) => (
                                     <div className='market_list_itm' key={i}>
-                                        <div className='market_list_img'><div className='market_list_img_in'><img src={businessId?.image ? handleimageUrl(businessId?.image) : Startupim1} /></div></div>
+                                        <div className='market_list_img'><div className='market_list_img_in'><img
+                                            onError={handleErrorImage}
+
+                                            src={businessId?.image ? handleimageUrl(businessId?.image) : Startupim1} /></div></div>
                                         <div className='market_list_con'>
                                             <div className='market_list_con_in'>
                                                 <div className='market_meta'>

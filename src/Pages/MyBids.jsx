@@ -14,7 +14,7 @@ import Agric3 from "../assets/agric3.svg"
 import Lokedic from "../assets/lokedic.svg"
 import { Link } from 'react-router-dom';
 import { baseURL } from '../utils/AxiosInstance';
-import { FirstLettCapital, GetFunction, handleimageUrl } from '../utils/ApiFunctions';
+import { FirstLettCapital, GetFunction, handleErrorImage, handleimageUrl } from '../utils/ApiFunctions';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Loader from '../Component/Loader';
 
@@ -79,7 +79,10 @@ const MyBids = () => {
                             {
                                 data?.length > 0 ? data?.map((val, i) => (
                                     <div className='market_list_itm' key={i}>
-                                        <div className='market_list_img'><div className='market_list_img_in'><img src={val?.businessId?.image ? handleimageUrl(val?.businessId?.image) : BusinessImg1} /></div></div>
+                                        <div className='market_list_img'><div className='market_list_img_in'><img
+                                            onError={handleErrorImage}
+
+                                            src={val?.businessId?.image ? handleimageUrl(val?.businessId?.image) : BusinessImg1} /></div></div>
                                         <div className='market_list_con'>
                                             <div className='market_list_con_in'>
                                                 <div className='bid_data'>

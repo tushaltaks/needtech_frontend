@@ -17,7 +17,7 @@ const EditProfile = () => {
     const [userData] = React.useState(JSON.parse(localStorage.getItem("userDetails")));
     const [userId, setUserId] = React.useState(localStorage.getItem("userId"));
     const handleSubmit = async (values) => {
-        console.log(values);
+
         const formData = new FormData();
         Object.keys(values).forEach((key) => {
             if (values[key]) {
@@ -46,8 +46,6 @@ const EditProfile = () => {
             <PhoneInput
                 country={"us"} // Default country
                 value={field.value} // Bind value from Formik
-
-
                 onChange={(value, country, e, formattedValue) => {
                     let DialCode = country?.dialCode;
                     let valueLength = value?.length;
@@ -55,7 +53,6 @@ const EditProfile = () => {
                         DialCode?.length,
                         valueLength - DialCode?.length
                     );
-
                     form.setFieldValue(
                         "mobile",
                         `+${DialCode}` + " " + result
@@ -100,7 +97,7 @@ const EditProfile = () => {
                                     {({ setFieldValue, handleSubmit }) => (
                                         <Form className='prodile_sec_s' onSubmit={handleSubmit}>
                                             <div className='prodile_sec_img'>
-                                                <div className='prodile_sec_img_in'><img src={profilePhoto ? profilePhoto : userData?.profileImage ? handleimageUrl(userData?.profileImage) : Profile } /></div>
+                                                <div className='prodile_sec_img_in'><img src={profilePhoto ? profilePhoto : userData?.profileImage ? handleimageUrl(userData?.profileImage) : Profile} /></div>
                                                 <div className='rditpic_btn'><span className='btn btn_outline'>Upload Photo</span><Form.Control
 
                                                     onChange={(e) => {

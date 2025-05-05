@@ -5,7 +5,6 @@ const Pagination = (props) => {
 
     const generatePageNumbers = () => {
         const { total, current } = props;
-        console.log("Received total:", total, "Received current:", current);
 
         if (total <= 7) {
             return Array.from({ length: total }, (_, i) => i + 1);
@@ -20,7 +19,7 @@ const Pagination = (props) => {
         const start = Math.max(2, current - 2);
         const end = Math.min(total - 1, current + 2);
 
-        console.log("Start:", start, "End:", end);
+
 
         for (let i = start; i <= end; i++) {
             pages.push(i);
@@ -32,7 +31,6 @@ const Pagination = (props) => {
 
         pages.push(total);
 
-        console.log("Final page numbers:", pages);
         return pages;
     };
 

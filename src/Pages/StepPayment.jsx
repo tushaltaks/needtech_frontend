@@ -13,6 +13,7 @@ import { ErrorMessage, Formik } from 'formik';
 
 import { subscrptionPurchase } from '../utils/Utils';
 import PayForm from '../Component/PayForm';
+import Loader from '../Component/Loader';
 const StepPayment = () => {
 
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const StepPayment = () => {
   const handleShow = () => setShow(true);
 
   const getStripeData = async () => {
+
     const res = await GetFunction(`${baseURL}/getKey/${STRIPE_TYPE}/${STRIPE_MODE}`)
     if (res?.status == 200) {
       let stripKey = decryptValue(res?.data?.key);
@@ -66,6 +68,7 @@ const StepPayment = () => {
   if (!stripePromise) {
     return <div>Loading...</div>;
   }
+
 
 
   return (

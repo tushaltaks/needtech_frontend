@@ -1,6 +1,6 @@
 import { ErrorMessage, Formik } from 'formik';
 
-import React from 'react'
+import React, { useState } from 'react'
 import { subscrptionPurchase } from '../utils/Utils';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 import { CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js';
@@ -8,6 +8,7 @@ import { SubmitResponse } from '../utils/ApiFunctions';
 import { baseURL } from '../utils/AxiosInstance';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import Loader from './Loader';
 const CARD_OPTIONS = {
     iconStyle: "solid",
     style: {
@@ -30,9 +31,9 @@ function PayForm({ subscription }) {
     const navigate = useNavigate()
     const elements = useElements();
     const stripe = useStripe();
-
+    const [loader, setLoader] = useState(false);
     const handleSubmit = async (values) => {
-
+        setLoader(true)
         const { error, paymentMethod } = await stripe.createPaymentMethod({
             type: "card",
             card: elements.getElement(
@@ -42,6 +43,8 @@ function PayForm({ subscription }) {
             ),
         });
         if (error) {
+            setLoader(false)
+
             return toast.error(error?.message);
         }
 
@@ -50,7 +53,7 @@ function PayForm({ subscription }) {
             planId: subscription?._id,
         };
         const res = await SubmitResponse(`${baseURL}/buyPlan`, data);
-        console.log("res", res?.data?.data);
+
         if (res?.data?.status == 200) {
             if (res?.data?.data?.requiresAction == true) {
                 const { error, paymentIntent } = await stripe.confirmCardPayment(
@@ -79,7 +82,7 @@ function PayForm({ subscription }) {
                     );
 
                     if (ress?.data?.status == 200) {
-                        console.log("ress", ress?.data?.data);
+
                         toast.success(res?.data?.message);
                         localStorage.setItem("subscriptionId", ress?.data?.data?.subscrptionId);
                         localStorage.setItem("subscritpionStartDate", ress?.data?.data?.subscriptionStartDate);
@@ -92,6 +95,10 @@ function PayForm({ subscription }) {
                 }
             }
         }
+    }
+
+    if (loader) {
+        return <Loader />
     }
     return (
         <div>
@@ -129,7 +136,7 @@ function PayForm({ subscription }) {
                                             }`}
                                     >
                                         <CardNumberElement
-                                            options={{...CARD_OPTIONS, showAutofill: false}}
+                                            options={{ ...CARD_OPTIONS, showAutofill: false }}
                                             onChange={(e) => {
                                                 if (e.complete) {
                                                     setFieldValue("cardNumber", e.complete);

@@ -34,7 +34,7 @@ const ChangePassword = () => {
 
     const handleSubmit = async (values) => {
         const res = await SubmitResponse(`${LoginbaseURL}/changePassword`, values);
-        console.log('ssss', res)
+
         if (res?.status == 200) {
             toast.success(res?.data?.message);
             setShow(false);

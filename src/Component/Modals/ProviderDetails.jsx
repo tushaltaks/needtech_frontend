@@ -4,7 +4,7 @@ import DewberryLogo from "../../assets/dewberry_logo.jpg"
 import { handleimageUrl } from '../../utils/ApiFunctions';
 
 const ProviderDetails = (props) => {
-    console.log('props?.showdata', props)
+
     return (
         <>
             <Modal {...props} centered>

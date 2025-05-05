@@ -17,7 +17,7 @@ import SearchIc from "../assets/searchIc.svg"
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { baseURL } from "../utils/AxiosInstance";
 import toast from "react-hot-toast";
-import { GetFunction, handleimageUrl, SubmitResponse } from "../utils/ApiFunctions";
+import { GetFunction, handleErrorImage, handleimageUrl, SubmitResponse } from "../utils/ApiFunctions";
 import Pagination from "../Component/Pagination";
 import Loader from "../Component/Loader";
 
@@ -184,7 +184,9 @@ const Marketplace = () => {
                                 list?.length > 0 ?
                                     list?.map((val, i) => (
                                         <div className='market_list_itm' key={i}>
-                                            <div className='market_list_img'><div className='market_list_img_in'><img src={val?.image ? handleimageUrl(val?.image) : Startupim1} /></div></div>
+                                            <div className='market_list_img'><div className='market_list_img_in'><img
+                                                onError={handleErrorImage}
+                                                src={val?.image ? handleimageUrl(val?.image) : Startupim1} /></div></div>
                                             <div className='market_list_con'>
                                                 <div className='market_list_con_in'>
                                                     <div className='market_meta'>

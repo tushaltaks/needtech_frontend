@@ -4693,3 +4693,7 @@ input[type="number"] {
     padding: 15px;
   }
 }
+.form-check-input:disabled~.form-check-label,
+.form-check-input[disabled]~.form-check-label{
+  opacity: 1;
+}

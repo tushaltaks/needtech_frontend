@@ -12,9 +12,6 @@ export const PDfUrl =
 export const NoImge =
   "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg";
 
-let DummytradieImage =
-  "https://api.trustedtradienetwork.com/uploads/dummy-tradie.png";
-
 export const GetFunction = async (Url) => {
   const token = localStorage.getItem("token");
   const config = {
@@ -97,20 +94,20 @@ export const FirstLettCapital = (str) => {
 
 export const handleimageUrl = (url) => {
   if (typeof url == "string") {
-    return ImageBaseUrl + url;
+    // return ImageBaseUrl + url;
 
-    // return url != undefined
-    //   ? url?.startsWith("https")
-    //     ? url
-    //     : ImageBaseUrl + url
-    //   : DummytradieImage;
+    return url != undefined
+      ? url?.startsWith("https")
+        ? url
+        : ImageBaseUrl + url
+      : NoImge;
   } else {
     return ImageBaseUrl + url;
   }
 };
 
 export const handleErrorImage = (e) => {
-  e.target.src = DummytradieImage;
+  e.target.src = NoImge;
 };
 export const handleimageUrlPdf = (url) => {
   return ImageBaseUrl + url;

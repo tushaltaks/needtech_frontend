@@ -13,7 +13,7 @@ export const signupSchema = Yup.object().shape({
     [true],
     "You must accept the Terms and Conditions"
   ),
-  reviewNdaSigned: Yup.bool().oneOf([true], "You must digitally sign the NDA"),
+  // reviewNdaSigned: Yup.bool().oneOf([true], "You must digitally sign the NDA"),
 });
 export const SelectStles = {
   control: (base, state) => ({
@@ -207,8 +207,6 @@ export const getFirst500WordsFromHTML = (htmlString) => {
 
   return words;
 };
-
-
 
 export const countries = [
   "Afghanistan",

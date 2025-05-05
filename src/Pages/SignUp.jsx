@@ -1,4 +1,4 @@
-import React, { useState } from 'react'; // Import useState
+import React, { useEffect, useState } from 'react'; // Import useState
 import { Button, Col, Container, Form, Row } from 'react-bootstrap';
 import { Eye, EyeOff } from "lucide-react";
 import { Link } from 'react-router-dom';
@@ -48,7 +48,10 @@ const PhoneField = ({ field, form }) => {
 const SignUp = () => {
 
     const [formState, setFormValues] = useState('')
+    const [email, setEmail] = useState('')
     const [show, setShow] = useState(false);
+    const [NdaSigned, setNdaSignedTrue] = useState(false);
+    const [docmentSent, setDodumentSent] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -65,49 +68,112 @@ const SignUp = () => {
 
     const sendOtp = async (values) => {
         setFormValues({ ...values })
-        const res = await SubmitResponse(`${LoginbaseURL}/register`, values);
+        // setEmail(values.email)
+        if (!NdaSigned) {
 
-        if (res?.data?.status == 200) {
-            toast.success(res?.data?.message);
-            handleShow();
+
+            const res = await SubmitResponse(`${LoginbaseURL}/doumentSignedMailSend`, values);
+
+            if (res?.data?.status == 200) {
+                if (res?.data?.data?.documentSigned) {
+                    handleShow()
+                    setNdaSignedTrue(true)
+                }
+                else {
+                    toast.success(res?.data?.message);
+                    setDodumentSent(true)
+                }
+            }
+            else {
+
+                toast.dismiss()
+                toast.error(res?.message);
+            }
         }
         else {
+            const res = await SubmitResponse(`${LoginbaseURL}/register`, values);
 
-            toast.dismiss()
-            toast.error(res?.message);
+            if (res?.data?.status == 200) {
+                toast.success(res?.data?.message);
+                handleShow()
+            }
+            else {
+
+                toast.dismiss()
+                toast.error(res?.message);
+            }
         }
 
     }
+
+
+    const checkUserDocuemntSigned = async () => {
+        const res = await SubmitResponse(`${LoginbaseURL}/CheckUserSignedDocument`, { email: formState.email });
+        if (res?.data?.status == 200) {
+
+            if (res?.data?.data) {
+                {
+                    setNdaSignedTrue(true)
+                }
+
+            }
+        }
+    }
+    useEffect(() => {
+        let timeoutId;
+
+        if (docmentSent && NdaSigned == false) {
+            timeoutId = setInterval(() => {
+                checkUserDocuemntSigned();
+            }, 3000);
+        }
+
+        return () => clearInterval(timeoutId); // Clean up the timeout on unmount or dependency change
+    }, [docmentSent, NdaSigned]);
+
+
+    useEffect(() => {
+        const handleBeforeUnload = (e) => {
+            e.preventDefault();
+            e.returnValue = ''; // Show browser's default confirmation dialog
+        };
+        if (docmentSent) {
+            window.addEventListener("beforeunload", handleBeforeUnload);
+        }
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        }
+    }, []);
 
 
 
     return (
         <>
 
-              <div className='inner_head'>
-                            <Container>
-                                <div className='inner_head_in backbtn_s'>
-                                    <Link to="/marketplace"
-                                    //     onClick={() => {
-                                    //     const from = location.state?.from?.pathname?.toString();
-                                    //     console.log('locatioaaan', typeof (from));
-                                    //     if (from === undefined) {
-                                    //         console.log('ddddddddd', navigate(-1))
-                                    //        // fallback if no previous route
-                                    //     } else {
-                                    //         navigate(from);
+            <div className='inner_head'>
+                <Container>
+                    <div className='inner_head_in backbtn_s'>
+                        <Link to="/marketplace"
+                        //     onClick={() => {
+                        //     const from = location.state?.from?.pathname?.toString();
+                        //     console.log('locatioaaan', typeof (from));
+                        //     if (from === undefined) {
+                        //         console.log('ddddddddd', navigate(-1))
+                        //        // fallback if no previous route
+                        //     } else {
+                        //         navigate(from);
 
-                                    //     }
-                                    // }}
+                        //     }
+                        // }}
 
-                                    // onClick={() => {
-                                    //     navigate('/marketplace');
-                                    // }}
-                                    >
-                                        <img src={BackIc} /> Back</Link>
-                                </div>
-                            </Container>
-                        </div>
+                        // onClick={() => {
+                        //     navigate('/marketplace');
+                        // }}
+                        >
+                            <img src={BackIc} /> Back</Link>
+                    </div>
+                </Container>
+            </div>
             <section className='login_page'>
                 <Container>
                     <div className='login_page_in'>
@@ -120,20 +186,21 @@ const SignUp = () => {
                                     </div>
                                     <Formik
                                         initialValues={{
-                                            name: '',
-                                            email: '',
+                                            name: formState?.name ?? '',
+                                            email: formState?.email ?? '',
 
                                             registrationType: "web",
-                                            mobile: '',
-                                            password: '',
-                                            confirmPassword: '',
-                                            reviewterms_conditions: false,
-                                            reviewNdaSigned: false,
+                                            mobile: formState?.mobile ?? '',
+                                            password: formState?.password ?? '',
+                                            confirmPassword: formState?.confirmPassword ?? '',
+                                            reviewterms_conditions: formState?.reviewterms_conditions ?? false,
+                                            reviewNdaSigned: NdaSigned ?? false,
                                         }}
+                                        enableReinitialize
                                         validationSchema={signupSchema}
                                         onSubmit={sendOtp}
                                     >
-                                        {({ handleSubmit, isSubmitting }) => (
+                                        {({ handleSubmit, isSubmitting, values }) => (
                                             <Form onSubmit={handleSubmit}>
                                                 <div className='login_form_in'>
                                                     <Row>
@@ -197,6 +264,8 @@ const SignUp = () => {
                                                             <Form.Group className="form-group">
                                                                 <Form.Check
                                                                     type="checkbox"
+                                                                    disabled={true}
+                                                                    checked={values?.reviewNdaSigned}
                                                                     id="reviewNdaSigned"
                                                                     className="mb-2"
                                                                     label={

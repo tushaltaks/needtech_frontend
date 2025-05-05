@@ -16,7 +16,7 @@ import Logo_approved from "../assets/logo_approved.png"
 import OfferBid from '../Component/Modals/OfferBid';
 import ProfilePhoto from "../assets/profilePhoto.jpg"
 import ProviderDetails from '../Component/Modals/ProviderDetails';
-import { GetFunction, handleimageUrl, SubmitResponse } from '../utils/ApiFunctions';
+import { GetFunction, handleErrorImage, handleimageUrl, SubmitResponse } from '../utils/ApiFunctions';
 import { baseURL } from '../utils/AxiosInstance';
 import toast from 'react-hot-toast';
 import { getFirst500WordsFromHTML } from '../utils/Utils';
@@ -70,9 +70,9 @@ const ServiceProviderDetail = () => {
         }
     }
 
-     if (loader) {
-            return <Loader />;
-        }
+    if (loader) {
+        return <Loader />;
+    }
 
 
     return (
@@ -93,7 +93,10 @@ const ServiceProviderDetail = () => {
                                     <div className='market_detail_s_in'>
                                         <div className='market_detail_img'>
                                             <div className='market_detail_img_in'>
-                                                <img src={provider?.image ? handleimageUrl(provider?.image) : ProfilePhoto} />
+                                                <img
+                                                    onError={handleErrorImage}
+
+                                                    src={provider?.image ? handleimageUrl(provider?.image) : ProfilePhoto} />
                                             </div>
                                         </div>
                                         <div className='market_detail_info'>
@@ -155,9 +158,11 @@ const ServiceProviderDetail = () => {
                                             </div>
                                         </div>
                                         <div className={token && subscriptionId ? 'service_provider_s' : 'service_provider_s locked_data'}>
-                                            <div className='service_provider_logo'><img
-                                                src={provider?.companyLogo ? handleimageUrl(provider?.companyLogo) : DewberryLogo}
-                                            /></div>
+                                            <div className='service_provider_logo'>
+                                                <img
+                                                    onError={handleErrorImage}
+                                                    src={provider?.companyLogo ? handleimageUrl(provider?.companyLogo) : DewberryLogo}
+                                                /></div>
                                             <div className='service_provider_d'>
                                                 <p>{provider?.companyName}</p>
                                                 <p>{provider?.aboutCompany}</p>
