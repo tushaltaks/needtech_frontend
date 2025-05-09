@@ -1,53 +1,50 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { lazy } from 'react';
 import { BrowserRouter, Route, Routes } from "react-router-dom"
-
 import Authlayout from "./Component/layouts/Authlayout"
-import Home from "./Pages/Home"
-import Layout from "./Component/layouts/Layout"
-import Marketplace from "./Pages/Marketplace"
-import MarketDetail from "./Pages/MarketDetail"
-import LockedMarketplace from "./Pages/LockedMarketplace"
-import AboutUs from "./Pages/AboutUs"
-import Articles from "./Pages/Articles"
-import ArticleDetail from "./Pages/ArticleDetail"
-import Login from "./Pages/Login"
-import SignUp from "./Pages/SignUp"
-import ForgotPassword from "./Pages/ForgotPassword"
-import SendEmail from "./Component/Modals/SendEmail"
-import OfferBid from "./Component/Modals/OfferBid"
-import OfferBidPayment from "./Pages/OfferBidPayment"
-import BidSubmitted from "./Component/Modals/BidSubmitted"
-import Payment from "./Pages/Payment"
-import LayoutLogin from "./Component/Layouts/LayoutLogin"
-import MarketplaceLogin from "./Pages/MarketplaceLogin"
-
-import MyBusiness from "./Pages/MyBusiness"
-import BusinessDetail from "./Pages/BusinessDetail"
-import MyBids from "./Pages/MyBids"
-import BidsDetail from "./Pages/BidsDetail"
-import MyWishlist from "./Pages/MyWishlist"
-import MyProfile from "./Pages/MyProfile"
-import EditProfile from "./Pages/EditProfile"
-import ChangePassword from "./Pages/ChangePassword"
-import LockedMarketplaceDetail from "./Pages/LockedMarketplaceDetail"
-import ServiceProvider from "./Pages/ServiceProvider"
-import ServiceProviderLogin from "./Pages/ServiceProviderLogin"
-import ServiceProviderDetail from "./Pages/ServiceProviderDetail"
-import ServiceProviderDetailLogin from "./Pages/ServiceProviderDetailLogin"
-import CompleteProfile from "./Pages/CompleteProfile"
-import StepPayment from "./Pages/StepPayment"
-import HelpSupport from "./Pages/HelpSupport"
-import PrivacyPolicy from "./Pages/PrivacyPolicy"
-import TermsConditions from "./Pages/TermsConditions"
-import TheCompany from "./Pages/TheCompany"
-import FAQs from "./Pages/FAQs"
 import { Toaster } from "react-hot-toast"
 import Resetpassword from './Pages/Resetpassword';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import PaymentSuccess from './Pages/PaymentSuccess';
-import PaymentFailed from './Pages/PaymentFailed';
-import MarketDetailLogin from './Pages/BusinessDetail';
-import Home2 from './Pages/Home2';
+import ThankyouForSigningDoc from './Pages/ThankyouForSigningDoc';
+
+const Home = lazy(() => import('./Pages/Home'));
+const Layout= lazy(() => import('./Component/Layouts/Layout'));
+const Marketplace = lazy(() => import('./Pages/Marketplace'));
+const MarketDetail = lazy(() => import("./Pages/MarketDetail"));
+const AboutUs = lazy(() => import("./Pages/AboutUs"));
+const Articles = lazy(() => import("./Pages/Articles"));
+const ArticleDetail = lazy(() => import("./Pages/ArticleDetail"));
+const Login = lazy(() => import("./Pages/Login"));
+const SignUp = lazy(() => import("./Pages/SignUp"));
+const ForgotPassword = lazy(() => import("./Pages/ForgotPassword"));
+const SendEmail = lazy(() => import("./Component/Modals/SendEmail"));
+const OfferBid = lazy(() => import("./Component/Modals/OfferBid"));
+const OfferBidPayment = lazy(() => import("./Pages/OfferBidPayment"));
+const BidSubmitted = lazy(() => import("./Component/Modals/BidSubmitted"));
+const Payment = lazy(() => import("./Pages/Payment"));
+const LayoutLogin = lazy(() => import("./Component/Layouts/LayoutLogin"));
+const MarketplaceLogin = lazy(() => import("./Pages/MarketplaceLogin"));
+const MyBusiness = lazy(() => import("./Pages/MyBusiness"));
+const BusinessDetail = lazy(() => import("./Pages/BusinessDetail"));
+const MyBids = lazy(() => import("./Pages/MyBids"));
+const BidsDetail = lazy(() => import("./Pages/BidsDetail"));
+const MyWishlist = lazy(() => import("./Pages/MyWishlist"));
+const MyProfile = lazy(() => import("./Pages/MyProfile"));
+const EditProfile = lazy(() => import("./Pages/EditProfile"));
+const ChangePassword = lazy(() => import("./Pages/ChangePassword"));
+const LockedMarketplaceDetail = lazy(() => import("./Pages/LockedMarketplaceDetail"));
+const ServiceProvider = lazy(() => import("./Pages/ServiceProvider"));
+const ServiceProviderDetail = lazy(() => import("./Pages/ServiceProviderDetail"));
+const CompleteProfile = lazy(() => import("./Pages/CompleteProfile"));
+const StepPayment = lazy(() => import("./Pages/StepPayment"));
+const HelpSupport = lazy(() => import("./Pages/HelpSupport"));
+const PrivacyPolicy = lazy(() => import("./Pages/PrivacyPolicy"));
+const TermsConditions = lazy(() => import("./Pages/TermsConditions"));
+const TheCompany = lazy(() => import("./Pages/TheCompany"));
+const FAQs = lazy(() => import("./Pages/FAQs"));
+const PaymentSuccess = lazy(() => import("./Pages/PaymentSuccess"));
+const PaymentFailed = lazy(() => import("./Pages/PaymentFailed"));
+const Home2 = lazy(() => import("./Pages/Home2"));
+// const Marketplace = lazy(() => import('./Pages/Marketplace'));
 
 const LoginRoute = lazy(() => import('./Component/Protected_routing/LoginRoute'));
 const Proteted = lazy(() => import('./Component/Protected_routing/Proteted'));
@@ -58,11 +55,9 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-
         <BrowserRouter>
           <Toaster />
           <Routes>
-
             <Route element={<Authlayout />}>
               <Route element={<LoginRoute />}>
                 <Route path='/login' element={<Login />} />
@@ -70,13 +65,13 @@ function App() {
                 <Route path='/reset-password' element={<Resetpassword />} />
                 <Route path='/forgot-password' element={<ForgotPassword />} />
                 <Route path='/complete-profile' element={<CompleteProfile />} />
+                <Route path='/signNowUrl' element={<ThankyouForSigningDoc/>} />
               </Route>
             </Route>
 
             <Route element={<Layout />}>
               <Route path='/' element={<Home />} />
               <Route path='/index2' element={<Home2 />} />
-              <Route path='/MarketDetailLogin' element={<MarketDetailLogin />} />
               <Route path='/marketplace' element={<Marketplace />} />
               <Route path='/market-detail/:id' element={<MarketDetail />} />
               <Route path='/locked-market-detail' element={<LockedMarketplaceDetail />} />
@@ -110,11 +105,8 @@ function App() {
                 <Route path='/my-profile' element={<MyProfile />} />
                 <Route path='/change-password' element={<ChangePassword />} />
                 <Route path='/edit-profile' element={<EditProfile />} />
-                <Route path='/service-provider-login' element={<ServiceProviderLogin />} />
               </Route>
             </Route>
-            <Route path='/service-provider-detail-login' element={<ServiceProviderDetailLogin />} />
-
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>

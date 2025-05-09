@@ -24,7 +24,7 @@ const TheCompany = () => {
                                 <div className='innovative_con'>
                                     <p>It's simple...</p>
                                     <h2>We create <br></br><span>innovative</span> startups <br></br>to solve <span>real-world</span> needs.</h2>
-                                </div>                                
+                                </div>
                             </Col>
                         </Row>
                     </div>

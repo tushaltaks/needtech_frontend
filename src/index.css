@@ -4697,3 +4697,24 @@ input[type="number"] {
 .form-check-input[disabled]~.form-check-label{
   opacity: 1;
 }
+.link-sapn {
+  color: #1597C5 !important;
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+
+ .thank-you-card {
+   max-width: 500px;
+   margin: 100px auto;
+   padding: 30px;
+   border-radius: 15px;
+   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+   background-color: #f8f9fa;
+   text-align: center;
+ }
+
+ .thank-you-icon {
+   font-size: 48px;
+   color: #28a745;
+   margin-bottom: 15px;
+ }

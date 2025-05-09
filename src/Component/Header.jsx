@@ -15,10 +15,9 @@ const Header = () => {
     const { pathname } = useLocation()
     const [show, setShow] = useState(false)
     const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("userDetails")));
-
     const [token, setToken] = useState(localStorage.getItem("token"));
-    const handleLogut = async () => {
 
+    const handleLogut = async () => {
         Swal.fire({
             title: "Are you sure?",
             text: "Please confirm that you want to logout?",
@@ -42,8 +41,6 @@ const Header = () => {
                 navigate('/login')
             }
         });
-
-
     }
 
     useEffect(() => {
@@ -73,6 +70,7 @@ const Header = () => {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
+
     useEffect(() => {
         if (
             collapseRef.current &&
@@ -82,6 +80,7 @@ const Header = () => {
             togglerRef.current.click(); // Collapse on route change
         }
     }, [pathname]);
+
     return (
         <header className='header-sec'>
             <Navbar expand="lg" className="header_sec">

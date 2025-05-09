@@ -32,7 +32,7 @@ const MyWishlist = () => {
       : "";
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  const [key, setKey] = useState("buisness");
+  const [key, setKey] = useState("startup");
   const [loader, setLoader] = useState(true);
 
   const [page, setPage] = useState(1);
@@ -43,7 +43,7 @@ const MyWishlist = () => {
 
   const getBusinessList = async () => {
     const res = await GetFunction(
-      `${baseURL}/userWishList?page=${page}&limit=10&search=${search}`
+      `${baseURL}/userWishList?page=${page}&limit=10&search=${search}&type=${key}`
     );
     setLoader(false);
 
@@ -60,7 +60,7 @@ const MyWishlist = () => {
 
   useEffect(() => {
     getBusinessList();
-  }, []);
+  }, [key,page]);
 
   const addToWishList = async (id, type) => {
     if (type == "buisness") {
@@ -111,7 +111,7 @@ const MyWishlist = () => {
             onSelect={(k) => setKey(k)}
             className="mb-3"
           >
-            <Tab eventKey="buisness" title="Startups">
+            <Tab eventKey="startup" title="Startups">
               <div className="market_list_itms">
                 {list?.[0]?.businessData?.length > 0 ? (
                   list?.[0]?.businessData?.map((val, i) => (
@@ -305,11 +305,13 @@ const MyWishlist = () => {
                                 }
                               }}
                             >
-                              {val?.wishlist ? (
+                              {/* {val?.wishlist ? (
                                 <img src={HeartIconFilled} />
                               ) : (
                                 <img src={HeartIcon} />
-                              )}
+                              )} */}
+                              <img src={HeartIconFilled} />
+
                             </div>
                           </div>
                           <div className="service_provider_s">
