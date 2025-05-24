@@ -7,7 +7,7 @@ import CheckIc from "../assets/checkic.svg";
 
 function ThankyouForSigningDoc() {
   const pathname = window.location.pathname;
-  console.log(pathname);
+
   const queryParams = new URLSearchParams(location.search);
   const [email] = useState(queryParams.get("email") || "");
   const [documentID] = useState(queryParams.get("document_id") || "");

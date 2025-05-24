@@ -85,7 +85,7 @@ const ServiceProviderDetail = () => {
       <div className="inner_head">
         <Container>
           <div className="inner_head_in backbtn_s">
-            <Link to="/service-provider">
+            <Link to="/service-providers">
               <img src={BackIc} /> Back to Service Providers
             </Link>
           </div>

@@ -1,48 +1,60 @@
-import React, { useEffect, useState } from 'react';
-import Logoimg from '../assets/logo.png';
-import { Button, Col, Container, Row, Form } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
-import PaymentCards from '../assets/payment_cards.svg';
-import PaymentSuccessful from '../Component/Modals/PaymentSuccessful';
-import { GetFunction, STRIPE_MODE, STRIPE_TYPE, SubmitResponse, decryptValue } from "../utils/ApiFunctions"
-import toast from 'react-hot-toast';
-import { baseURL } from '../utils/AxiosInstance';
-import { CardCvcElement, CardExpiryElement, CardNumberElement, Elements, useElements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
-import { ErrorMessage, Formik } from 'formik';
+import React, { useEffect, useState } from "react";
+import Logoimg from "../assets/logo.png";
+import { Button, Col, Container, Row, Form } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
+import PaymentCards from "../assets/payment_cards.svg";
+import PaymentSuccessful from "../Component/Modals/PaymentSuccessful";
+import {
+  GetFunction,
+  STRIPE_MODE,
+  STRIPE_TYPE,
+  SubmitResponse,
+  decryptValue,
+} from "../utils/ApiFunctions";
+import toast from "react-hot-toast";
+import { baseURL } from "../utils/AxiosInstance";
+import {
+  CardCvcElement,
+  CardExpiryElement,
+  CardNumberElement,
+  Elements,
+  useElements,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { ErrorMessage, Formik } from "formik";
 
-import { subscrptionPurchase } from '../utils/Utils';
-import PayForm from '../Component/PayForm';
-import Loader from '../Component/Loader';
+import { subscrptionPurchase } from "../utils/Utils";
+import PayForm from "../Component/PayForm";
+import Loader from "../Component/Loader";
 const StepPayment = () => {
-
   const navigate = useNavigate();
   const [stripePromise, setStripePromis] = useState("");
-  const [subscription, setSubscription] = useState('')
+  const [subscription, setSubscription] = useState("");
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   const getStripeData = async () => {
-
-    const res = await GetFunction(`${baseURL}/getKey/${STRIPE_TYPE}/${STRIPE_MODE}`)
+    const res = await GetFunction(
+      `${baseURL}/getKey/${STRIPE_TYPE}/${STRIPE_MODE}`
+    );
     if (res?.status == 200) {
       let stripKey = decryptValue(res?.data?.key);
-      setStripePromis(loadStripe(stripKey));
+      const stripe = await loadStripe(stripKey);
+
+      setStripePromis(stripe);
     } else {
       toast.error(res?.data?.message);
     }
   };
 
-
   const getPlan = async () => {
-    const res = await GetFunction(`${baseURL}/getSubscriptionList`)
+    const res = await GetFunction(`${baseURL}/getSubscriptionList`);
     if (res?.status == 200) {
       if (res?.data?.userData?.subscrptionId) {
-        navigate('/marketplace')
+        navigate("/marketplace");
       }
-      setSubscription(res?.data?.data[0])
-
+      setSubscription(res?.data?.data[0]);
     }
     // if (res?.status == 200) {
     //   if (process.env.NEXT_PUBLIC_PRODUCTION == "server") {
@@ -60,16 +72,13 @@ const StepPayment = () => {
   };
 
   useEffect(() => {
-    getPlan()
-    getStripeData()
-  }, [])
-
+    getPlan();
+    getStripeData();
+  }, []);
 
   if (!stripePromise) {
     return <div>Loading...</div>;
   }
-
-
 
   return (
     <>
@@ -84,13 +93,14 @@ const StepPayment = () => {
                 </Link> */}
                 <h2 className="heading_type2">Marketplace Membership</h2>
                 <p>
-                  Unlock full access to our marketplace. You will be charged $100 today and then automatically each month, giving you continuous access until you decide to cancel.
+                  Unlock full access to our marketplace. You will be charged
+                  $100 today and then automatically each month, giving you
+                  continuous access until you decide to cancel.
                 </p>
               </div>
 
               {/* Payment Form Section */}
               <div className="cp_s_steps payment_steps">
-
                 {/* <Row>
 
                     <Col md={12}>
@@ -137,10 +147,7 @@ const StepPayment = () => {
           </Container>
         </div>
       </Elements>
-      <PaymentSuccessful
-        show={show}
-        onHide={handleClose}
-      />
+      <PaymentSuccessful show={show} onHide={handleClose} />
     </>
   );
 };

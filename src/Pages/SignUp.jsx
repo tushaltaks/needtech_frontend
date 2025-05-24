@@ -6,6 +6,8 @@ import BackIc from "../assets/backIc.svg";
 
 import GoogleIcon from "../assets/google_icon.svg";
 import FacebookIcon from "../assets/facebook_icon.svg";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+
 import Logoimg from "../assets/logo.png";
 import Loginmetaic1 from "../assets/loginmetaic1.svg";
 import Loginmetaic2 from "../assets/loginmetaic2.svg";
@@ -18,7 +20,6 @@ import { SubmitResponse } from "../utils/ApiFunctions";
 import { LoginbaseURL } from "../utils/AxiosInstance";
 import toast from "react-hot-toast";
 import { useGoogleLogin } from "@react-oauth/google";
-
 import PopupSignDocument from "../Component/Modals/PopupSignDocument";
 import axios from "axios";
 
@@ -138,7 +139,6 @@ const SignUp = () => {
   const runCountRef = useRef(0);
 
   useEffect(() => {
-
     if (docmentSent && !NdaSigned) {
       intervalIdRef.current = setInterval(() => {
         checkUserDocuemntSigned();
@@ -204,9 +204,9 @@ const SignUp = () => {
       formdata.append("name", userInfo?.data?.given_name);
       formdata.append("email", userInfo?.data?.email);
       formdata.append("password", "password");
+      formdata.append("registrationType", "google");
       const res = await SubmitResponse(`${LoginbaseURL}/socialLogin`, formdata);
       if (res?.data?.status == 200) {
-        console.log("res--->", res?.data);
         if (res?.data?.data?.LastStep == 7) {
           localStorage.setItem("name", res?.data?.data?.name);
           localStorage.setItem("email", res?.data?.data?.email);
@@ -223,6 +223,9 @@ const SignUp = () => {
               parseInt(res?.data?.data?.LastStep + 1)
           );
         }
+      } else {
+        toast.dismiss();
+        toast.error(res?.message);
       }
     },
     onError: (errorResponse) => {
@@ -233,6 +236,40 @@ const SignUp = () => {
     },
   });
 
+  const callbackFacebook = async (userInfo) => {
+    try {
+      let formdata = new FormData();
+      formdata.append("socialId", userInfo?.id);
+      formdata.append("name", "");
+      formdata.append("email", userInfo?.email);
+      formdata.append("password", "password");
+      formdata.append("registrationType", "facebook");
+      const res = await SubmitResponse(`${LoginbaseURL}/socialLogin`, formdata);
+      if (res?.data?.status == 200) {
+        if (res?.data?.data?.LastStep == 7) {
+          localStorage.setItem("name", res?.data?.data?.name);
+          localStorage.setItem("email", res?.data?.data?.email);
+          localStorage.setItem("token", res?.data?.token);
+          localStorage.setItem("userId", res?.data?.data?._id);
+          localStorage.setItem("userDetails", JSON.stringify(res?.data?.data));
+
+          navigate("/marketplace");
+        } else {
+          localStorage.setItem("userDetails", JSON.stringify(res?.data?.data));
+          localStorage.setItem("userId", res?.data?.data?._id);
+          navigate(
+            "/complete-profile?lastStep=" +
+              parseInt(res?.data?.data?.LastStep + 1)
+          );
+        }
+      } else {
+        toast.dismiss();
+        toast.error(res?.message);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
   return (
     <>
       <div className="inner_head">
@@ -281,7 +318,6 @@ const SignUp = () => {
                     initialValues={{
                       name: formState?.name ?? "",
                       email: formState?.email ?? "",
-
                       registrationType: "web",
                       mobile: formState?.mobile ?? "",
                       password: formState?.password ?? "",
@@ -300,6 +336,7 @@ const SignUp = () => {
                       isSubmitting,
                       values,
                       validateField,
+                      errors,
                       validateForm,
                     }) => (
                       <Form onSubmit={handleSubmit}>
@@ -424,23 +461,28 @@ const SignUp = () => {
                                         "password",
                                         "confirmPassword",
                                         "mobile",
-                                        "reviewterms_conditions",
                                       ];
-
-                                      // Mark fields as touched
                                       for (const field of fields) {
                                         await setFieldTouched(field, true);
+                                        await validateField(field);
                                       }
 
                                       // Validate the whole form
-                                      const formErrors = await validateForm();
+                                      const formErrors = {};
+                                      for (const field of fields) {
+                                        if (errors[field]) {
+                                          formErrors[field] = errors[field];
+                                        }
+                                      }
 
                                       if (
                                         Object.keys(formErrors).length === 0
                                       ) {
                                         // All validations passed
                                         setFormValues({ ...values });
-                                        setPopup(true);
+                                        // setPopup(true);
+
+                                        handleSubmit(values);
                                       }
                                     } else {
                                       const fields = [
@@ -449,12 +491,12 @@ const SignUp = () => {
                                         "password",
                                         "confirmPassword",
                                         "mobile",
-                                        "reviewterms_conditions",
                                       ];
 
                                       // Mark fields as touched
                                       for (const field of fields) {
                                         await setFieldTouched(field, true);
+                                        await validateField(field);
                                       }
                                     }
                                   }}
@@ -467,9 +509,7 @@ const SignUp = () => {
                                         className="link-sapn"
                                         onClick={
                                           async (e) => {
-                                            toast.dismiss();
                                             e.preventDefault();
-
                                             if (
                                               values?.email &&
                                               values?.mobile
@@ -480,30 +520,33 @@ const SignUp = () => {
                                                 "password",
                                                 "confirmPassword",
                                                 "mobile",
-                                                "reviewterms_conditions",
                                               ];
-
-                                              // Mark fields as touched
                                               for (const field of fields) {
                                                 await setFieldTouched(
                                                   field,
                                                   true
                                                 );
+                                                await validateField(field);
                                               }
 
                                               // Validate the whole form
-                                              const formErrors =
-                                                await validateForm();
+                                              const formErrors = {};
+                                              for (const field of fields) {
+                                                if (errors[field]) {
+                                                  formErrors[field] =
+                                                    errors[field];
+                                                }
+                                              }
 
                                               if (
                                                 Object.keys(formErrors)
                                                   .length === 0
                                               ) {
                                                 // All validations passed
-                                                setFormValues({
-                                                  ...values,
-                                                });
-                                                setPopup(true);
+                                                setFormValues({ ...values });
+                                                // setPopup(true);
+
+                                                handleSubmit(values);
                                               }
                                             } else {
                                               const fields = [
@@ -512,7 +555,6 @@ const SignUp = () => {
                                                 "password",
                                                 "confirmPassword",
                                                 "mobile",
-                                                "reviewterms_conditions",
                                               ];
 
                                               // Mark fields as touched
@@ -521,6 +563,7 @@ const SignUp = () => {
                                                   field,
                                                   true
                                                 );
+                                                await validateField(field);
                                               }
                                             }
                                           }
@@ -584,7 +627,7 @@ const SignUp = () => {
                             <Col md="12">
                               <Button
                                 type="submit"
-                                disabled={NdaSigned == false || loader}
+                                // disabled={NdaSigned == false || loader}
                                 className="btn btn_primary w-100"
                               >
                                 {loader ? "Please Wait..." : "Continue"}
@@ -604,9 +647,22 @@ const SignUp = () => {
                             >
                               <img src={GoogleIcon} alt="Google" />
                             </Link>
-                            <Link to="#">
-                              <img src={FacebookIcon} alt="Facebook" />
-                            </Link>
+
+                            <FacebookLogin
+                              appId={import.meta.env.VITE_FACEBOOK_APP_ID}
+                              autoLoad={false}
+                              fields="email"
+                              callback={(res) => {
+                                if (res?.email) {
+                                  callbackFacebook(res);
+                                }
+                              }}
+                              render={(renderProps) => (
+                                <Link to="#" onClick={renderProps.onClick}>
+                                  <img src={FacebookIcon} alt="Facebook" />
+                                </Link>
+                              )}
+                            />
                           </div>
                         </div>
                         <div className="login_para">

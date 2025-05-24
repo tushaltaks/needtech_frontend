@@ -9,10 +9,13 @@ export const signupSchema = Yup.object().shape({
   confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "Passwords must match")
     .required("Confirm Password is required"),
-  reviewterms_conditions: Yup.bool().oneOf(
-    [true],
-    "You must accept the Terms and Conditions"
-  ),
+
+  reviewterms_conditions: Yup.bool().when("reviewNdaSigned", {
+    is: true, // only validate when reviewNdaSigned is true
+    then: (schema) =>
+      schema.oneOf([true], "You must accept the Terms and Conditions"),
+    otherwise: (schema) => schema.notRequired(),
+  }),
   // reviewNdaSigned: Yup.bool().oneOf([true], "You must digitally sign the NDA"),
 });
 export const SelectStles = {
@@ -79,8 +82,9 @@ export const stepSix = Yup.object({
 
 export const stepSeven = Yup.object({
   profileImage: Yup.mixed()
-    .required("Profile picture is required")
+    .nullable()
     .test("fileType", "Only image files are allowed", (value) => {
+      if (!value) return true; // allow null or empty
       return (
         value && ["image/jpeg", "image/png", "image/jpg"].includes(value.type)
       );

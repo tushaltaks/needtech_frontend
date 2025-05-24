@@ -345,7 +345,7 @@ const MyWishlist = () => {
                           </div>
                           <div className="market_list_btn">
                             <Link
-                              to={`/service-provider-detail/${val?.slug}`}
+                              to={`/service-providers-detail/${val?.slug}`}
                               className="btn btn_primary"
                             >
                               Read More

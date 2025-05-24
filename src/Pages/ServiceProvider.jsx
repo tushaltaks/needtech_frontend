@@ -107,7 +107,7 @@ const ServiceProvider = () => {
       <div className="inner_head">
         <Container>
           <div className="inner_head_in">
-            <h1 className="heading_type1">Professional Services</h1>
+            <h1 className="heading_type1">Service Providers</h1>
           </div>
         </Container>
       </div>
@@ -261,7 +261,7 @@ const ServiceProvider = () => {
                       </div>
                       <div className="market_list_btn">
                         <Link
-                          to={`/service-provider-detail/${val?.slug}`}
+                          to={`/service-providers-detail/${val?.slug}`}
                           className="btn btn_primary"
                         >
                           Read More

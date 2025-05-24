@@ -9,8 +9,8 @@ import Step4 from "../Component/Steps/Step4";
 import Step5 from "../Component/Steps/Step5";
 import Step6 from "../Component/Steps/Step6";
 import Step7 from "../Component/Steps/Step7";
-import { TopSteps } from "../Component/Steps/TopSteps";
 import Step8 from "../Component/Steps/Step8";
+import { TopSteps } from "../Component/Steps/TopSteps";
 import { SubmitResponse } from "../utils/ApiFunctions";
 import { baseURL, LoginbaseURL } from "../utils/AxiosInstance";
 import toast from "react-hot-toast";
@@ -63,18 +63,26 @@ const CompleteProfile = () => {
   const updateDetails = async (values) => {
     const formData = new FormData();
     const userId = localStorage.getItem("userId");
+
     fieldsToAppend.forEach((field) => {
-      if (values?.[field]) {
+      if (Array.isArray(values?.[field])) {
+      } else {
         formData.append(field, values[field]);
       }
     });
+    // console.log("industry", values);
+
+    if (Array.isArray(values?.categoryNames)) {
+      values.categoryNames.forEach((industry, index) => {
+        // console.log("industry", industry);
+        formData.append(`industries[]`, industry);
+      });
+    }
 
     if (Array.isArray(values?.industries)) {
       values.industries.forEach((industry, index) => {
-        formData.append(`industries[]`, industry);
+        formData.append(`industriesIds[]`, industry);
       });
-    } else {
-      formData.append("industries[]", values?.industries);
     }
 
     if (Array.isArray(values?.budgetRange)) {
@@ -84,6 +92,8 @@ const CompleteProfile = () => {
     } else {
       formData.append("budgetRange[]", values?.budgetRange);
     }
+
+    // console.log("******abc**********",JSON.stringify(formData, null, 2));
 
     const res = await SubmitResponse(
       `${baseURL}/updateUserDetails/${userId}`,
@@ -174,7 +184,7 @@ const CompleteProfile = () => {
               )}
             </div>
 
-            {userDetails?.reviewNdaSigned && (
+            {userDetails?.reviewNdaSigned ? (
               <div className="cp_s_steps">
                 <TopSteps currentStep={step} />
                 <div className="cp_s_steps_in">
@@ -249,6 +259,14 @@ const CompleteProfile = () => {
                     />
                   )}
                 </div>
+              </div>
+            ) : (
+              <div>
+                <h2 className="text-center">Please sign the NDA to proceed</h2>
+                <p className="text-center">
+                  You need to sign the NDA to proceed with the profile
+                  completion.
+                </p>
               </div>
             )}
             <PopupSignDocument
