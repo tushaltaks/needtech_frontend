@@ -383,7 +383,7 @@ const MarketDetail = () => {
                                 <h2 className="heading_type2">
                                   Unlock Startup
                                 </h2>
-                                <p>You can get full access for this product</p>
+                                <p>And full access for this product</p>
 
                                 <Button
                                   onMouseEnter={handleMouseEnter}
@@ -583,7 +583,7 @@ const MarketDetail = () => {
 
                           <div className="locked_sec_con">
                             <h2 className="heading_type2">Unlock Startup</h2>
-                            <p>You can get full access for this product</p>
+                            <p>And full access for this product</p>
 
                             <Button
                               onMouseEnter={handleMouseEnter}

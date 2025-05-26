@@ -164,7 +164,7 @@ function Home() {
                     onChange={(e) => setSelectedCategory(e.target.value)}
                     aria-label="Default select example"
                   >
-                    <option>Pick a Category</option>
+                    <option>All Categories</option>
                     {categoryList &&
                       categoryList?.map((val, i) => (
                         <option value={val?._id} key={i}>

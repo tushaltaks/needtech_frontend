@@ -276,7 +276,7 @@ const ServiceProvider = () => {
                 </h3>
               )}
             </div>
-            {list?.length > 0 && (
+            {list?.length > 0 && paginatio?.totalPages > 1 && (
               <Pagination
                 current={page}
                 total={paginatio?.totalPages}
