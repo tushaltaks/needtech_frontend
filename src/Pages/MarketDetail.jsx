@@ -352,25 +352,51 @@ const MarketDetail = () => {
                             )}
                           </div>
                         ) : (
-                          <div className="market_list_btn">
-                            <span
-                              onClick={() => {
-                                setShowPopup1(true);
-                              }}
-                              className="btn btn_primary"
-                            >
-                              Buy Now
-                            </span>
-                            {business?.bidDetailReletedtoBusiness == null && (
-                              <Button
-                                className="btn btn_outline"
+                          <div className="section-mobile-view">
+                            <div className="market_list_btn">
+                              <span
                                 onClick={() => {
                                   setShowPopup1(true);
                                 }}
+                                className="btn btn_primary"
                               >
-                                Offer a Bid
-                              </Button>
-                            )}
+                                Buy Now
+                              </span>
+                              {business?.bidDetailReletedtoBusiness == null && (
+                                <Button
+                                  className="btn btn_outline"
+                                  onClick={() => {
+                                    setShowPopup1(true);
+                                  }}
+                                >
+                                  Offer a Bid
+                                </Button>
+                              )}
+                            </div>
+
+                            <div className="locked_sec-1">
+                              <div className="locked_sec_img">
+                                <img src={Lokedic} alt="Locked Icon" />
+                              </div>
+
+                              <div className="locked_sec_con">
+                                <h2 className="heading_type2">
+                                  Unlock Startup
+                                </h2>
+                                <p>You can get full access for this product</p>
+
+                                <Button
+                                  onMouseEnter={handleMouseEnter}
+                                  onMouseLeave={handleMouseLeave}
+                                  onClick={() => {
+                                    navigate("/buy-plan");
+                                  }}
+                                  className="btn btn_primary"
+                                >
+                                  Unlock Now
+                                </Button>
+                              </div>
+                            </div>
                           </div>
                         )}
 
